@@ -58,10 +58,6 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white, // 배경색 설정
-      // appBar: AppBar(
-      //   backgroundColor: Colors.white, // 앱바 배경색
-      //   elevation: 0, // 그림자 없음
-      // ),
       body: _buildPage(_currentIndex), // 현재 페이지 표시
       bottomNavigationBar: BottomAppBar(
         color: Color(0xFFF8F8F8), // 하단 내비게이션 바 색상
@@ -84,7 +80,6 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-
 /* 메인 화면 */
 class DolScreen extends StatefulWidget {
   @override
@@ -98,28 +93,43 @@ class _DolScreenState extends State<DolScreen> {
     'assets/banners/banner3.png',
     'assets/banners/banner4.png',
   ];
-  
+
+  PageController _pageController = PageController(); // 페이지 컨트롤러
   int _currentPage = 0; // 현재 페이지 인덱스
-  Timer? _timer; //Timer 변수
+  Timer? _timer; // Timer 변수
 
   @override
   void initState() {
     super.initState();
-    //자동 슬라이드 기능
+    _pageController.addListener(() {
+      setState(() {
+        _currentPage = _pageController.page!.round(); // 페이지 변화에 따라 현재 페이지 업데이트
+      });
+    });
+
+    // 자동 슬라이드 기능
     _startAutoSlide();
   }
 
   @override
   void dispose() {
+    _pageController.dispose(); // 페이지 컨트롤러 해제
     _timer?.cancel(); // 타이머 해제
     super.dispose();
   }
 
   void _startAutoSlide() { // 3초마다 페이지 변경
-    _timer= Timer.periodic(Duration(seconds: 3), (timer) {
-      setState(() {
-        _currentPage= (_currentPage+1)%images.length;
-      });
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      if (_currentPage < images.length - 1) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+      _pageController.animateToPage(
+        _currentPage,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
     });
   }
 
@@ -128,15 +138,16 @@ class _DolScreenState extends State<DolScreen> {
     return Stack(
       children: [
         Container( // 이미지 슬라이드
-          width: double.infinity,
           height: 400, // 배너 높이
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 500),
-            child: Image.asset(
-              images[_currentPage],
-              key: ValueKey<int>(_currentPage),
-              fit: BoxFit.fill,
-            ),
+          child: PageView.builder(
+            controller: _pageController, // 페이지 컨트롤러 설정
+            itemCount: images.length, // 이미지 개수
+            itemBuilder: (context, index) {
+              return Image.asset(
+                images[index], // 이미지 표시
+                fit: BoxFit.cover, // 이미지 비율 유지
+              );
+            },
           ),
         ),
         Positioned( // 이미지 슬라이드 도트
@@ -163,7 +174,6 @@ class _DolScreenState extends State<DolScreen> {
   }
 }
 
-
 /* 키워드 검색 화면 */
 class HashScreen extends StatelessWidget {
   @override
@@ -174,8 +184,7 @@ class HashScreen extends StatelessWidget {
   }
 }
 
-
-/* 여행 화면? */
+/* 여행 화면 */
 class BriefcaseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -184,7 +193,6 @@ class BriefcaseScreen extends StatelessWidget {
     );
   }
 }
-
 
 /* 메뉴 화면 */
 class MenuScreen extends StatelessWidget {
