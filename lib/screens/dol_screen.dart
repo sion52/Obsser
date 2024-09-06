@@ -97,10 +97,10 @@ class _DolScreenState extends State<DolScreen> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(24),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              height: 140, // 검색창 높이
+              height: 130, // 검색창 높이
               decoration: BoxDecoration(
                 color: Color(0xFFEFEFEF), // 배경색
                 borderRadius: BorderRadius.circular(15), // 모서리 둥글게
@@ -110,12 +110,12 @@ class _DolScreenState extends State<DolScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(16,18,16,5),
+                    padding: const EdgeInsets.fromLTRB(16,18,16,0),
                     child: Text(
                       '어떤 여행지를 찾으시나요?', // 질문 텍스트
                       style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold, // 굵은 텍스트
+                        fontSize: 21,
+                        fontWeight: FontWeight.w700, // 굵은 텍스트
                       ),
                     ),
                   ),
@@ -139,7 +139,7 @@ class _DolScreenState extends State<DolScreen> {
                         decoration: InputDecoration(
                           border: InputBorder.none, // 테두리 없음
                           hintText: '검색', // 힌트 텍스트
-                          hintStyle: TextStyle(color: Colors.grey), // 힌트 색상
+                          hintStyle: TextStyle(fontSize: 18, color: Colors.grey), // 힌트 색상
                           prefixIcon: Icon(Icons.search, color: Colors.grey), // 검색 아이콘
                         ),
                       ),
@@ -150,7 +150,7 @@ class _DolScreenState extends State<DolScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               height: 140, // 창 높이
@@ -164,19 +164,20 @@ class _DolScreenState extends State<DolScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16,18,16,5),
+                        padding: const EdgeInsets.fromLTRB(16,18,0,5),
                         child: Text(
                           '옵써의 트렌디한 매거진', // 텍스트
                           style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold, // 굵은 텍스트
+                            fontSize: 21,
+                            fontWeight: FontWeight.w700, // 굵은 텍스트
                           ),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(5,18,16,5),
+                        padding: const EdgeInsets.fromLTRB(0,18,16,5),
                         child: Text(
                           '더보기', // 텍스트
                           style: TextStyle(
