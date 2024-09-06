@@ -106,11 +106,11 @@ class _DolScreenState extends State<DolScreen> {
                 borderRadius: BorderRadius.circular(15), // 모서리 둥글게
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                //mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                    padding: const EdgeInsets.fromLTRB(16,18,16,5),
                     child: Text(
                       '어떤 여행지를 찾으시나요?', // 질문 텍스트
                       style: TextStyle(
@@ -145,6 +145,48 @@ class _DolScreenState extends State<DolScreen> {
                       ),
                     ),
                   ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              height: 140, // 창 높이
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Color(0xFFE8F1EA), // 배경색
+                borderRadius: BorderRadius.circular(15), // 모서리 둥글게
+              ),
+              child: Column(
+                //mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16,18,16,5),
+                        child: Text(
+                          '옵써의 트렌디한 매거진', // 텍스트
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold, // 굵은 텍스트
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(5,18,16,5),
+                        child: Text(
+                          '더보기', // 텍스트
+                          style: TextStyle(
+                            color: Color(0xFF477C59),
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
