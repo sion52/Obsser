@@ -11,30 +11,90 @@ class HashScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '키워드별 여행지',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
-              ),
+              buildKeywordHeader(),
               SizedBox(height: 8,),
               buildKeywordChips(),
-              SizedBox(height: 16,),
-              Text(
-                '교통수단별 여행코스',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              SizedBox(height: 40,),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '교통수단별',
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
+                    ),
+                    TextSpan(
+                      text: ' 여행코스',
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Colors.black),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 8,),
               buildTransportOptions(),
-              SizedBox(height: 16,),
-              Text(
-                '카테고리별 여행지',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              SizedBox(height: 40,),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '카테고리별',
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
+                    ),
+                    TextSpan(
+                      text: ' 여행지',
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Colors.black),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 8,),
+              SizedBox(height: 16,),
               buildCategoryList(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildKeywordHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: '키워드별',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
+              ),
+              TextSpan(
+                text: ' 여행지',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Colors.black),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          width: 140,
+          height: 30,
+          child: TextField(
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              filled: true,
+              fillColor: Color(0xFFE0E0E0),
+              suffixIcon: Container(
+                height: 30,
+                child: IconButton(
+                  icon: Icon(Icons.search, color: Color(0xFF497F5B),),
+                  onPressed: () {
+                    // 검색 버튼 클릭 시 동작
+                  },
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -44,7 +104,7 @@ class HashScreen extends StatelessWidget {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 0),
     child: Container(
-      height: 200, // 적절한 높이 설정
+      height: 187, // 적절한 높이 설정
       width: double.infinity,
       decoration: BoxDecoration(
         color: Color(0xFFFFFFFF), // 배경색
@@ -55,7 +115,7 @@ class HashScreen extends StatelessWidget {
         )
       ),
       child: GridView.builder(
-        padding: EdgeInsets.fromLTRB(5,10,5,0),
+        padding: EdgeInsets.fromLTRB(8,16,8,0),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3, // 3개의 열
           childAspectRatio: 2, // 버튼 비율
@@ -63,7 +123,7 @@ class HashScreen extends StatelessWidget {
         itemCount: keywords.length,
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.fromLTRB(5,0,5,10),
+            padding: const EdgeInsets.fromLTRB(5,0,5,15),
             child: ElevatedButton(
               onPressed: () {
                 // 버튼 클릭 시 동작
@@ -73,12 +133,13 @@ class HashScreen extends StatelessWidget {
               },
               child: Text(
                 keywords[index],
-                style: TextStyle(fontSize: 18,fontWeight: FontWeight.w100),
+                style: TextStyle(fontSize: 17,fontWeight: FontWeight.w300),
               ),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(0),
                 backgroundColor: Color(0xFFE8F1EA), // 버튼 배경색
                 foregroundColor: Color(0xFF000000), // 버튼 텍스트 색
+                elevation: 0, // 그림자 제거
               ),
             ),
           );
@@ -89,7 +150,7 @@ class HashScreen extends StatelessWidget {
 }
 
   Widget buildTransportOptions() {
-    List<Map<String, dynamic>> trasnportOptions= [
+    List<Map<String, dynamic>> transportOptions= [
       {'icon': Icons.directions_car, 'label': '자동차'},
       {'icon': Icons.pedal_bike, 'label': '자전거'},
       {'icon': Icons.directions_walk, 'label': '도보'},
@@ -98,12 +159,22 @@ class HashScreen extends StatelessWidget {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: trasnportOptions.map((option) {
+      children: transportOptions.map((option) {
         return Column(
           children: [
-            Icon(option['icon'], size: 40,),
-            SizedBox(height: 8,),
-            Text(option['label']),
+            Container(
+              width: 60, // 원의 너비
+              height: 60, // 원의 높이
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xFFE8E9F1), // 배경색
+              ),
+              child: Center(
+                child: Icon(option['icon'], size: 40, color: Color(0xFF284029),), // 아이콘 크기 조절
+              ),
+            ),
+            SizedBox(height: 3),
+            Text(option['label'], style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),),
           ],
         );
       }).toList(),
@@ -111,20 +182,29 @@ class HashScreen extends StatelessWidget {
   }
 
   Widget buildCategoryList() {
-    List<String> categories = ['식당', '카페', '명소'];
+    List<Map<String, String>> categories = [
+      {'label': '식당', 'image': 'assets/buttons/back_1.png'}, 
+      {'label': '카페', 'image': 'assets/buttons/back_2.png'}, 
+      {'label': '명소', 'image': 'assets/buttons/back_3.png'}
+    ];
 
     return Column(
       children: categories.map((category) {
         return Container(
-          margin: EdgeInsets.symmetric(vertical: 4),
-          padding: EdgeInsets.all(16),
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(vertical: 7),
+          padding: EdgeInsets.fromLTRB(14,5,16,5),
           decoration: BoxDecoration(
-            color: Colors.green[100],
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(10),
+            color: Color(0xFFE8E9F1),
+            image: DecorationImage(
+              image: AssetImage(category['image']!),
+              fit: BoxFit.cover,
+            ),
           ),
           child: Text(
-            category,
-            style: TextStyle(fontSize: 18),
+            category['label']!,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
           ),
         );
       }).toList(),
