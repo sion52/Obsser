@@ -6,7 +6,7 @@ class HashScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(28, 50, 28, 16),
+        padding: const EdgeInsets.fromLTRB(38, 50, 38, 16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,23 +74,28 @@ class HashScreen extends StatelessWidget {
           ),
         ),
         Container(
-          width: 140,
-          height: 30,
+          padding: EdgeInsets.fromLTRB(0,0,16,0),
+          width: 150,
+          height: 25,
           child: TextField(
             decoration: InputDecoration(
-              border: InputBorder.none,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide.none,
+              ),
               filled: true,
               fillColor: Color(0xFFE0E0E0),
-              suffixIcon: Container(
-                height: 30,
-                child: IconButton(
-                  icon: Icon(Icons.search, color: Color(0xFF497F5B),),
-                  onPressed: () {
-                    // 검색 버튼 클릭 시 동작
-                  },
-                ),
+              suffixIcon: IconButton(
+                padding: EdgeInsets.zero,
+                icon: Icon(Icons.search, size: 25, color: Color(0xFF000000),),
+                onPressed: () {
+                  // 검색 버튼 클릭 시 동작
+                },
               ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              suffixIconConstraints: const BoxConstraints(
+                maxWidth: 30,
+              ),
+              contentPadding: EdgeInsets.fromLTRB(15, 0, 0, 0), // 수직 패딩 조정
             ),
           ),
         ),
@@ -104,7 +109,7 @@ class HashScreen extends StatelessWidget {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 0),
     child: Container(
-      height: 187, // 적절한 높이 설정
+      height: 183, // 적절한 높이 설정
       width: double.infinity,
       decoration: BoxDecoration(
         color: Color(0xFFFFFFFF), // 배경색
@@ -115,10 +120,10 @@ class HashScreen extends StatelessWidget {
         )
       ),
       child: GridView.builder(
-        padding: EdgeInsets.fromLTRB(8,16,8,0),
+        padding: EdgeInsets.fromLTRB(8,14,8,0),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3, // 3개의 열
-          childAspectRatio: 2, // 버튼 비율
+          childAspectRatio: 1.9, // 버튼 비율
         ),
         itemCount: keywords.length,
         itemBuilder: (context, index) {
@@ -192,8 +197,8 @@ class HashScreen extends StatelessWidget {
       children: categories.map((category) {
         return Container(
           width: double.infinity,
-          margin: EdgeInsets.symmetric(vertical: 7),
-          padding: EdgeInsets.fromLTRB(14,5,16,5),
+          margin: EdgeInsets.symmetric(vertical: 6),
+          padding: EdgeInsets.fromLTRB(14,4,16,4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Color(0xFFE8E9F1),
