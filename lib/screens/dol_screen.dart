@@ -22,7 +22,7 @@ class _DolScreenState extends State<DolScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    _pageController = PageController(); // 페이지 컨트롤러 초기화
     // 페이지 변경 시 현재 페이지 업데이트
     _pageController.addListener(() {
       setState(() {
@@ -47,8 +47,8 @@ class _DolScreenState extends State<DolScreen> {
       });
       _pageController.animateToPage(
         _currentPage,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeInOut, // 애니메이션 효과
+        duration: Duration(milliseconds: 500), // 애니메이션 지속 시간
+        curve: Curves.easeInOut, // 애니메이션 곡선
       );
     });
   }
@@ -58,6 +58,7 @@ class _DolScreenState extends State<DolScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
+          // 슬라이드 배너
           Stack(
             children: [
               Container(
@@ -96,6 +97,7 @@ class _DolScreenState extends State<DolScreen> {
               ),
             ],
           ),
+          // 검색창
           Padding(
             padding: const EdgeInsets.all(24),
             child: Container(
@@ -106,11 +108,10 @@ class _DolScreenState extends State<DolScreen> {
                 borderRadius: BorderRadius.circular(15), // 모서리 둥글게
               ),
               child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(16,18,16,0),
+                    padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
                     child: Text(
                       '어떤 여행지를 찾으시나요?', // 질문 텍스트
                       style: TextStyle(
@@ -149,6 +150,7 @@ class _DolScreenState extends State<DolScreen> {
               ),
             ),
           ),
+          // 매거진 섹션
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Container(
@@ -160,14 +162,13 @@ class _DolScreenState extends State<DolScreen> {
                 borderRadius: BorderRadius.circular(15), // 모서리 둥글게
               ),
               child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16,18,0,5),
+                        padding: const EdgeInsets.fromLTRB(16, 18, 0, 5),
                         child: Text(
                           '옵써의 트렌디한 매거진', // 텍스트
                           style: TextStyle(
@@ -177,7 +178,7 @@ class _DolScreenState extends State<DolScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0,18,16,5),
+                        padding: const EdgeInsets.fromLTRB(0, 18, 16, 5),
                         child: Text(
                           '더보기', // 텍스트
                           style: TextStyle(
@@ -187,7 +188,7 @@ class _DolScreenState extends State<DolScreen> {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
