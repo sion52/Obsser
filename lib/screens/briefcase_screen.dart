@@ -20,33 +20,36 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
             Container(
               decoration: BoxDecoration(
                 color: Color(0xFFFAFAFA),
-                borderRadius: BorderRadius.circular(10),
               ),
-              child: TableCalendar(
-                focusedDay: DateTime.now(),
-                firstDay: DateTime(2024,1,1),
-                lastDay: DateTime(2024,12,31),
-                locale: 'ko-KR',
-                daysOfWeekHeight: 30,
-
-                headerStyle: HeaderStyle(
-                  formatButtonVisible: false,
-                  titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                
-                calendarStyle: CalendarStyle(
-                  defaultTextStyle: TextStyle(color: Color(0xFF494A50), fontWeight: FontWeight.bold),
-                  weekendTextStyle: TextStyle(color: Color(0xFF494A50), fontWeight: FontWeight.bold),
-                  outsideDaysVisible: true,
-                  todayDecoration: BoxDecoration(
-                    color: Color(0xFF85C59A),
-                    shape: BoxShape.circle,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: TableCalendar(
+                  focusedDay: DateTime.now(),
+                  firstDay: DateTime(2024,1,1),
+                  lastDay: DateTime(2024,12,31),
+                  locale: 'ko-KR',
+                  daysOfWeekHeight: 50,
+                  
+                  headerStyle: HeaderStyle(
+                    formatButtonVisible: false,
+                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  todayTextStyle: TextStyle(
-                    color: Color(0xFFFFFFFF)
-                  ),
-                  rowDecoration: BoxDecoration(
-                    color: Color(0xFFF6F6F6)
+                  
+                  calendarStyle: CalendarStyle(
+                    defaultTextStyle: TextStyle(color: Color(0xFF494A50), fontWeight: FontWeight.bold),
+                    weekendTextStyle: TextStyle(color: Color(0xFF494A50), fontWeight: FontWeight.bold),
+                    outsideDaysVisible: true,
+                    todayDecoration: BoxDecoration(
+                      color: Color(0xFF85C59A),
+                      shape: BoxShape.circle,
+                    ),
+                    todayTextStyle: TextStyle(
+                      color: Color(0xFFFFFFFF)
+                    ),
+                    rowDecoration: BoxDecoration(
+                      color: Color(0xFFF6F6F6),
+                      //borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
               ),
