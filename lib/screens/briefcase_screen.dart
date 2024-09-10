@@ -19,7 +19,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(25, 50, 25, 0),
+            padding: const EdgeInsets.fromLTRB(25, 30, 25, 0),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -71,6 +71,10 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
             headerPadding: EdgeInsets.fromLTRB(0, 25, 0, 10),
             titleTextStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.w900),
           ),
+          daysOfWeekStyle: DaysOfWeekStyle(
+            weekdayStyle: TextStyle(fontSize: 12),
+            weekendStyle: TextStyle(fontSize: 12),
+          ),
           calendarStyle: CalendarStyle(
             defaultTextStyle: TextStyle(fontSize: 15, color: Color(0xFF494A50), fontWeight: FontWeight.bold),
             weekendTextStyle: TextStyle(fontSize: 15, color: Color(0xFF494A50), fontWeight: FontWeight.bold),
@@ -99,7 +103,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
       alignment: Alignment.centerLeft,
       child: Text(
         ' 여행 히스토리',
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
       ),
     );
   }
@@ -115,14 +119,14 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
         borderRadius: BorderRadius.circular(10),
         child: Stack(
           children: [
-            Image.asset(imageUrl, fit: BoxFit.cover, width: double.infinity, height: 90),
+            Image.asset(imageUrl, fit: BoxFit.cover, width: double.infinity, height: 120),
             Container(
-              padding: const EdgeInsets.fromLTRB(10, 5, 0, 0),
+              padding: const EdgeInsets.fromLTRB(15, 10, 0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-                  Text(date, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300, color: Colors.white)),
+                  Text(title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
+                  Text(date, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w100, color: Colors.white)),
                 ],
               ),
             ),
@@ -154,7 +158,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            minimumSize: Size(170, 40),
+            minimumSize: Size(170, 50),
             elevation: 0,
           ),
         ),

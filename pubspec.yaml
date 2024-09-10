@@ -38,6 +38,7 @@ dependencies:
   flutter_native_splash: ^2.4.1
   flutter_svg: ^2.0.10+1
   table_calendar: ^3.1.2
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +71,35 @@ flutter:
     - assets/buttons/
     - assets/histories/photo.png
 
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: fonts/Inter_18pt-Thin.ttf
+          weight: 100
+        - asset: fonts/Inter_18pt-ExtraLight.ttf
+          weight: 200
+        - asset: fonts/Inter_18pt-Light.ttf
+          weight: 300
+        - asset: fonts/Inter_18pt-Regular.ttf
+          weight: 400
+        - asset: fonts/Inter_18pt-Medium.ttf
+          weight: 500
+        - asset: fonts/Inter_18pt-SemiBold.ttf
+          weight: 600
+        - asset: fonts/Inter_18pt-Bold.ttf
+          weight: 700
+        - asset: fonts/Inter_18pt-ExtraBold.ttf
+          weight: 800
+        - asset: fonts/Inter_18pt-Black.ttf
+          weight: 900
+    - family: NanumMyeongjo
+      fonts:
+        - asset: fonts/NanumMyeongjo.ttf
+        - asset: fonts/NanumMyeongjo.ttf
+          weight: 700
+        - asset: fonts/NanumMyeongjo.ttf
+          weight: 900
+          
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
