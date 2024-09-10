@@ -31,11 +31,11 @@ class HashDetail extends StatelessWidget {
             children: [
               TextSpan(
                 text: '키워드별',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: Color(0xFF497F5B)),
               ),
               TextSpan(
                 text: ' 여행지',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Colors.black),
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: Colors.black),
               ),
             ],
           ),
@@ -51,7 +51,7 @@ class HashDetail extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Container(
-        height: 183, // 칩 리스트 높이
+        height: 218, // 칩 리스트 높이
         width: double.infinity,
         decoration: BoxDecoration(
           color: Color(0xFFFFFFFF), // 배경색
@@ -62,10 +62,10 @@ class HashDetail extends StatelessWidget {
           )
         ),
         child: GridView.builder(
-          padding: EdgeInsets.fromLTRB(8, 14, 8, 0),
+          padding: EdgeInsets.fromLTRB(7, 14, 7, 0),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, // 3개의 열
-            childAspectRatio: 1.9, // 버튼 비율
+            childAspectRatio: 2, // 버튼 비율
           ),
           itemCount: keywords.length,
           itemBuilder: (context, index) {
@@ -80,7 +80,7 @@ class HashDetail extends StatelessWidget {
                 },
                 child: Text(
                   keywords[index],
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                 ),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(0),

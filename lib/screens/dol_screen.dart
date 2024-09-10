@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
-import 'package:google_fonts/google_fonts.dart';
+import 'package:obsser_1/screens/dol_detail.dart';
 
 class DolScreen extends StatefulWidget {
   @override
@@ -55,6 +54,14 @@ class _DolScreenState extends State<DolScreen> {
     });
   }
 
+  void _onImageTap(int index) {
+    Navigator.pushReplacement(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => DolDetail(imageIndex: index,))
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -69,9 +76,12 @@ class _DolScreenState extends State<DolScreen> {
                   controller: _pageController,
                   itemCount: images.length, // 이미지 수
                   itemBuilder: (context, index) {
-                    return Image.asset(
-                      images[index], // 이미지 표시
-                      fit: BoxFit.cover, // 이미지를 커버로 맞춤
+                    return GestureDetector(
+                      onTap: () => _onImageTap(index),
+                      child: Image.asset(
+                        images[index],
+                        fit: BoxFit.cover,
+                      ),
                     );
                   },
                 ),
@@ -97,6 +107,19 @@ class _DolScreenState extends State<DolScreen> {
                   }),
                 ),
               ),
+              Positioned(
+                top: 20,
+                right: 20,
+                child: IconButton(
+                  onPressed: () {
+
+                  }, 
+                  icon: Icon(
+                    Icons.notifications_none,
+                    size: 50,
+                    color: Color(0xFF000000),
+                  )),
+              )
             ],
           ),
           // 검색창

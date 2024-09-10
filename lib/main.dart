@@ -7,7 +7,7 @@ import 'screens/menu_screen.dart';
 import 'screens/hash_detail.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-void main() {
+void main(){
   // 날짜 형식 초기화 후 애플리케이션 실행
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }

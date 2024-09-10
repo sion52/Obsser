@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:obsser_1/screens/hash_detail.dart';
 
 class HashScreen extends StatefulWidget {
   final Function(int) onKeywordSelected;
