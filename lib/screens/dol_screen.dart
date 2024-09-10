@@ -180,7 +180,7 @@ class _DolScreenState extends State<DolScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              height: 1000, // 창 높이
+              height: 1336, // 창 높이
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Color(0xFFE8F1EA), // 배경색
@@ -215,7 +215,33 @@ class _DolScreenState extends State<DolScreen> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 0,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset('assets/banners/m_1.png'),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 0,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset('assets/banners/m_1.png'),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
