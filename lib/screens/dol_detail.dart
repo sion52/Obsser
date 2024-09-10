@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:obsser_1/main.dart';
 
 class DolDetail extends StatelessWidget {
   final int imageIndex;
@@ -26,7 +27,10 @@ class DolDetail extends StatelessWidget {
                   left: 20,
                   child: IconButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pushReplacement(
+                        context, 
+                        MaterialPageRoute(builder: (context) => MainPage()),
+                      );
                     }, 
                     icon: Icon(
                       Icons.arrow_back_ios,

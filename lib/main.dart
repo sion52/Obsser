@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'screens/dol_screen.dart';
 import 'screens/hash_screen.dart';
@@ -10,6 +11,25 @@ import 'package:intl/date_symbol_data_local.dart';
 void main(){
   // 날짜 형식 초기화 후 애플리케이션 실행
   initializeDateFormatting().then((_) => runApp(MyApp()));
+}
+
+Future<void> _onBackPressed(BuildContext context) async {
+  await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Do you want to exit?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context), 
+          child: const Text('No'),
+        ),
+        TextButton(
+          onPressed: () => SystemNavigator.pop, 
+          child: const Text('Yes'),
+        ),
+      ],
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -67,24 +87,30 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white, // 배경색 설정
-      body: _buildPage(_currentIndex), // 현재 선택된 페이지 표시
-      bottomNavigationBar: BottomAppBar(
-        color: Color(0xFFF8F8F8), // 하단 네비게이션 바 색상
-        height: 100, // 높이 설정
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
-          children: <Widget>[
-            _buildIcon('assets/icons/Dol.svg', 0, width: 32, height: 60), // 첫 번째 아이콘
-            SizedBox(width: 60), // 아이콘 사이 간격
-            _buildIcon('assets/icons/Hash.svg', 1), // 두 번째 아이콘
-            SizedBox(width: 70), // 아이콘 사이 간격
-            _buildIcon('assets/icons/Briefcase.svg', 2), // 세 번째 아이콘
-            SizedBox(width: 70), // 아이콘 사이 간격
-            _buildIcon('assets/icons/Menu.svg', 3), // 네 번째 아이콘
-            SizedBox(width: 20), // 아이콘 사이 간격
-          ],
+    return WillPopScope(
+      onWillPop: () async {
+        await _onBackPressed(context);
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white, // 배경색 설정
+        body: _buildPage(_currentIndex), // 현재 선택된 페이지 표시
+        bottomNavigationBar: BottomAppBar(
+          color: Color(0xFFF8F8F8), // 하단 네비게이션 바 색상
+          height: 100, // 높이 설정
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+            children: <Widget>[
+              _buildIcon('assets/icons/Dol.svg', 0, width: 32, height: 60), // 첫 번째 아이콘
+              SizedBox(width: 60), // 아이콘 사이 간격
+              _buildIcon('assets/icons/Hash.svg', 1), // 두 번째 아이콘
+              SizedBox(width: 70), // 아이콘 사이 간격
+              _buildIcon('assets/icons/Briefcase.svg', 2), // 세 번째 아이콘
+              SizedBox(width: 70), // 아이콘 사이 간격
+              _buildIcon('assets/icons/Menu.svg', 3), // 네 번째 아이콘
+              SizedBox(width: 20), // 아이콘 사이 간격
+            ],
+          ),
         ),
       ),
     );
