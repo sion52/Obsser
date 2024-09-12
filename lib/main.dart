@@ -102,13 +102,13 @@ class _MainPageState extends State<MainPage> {
             mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
             children: <Widget>[
               _buildIcon('assets/icons/Dol.svg', 0, width: 32, height: 60), // 첫 번째 아이콘
-              SizedBox(width: 60), // 아이콘 사이 간격
+              SizedBox(width: 50), // 아이콘 사이 간격
               _buildIcon('assets/icons/Hash.svg', 1), // 두 번째 아이콘
-              SizedBox(width: 70), // 아이콘 사이 간격
+              SizedBox(width: 55), // 아이콘 사이 간격
               _buildIcon('assets/icons/Briefcase.svg', 2), // 세 번째 아이콘
-              SizedBox(width: 70), // 아이콘 사이 간격
+              SizedBox(width: 60), // 아이콘 사이 간격
               _buildIcon('assets/icons/Menu.svg', 3), // 네 번째 아이콘
-              SizedBox(width: 20), // 아이콘 사이 간격
+              SizedBox(width: 10), // 아이콘 사이 간격
             ],
           ),
         ),

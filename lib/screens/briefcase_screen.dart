@@ -34,8 +34,20 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
                     date: '2024.08.15 - 2024.08.18',
                     imageUrl: 'assets/histories/photo.png' // 실제 이미지 URL
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 10),
                   // 추가적인 여행 카드도 여기에 추가할 수 있습니다.
+                  _buildTravelCard(
+                    title: '8월 힐링 제주도',
+                    date: '2024.08.15 - 2024.08.18',
+                    imageUrl: 'assets/histories/photo.png' // 실제 이미지 URL
+                  ),
+                  SizedBox(height: 10),
+                  _buildTravelCard(
+                    title: '8월 힐링 제주도',
+                    date: '2024.08.15 - 2024.08.18',
+                    imageUrl: 'assets/histories/photo.png' // 실제 이미지 URL
+                  ),
+                  SizedBox(height: 10),
                 ],
               ),
             ),

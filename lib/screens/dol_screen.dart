@@ -71,7 +71,7 @@ class _DolScreenState extends State<DolScreen> {
           Stack(
             children: [
               Container(
-                height: 550, // 배너의 높이
+                height: 470, // 배너의 높이
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: images.length, // 이미지 수
@@ -180,7 +180,7 @@ class _DolScreenState extends State<DolScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              height: 1336, // 창 높이
+              height: 1125, // 창 높이
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Color(0xFFE8F1EA), // 배경색
@@ -257,6 +257,7 @@ class _DolScreenState extends State<DolScreen> {
               ),
             ),
           ),
+          SizedBox(height: 25,),
         ],
       ),
     );

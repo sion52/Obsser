@@ -50,19 +50,19 @@ class _HashScreenState extends State<HashScreen> {
             children: [
               TextSpan(
                 text: '키워드별',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: Color(0xFF497F5B)),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Color(0xFF497F5B)),
               ),
               TextSpan(
                 text: ' 여행지',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: Colors.black),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Colors.black),
               ),
             ],
           ),
         ),
         // 검색 입력 필드
         Container(
-          padding: EdgeInsets.fromLTRB(0, 2, 24, 0),
-          width: 200,
+          padding: EdgeInsets.fromLTRB(0, 2, 20, 0),
+          width: 155,
           height: 30,
           child: TextField(
             decoration: InputDecoration(
@@ -74,7 +74,7 @@ class _HashScreenState extends State<HashScreen> {
               fillColor: Color(0xFFE0E0E0),
               suffixIcon: IconButton(
                 padding: EdgeInsets.zero,
-                icon: Icon(Icons.search, size: 30, color: Color(0xFF000000),),
+                icon: Icon(Icons.search, size: 28, color: Color(0xFF000000),),
                 onPressed: () {
                   // 검색 버튼 클릭 시 동작
                 },
@@ -97,7 +97,7 @@ class _HashScreenState extends State<HashScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Container(
-        height: 218, // 칩 리스트 높이
+        height: 185, // 칩 리스트 높이
         width: double.infinity,
         decoration: BoxDecoration(
           color: Color(0xFFFFFFFF), // 배경색
@@ -120,14 +120,11 @@ class _HashScreenState extends State<HashScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // 버튼 클릭 시 동작
-                  setState(() {
-                    selectedKeyword= keywords[index];
-                  });
                   widget.onKeywordSelected(11);
                 },
                 child: Text(
                   keywords[index],
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                 ),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(0),
@@ -150,11 +147,11 @@ class _HashScreenState extends State<HashScreen> {
         children: [
           TextSpan(
             text: '교통수단별',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: Color(0xFF497F5B)),
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Color(0xFF497F5B)),
           ),
           TextSpan(
             text: ' 여행코스',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: Colors.black),
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Colors.black),
           ),
         ],
       ),
@@ -202,11 +199,11 @@ class _HashScreenState extends State<HashScreen> {
         children: [
           TextSpan(
             text: '카테고리별',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
           ),
           TextSpan(
             text: ' 여행지',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: Colors.black),
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.black),
           ),
         ],
       ),
@@ -225,8 +222,9 @@ class _HashScreenState extends State<HashScreen> {
       children: categories.map((category) {
         return Container(
           width: double.infinity,
-          margin: EdgeInsets.symmetric(vertical: 6),
-          padding: EdgeInsets.fromLTRB(14, 6, 16, 6),
+          height: 40,
+          margin: EdgeInsets.symmetric(vertical: 7),
+          padding: EdgeInsets.fromLTRB(14, 0, 0, 0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Color(0xFFE8E9F1),
@@ -235,9 +233,25 @@ class _HashScreenState extends State<HashScreen> {
               fit: BoxFit.cover,
             ),
           ),
-          child: Text(
-            category['label']!, // 카테고리 라벨
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                child: Text(
+                  category['label']!, // 카테고리 라벨
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+                ),
+              ),
+              Positioned(
+                right: 0,
+                top: 0,
+                child: IconButton(
+                  onPressed: () {
+                    print('${category['label']} 버튼 클릭됨');
+                  }, 
+                  icon: Icon(Icons.arrow_forward_ios, color: Color(0xFF000000),size: 20,)),
+              )
+            ],
           ),
         );
       }).toList(),

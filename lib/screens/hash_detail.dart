@@ -6,7 +6,7 @@ class HashDetail extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(38, 50, 38, 16),
+        padding: const EdgeInsets.fromLTRB(50, 50, 50, 16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,11 +31,11 @@ class HashDetail extends StatelessWidget {
             children: [
               TextSpan(
                 text: '키워드별',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: Color(0xFF497F5B)),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Color(0xFF497F5B)),
               ),
               TextSpan(
                 text: ' 여행지',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: Colors.black),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Colors.black),
               ),
             ],
           ),
@@ -51,7 +51,7 @@ class HashDetail extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Container(
-        height: 218, // 칩 리스트 높이
+        height: 185, // 칩 리스트 높이
         width: double.infinity,
         decoration: BoxDecoration(
           color: Color(0xFFFFFFFF), // 배경색
@@ -61,36 +61,26 @@ class HashDetail extends StatelessWidget {
             color: Color(0xA6A4A4A4)
           )
         ),
-        child: GridView.builder(
-          padding: EdgeInsets.fromLTRB(7, 14, 7, 0),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3, // 3개의 열
-            childAspectRatio: 2, // 버튼 비율
-          ),
-          itemCount: keywords.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(5, 0, 5, 15),
-              child: ElevatedButton(
-                onPressed: () {
-                  // 버튼 클릭 시 동작
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('${keywords[index]} 클릭됨')),
-                  );
-                },
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(12, 14, 7, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 40,
+                width: 100,
+                decoration: BoxDecoration(
+                  color: Color(0xFFD9D9D9),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                alignment: Alignment.center,
                 child: Text(
-                  keywords[index],
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                  'text',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: Color(0xFF000000)),
                 ),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(0),
-                  backgroundColor: Color(0xFFE8F1EA), // 버튼 배경색
-                  foregroundColor: Color(0xFF000000), // 버튼 텍스트 색
-                  elevation: 0, // 그림자 제거
-                ),
-              ),
-            );
-          },
+              )
+            ],
+          ),
         ),
       ),
     );
