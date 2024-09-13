@@ -12,16 +12,65 @@ class _HashDetailState extends State<HashDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(50, 50, 50, 16),
-        child: Column(
+      body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildKeywordHeader(),
-            SizedBox(height: 8,),
-            buildKeywordChips(),
+            Padding(
+              padding: EdgeInsets.fromLTRB(50, 50, 50, 16),
+              child:  Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildKeywordHeader(),
+                  SizedBox(height: 8,),
+                  buildKeywordChips(),
+                ],
+              ),
+            ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '옵써가 계획한 ',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF000000),
+                    ),
+                  ),
+                  Text(
+                    '#한적한',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF497F5B),
+                    ),
+                  ),
+                  Text(
+                    ' 여행루트는 어때요? ',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF000000),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigator.push(
+                      //   context, 
+                      //   MaterialPageRoute(builder: (context) => SignupScreen()),
+                      // );
+                    },
+                    child: Text(
+                      '보러가기>',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: Color(0xFF497F5B),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
-        ),
       ),
     );
   }
@@ -54,7 +103,7 @@ class _HashDetailState extends State<HashDetail> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Container(
-        height: 700,
+        height: 660,
         width: double.infinity,
         decoration: BoxDecoration(
           color: Color(0xFFFFFFFF),
@@ -69,20 +118,27 @@ class _HashDetailState extends State<HashDetail> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 40,
-                width: 100,
-                decoration: BoxDecoration(
-                  color: Color(0xFFD9D9D9),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  keywords[0],
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: Color(0xFF000000)),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // 버튼 클릭 시 동작
+                    // widget.onKeywordSelected(11);
+                  },
+                  child: Text(
+                    keywords[0],
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(0),
+                    backgroundColor: Color(0xFFD9D9D9), // 버튼 배경색
+                    foregroundColor: Color(0xFF000000), // 버튼 텍스트 색
+                    elevation: 0, // 그림자 제거
+                    minimumSize: Size(110, 50),
+                  ),
                 ),
               ),
-              SizedBox(height: 12,),
+              SizedBox(height: 10,),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(

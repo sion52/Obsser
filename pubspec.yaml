@@ -72,6 +72,7 @@ flutter:
     - assets/buttons/
     - assets/histories/photo.png
     - assets/pictures/
+    - assets/magazines/
 
   fonts:
     - family: Inter

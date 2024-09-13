@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:obsser_1/screens/dol_detail.dart';
+import 'package:obsser_1/screens/magazine_detail.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -90,7 +91,15 @@ class _DolScreenState extends State<DolScreen> {
         builder: (context) => DolDetail(imageIndex: index,))
     );
   }
-
+  
+  void _onMagazineTap(int index) {
+    Navigator.push(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => MagzScreen(index: index),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -245,40 +254,49 @@ class _DolScreenState extends State<DolScreen> {
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 0,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset('assets/banners/m_1.png'),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 0,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset('assets/banners/m_1.png'),
+                    child: GestureDetector(
+                      onTap: () => _onMagazineTap(0),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset('assets/magazines/m_0.png'),
+                        ),
                       ),
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                    child: GestureDetector(
+                      onTap: () => _onMagazineTap(1),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset('assets/magazines/m_1.png'),
+                        ),
                       ),
-                      elevation: 0,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset('assets/banners/m_1.png'),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: GestureDetector(
+                      onTap: () => _onMagazineTap(2),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset('assets/magazines/m_2.png'),
+                        ),
                       ),
                     ),
                   ),
