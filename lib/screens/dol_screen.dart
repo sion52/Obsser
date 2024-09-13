@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:obsser_1/screens/dol_detail.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class DolScreen extends StatefulWidget {
   @override
@@ -8,6 +10,8 @@ class DolScreen extends StatefulWidget {
 }
 
 class _DolScreenState extends State<DolScreen> {
+  String dolMessage = 'Loading...'; // 서버 응답 메세지 저장 변수
+
   // 이미지 목록
   final List<String> images = [
     'assets/banners/banner1.png',
@@ -23,6 +27,9 @@ class _DolScreenState extends State<DolScreen> {
   @override
   void initState() {
     super.initState();
+
+    fetchDolData(); // 페이지 로드 시 서버에 데이터 요청
+
     _pageController = PageController(); // 페이지 컨트롤러 초기화
     // 페이지 변경 시 현재 페이지 업데이트
     _pageController.addListener(() {
@@ -31,6 +38,28 @@ class _DolScreenState extends State<DolScreen> {
       });
     });
     _startAutoSlide(); // 자동 슬라이드 시작
+  }
+
+  Future<void> fetchDolData() async {
+    try {
+      final response = await http.get(Uri.parse('http://127.0.0.1:5000/dol'));
+      if (response.statusCode == 200) {
+        // 서버 응답 성공시
+        setState(() {
+          dolMessage = json.decode(response.body)['dolMessage'];
+        });
+      } else {
+        // 서버 응답 실패시
+        setState(() {
+          dolMessage = 'Failed to fetch data. Status code: ${response.statusCode}';
+        });
+      }
+    } catch (e) {
+      // 오류 발생시
+      setState(() {
+        dolMessage = 'Error fetching data: $e';
+      });
+    }
   }
 
   @override
@@ -258,6 +287,7 @@ class _DolScreenState extends State<DolScreen> {
             ),
           ),
           SizedBox(height: 25,),
+          Text(dolMessage, style: TextStyle(fontSize: 18),)
         ],
       ),
     );

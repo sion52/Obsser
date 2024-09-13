@@ -3,7 +3,7 @@ import 'package:obsser_1/main.dart';
 
 class DolDetail extends StatelessWidget {
   final int imageIndex;
-  
+
   final List<String> images = [
     'assets/banners/banner1.png',
     'assets/banners/banner2.png',
@@ -16,12 +16,13 @@ class DolDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFFFFFFF),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Stack(
               children: [
-                Image.asset(images[imageIndex], height: 550, fit: BoxFit.cover,),
+                Image.asset(images[imageIndex], height: 470, fit: BoxFit.cover,),
                 Positioned(
                   top: 20,
                   left: 20,
@@ -40,6 +41,46 @@ class DolDetail extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(15, 10, 10, 10), // 오른쪽 패딩 추가
+              child: Column(
+                children: [
+                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween, // 양쪽 끝 정렬
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          // 상품 페이지로 이동하는 코드
+                        },
+                        child: Text(
+                          '상품>',
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: Color(0xFF717A75),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.share_outlined, color: Color(0xFF717A75)),
+                        onPressed: () {
+                          // 공유 기능 구현
+                        },
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '제주마음샌드 케이크',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Text('상세페이지 $imageIndex', style: TextStyle(fontSize: 24)),
           ],
