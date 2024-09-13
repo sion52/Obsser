@@ -160,7 +160,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   hintStyle: TextStyle(fontSize: 16, color: Color(0xFFC5C6CC)),
                   suffixIcon: IconButton(
                     padding: EdgeInsets.zero,
-                    icon: Icon(isVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined, size: 24, color: Color(0xFFC5C6CC)),
+                    icon: Icon(isVisible ? Icons.visibility : Icons.visibility_off, size: 24, color: Color(0xFFC5C6CC)),
                     onPressed: () {
                       setState(() {
                         isVisible = !isVisible;
