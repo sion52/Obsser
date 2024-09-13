@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,12 +8,45 @@ import 'screens/hash_screen.dart';
 import 'screens/briefcase_screen.dart';
 import 'screens/menu_screen.dart';
 import 'screens/hash_detail.dart';
+import 'screens/login.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:http/http.dart' as http;
 
 void main(){
   // 날짜 형식 초기화 후 애플리케이션 실행
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
+
+// class Session {
+//   Map<String, String> headers = {
+//     'Content-Type': 'application/json',
+//     'Accept': 'application/json',
+//   };
+
+//   Map<String, String> cookies={};
+
+//   Future<dynamic> get(String url) async {
+//     print('get() url: $url');
+//     http.Response response =
+//       await http.get(Uri.encodeFull(url), headers: headers);
+//     final int statusCode = response.statusCode;
+//     if (statusCode < 200 || statusCode > 400 || json == null) {
+//       // 코드 입력
+//     }
+//     return json.decode(utf8.decode(response.bodyBytes));
+//   }
+
+//   Future<dynamic> post(String url, dynamic data) async {
+//     print('post() url: $url');
+//     http.Response response = await http.post(Uri.encodeFull(url),
+//       body: json.encode(data), headers: headers);
+//     final int statusCode = response.statusCode;
+//     if (statusCode < 200 || statusCode > 400 || json == null) {
+//       // 코드 입력
+//     }
+//     return json.decode(utf8.decode(response.bodyBytes));
+//   }
+// }
 
 Future<void> _onBackPressed(BuildContext context) async {
   await showDialog(
@@ -66,7 +101,7 @@ class _MainPageState extends State<MainPage> {
       case 0: return DolScreen(); // 첫 번째 페이지
       case 1: return HashScreen(onKeywordSelected: _onItemTapped); // 두 번째 페이지
       case 2: return BriefcaseScreen(); // 세 번째 페이지
-      case 3: return MenuScreen(); // 네 번째 페이지
+      case 3: return LoginScreen(); // 네 번째 페이지
       case 11: return HashDetail();
       default: return Container(); // 기본값 (빈 컨테이너)
     }
@@ -102,9 +137,9 @@ class _MainPageState extends State<MainPage> {
             mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
             children: <Widget>[
               _buildIcon('assets/icons/Dol.svg', 0, width: 32, height: 60), // 첫 번째 아이콘
-              SizedBox(width: 50), // 아이콘 사이 간격
+              SizedBox(width: 60), // 아이콘 사이 간격
               _buildIcon('assets/icons/Hash.svg', 1), // 두 번째 아이콘
-              SizedBox(width: 55), // 아이콘 사이 간격
+              SizedBox(width: 60), // 아이콘 사이 간격
               _buildIcon('assets/icons/Briefcase.svg', 2), // 세 번째 아이콘
               SizedBox(width: 60), // 아이콘 사이 간격
               _buildIcon('assets/icons/Menu.svg', 3), // 네 번째 아이콘
