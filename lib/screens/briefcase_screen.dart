@@ -15,6 +15,10 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFFFFFFFF),
+        toolbarHeight: 0,
+      ),
       backgroundColor: Color(0xFFFFFFFF),
       body: Stack(
         children: [

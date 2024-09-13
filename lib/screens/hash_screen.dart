@@ -15,6 +15,10 @@ class _HashScreenState extends State<HashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFFFFFFFF),
+        toolbarHeight: 0,
+      ),
       backgroundColor: Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(38, 50, 38, 16),

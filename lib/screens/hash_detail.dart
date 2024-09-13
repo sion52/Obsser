@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class HashDetail extends StatefulWidget {
+  final Function(int) onKeywordSelected;
+
+  HashDetail({required this.onKeywordSelected});
+
   @override
   _HashDetailState createState() => _HashDetailState();
 }
@@ -11,6 +15,7 @@ class _HashDetailState extends State<HashDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       backgroundColor: Color(0xFFFFFFFF),
       body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +128,7 @@ class _HashDetailState extends State<HashDetail> {
                 child: ElevatedButton(
                   onPressed: () {
                     // 버튼 클릭 시 동작
-                    // widget.onKeywordSelected(11);
+                    widget.onKeywordSelected(1);
                   },
                   child: Text(
                     keywords[0],

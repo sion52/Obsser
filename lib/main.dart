@@ -99,7 +99,7 @@ class _MainPageState extends State<MainPage> {
       case 1: return HashScreen(onKeywordSelected: _onItemTapped); // 두 번째 페이지
       case 2: return BriefcaseScreen(); // 세 번째 페이지
       case 3: return MenuScreen(); // 네 번째 페이지
-      case 11: return HashDetail();
+      case 11: return HashDetail(onKeywordSelected: _onItemTapped);
       default: return Container(); // 기본값 (빈 컨테이너)
     }
   }

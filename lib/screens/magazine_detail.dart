@@ -23,6 +23,10 @@ class _MagzScreenState extends State<MagzScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFFFFFFFF),
+        toolbarHeight: 0,
+      ),
       backgroundColor: Color(0xFFFFFFFF),
       body: SingleChildScrollView(
         child: Column(

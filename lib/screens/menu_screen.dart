@@ -4,12 +4,18 @@ import 'package:obsser_1/screens/login.dart';
 class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-          child: Text('Menu 화면', style: TextStyle(fontSize: 24)),
-        ),
-        Center(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFFFFFFFF),
+        toolbarHeight: 0,
+      ),
+      backgroundColor: Color(0xFFFFFFFF),
+      body: Column(
+        children: [
+          Center(
+            child: Text('Menu 화면', style: TextStyle(fontSize: 24)),
+          ),
+          Center(
             child: ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -33,7 +39,8 @@ class MenuScreen extends StatelessWidget {
               ),
             ),
           ),
-      ],
+        ],
+      ),
     );
   }
 }
