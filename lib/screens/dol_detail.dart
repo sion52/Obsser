@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:obsser_1/main.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:share_plus/share_plus.dart';
 
 class DolDetail extends StatefulWidget {
   final int imageIndex;
@@ -76,6 +77,7 @@ class _DolDetailState extends State<DolDetail> {
                       GestureDetector(
                         onTap: () {
                           // 공유 기능 구현
+                          Share.share('Test', subject: 'Cool');
                         },
                         child: SvgPicture.asset('assets/icons/Share.svg'),
                         // child: Icon(
@@ -184,7 +186,7 @@ class _DolDetailState extends State<DolDetail> {
                   color: Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(10)
                 ),
-                padding: EdgeInsets.all(12),
+                padding: EdgeInsets.all(10),
                 child: SvgPicture.asset(
                   isFavorite ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
                   color: Color(0xFF000000),
@@ -194,9 +196,6 @@ class _DolDetailState extends State<DolDetail> {
             SizedBox(width: 15),
             GestureDetector(
               onTap: () => {
-                setState(() {
-                  
-                })
               },
               child: Container(
                 width: 50,
@@ -207,7 +206,7 @@ class _DolDetailState extends State<DolDetail> {
                 ),
                 padding: EdgeInsets.all(10),
                 child: SvgPicture.asset(
-                  'assets/icons/briefcase.svg',
+                  'assets/icons/Briefcase.svg',
                   color: Color(0xFF000000),
                 ),
               ),
