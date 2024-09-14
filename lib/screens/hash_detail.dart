@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HashDetail extends StatefulWidget {
   final Function(int) onKeywordSelected;
@@ -180,22 +181,20 @@ class _HashDetailState extends State<HashDetail> {
             Positioned(
               bottom: 10,
               left: 15,
-              child: Text(title, style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white)),
+              child: Text(title, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, color: Colors.white)),
             ),
             Positioned(
-              bottom: 5,
-              right: 2,
-              child: IconButton(
-                onPressed: () {
+              bottom: 15,
+              right: 10,
+              child: GestureDetector(
+                onTap: () => {
                   setState(() {
                     isFavoriteList[index] = !isFavoriteList[index]; // 해당 카드의 즐겨찾기 상태만 변경
-                  });
+                  })
                 },
-                icon: Icon(
-                  isFavoriteList[index] ? Icons.favorite : Icons.favorite_border,
-                  size: 30,
-                  color: Color(0xFFFFFFFF),
-                ),
+                child: SvgPicture.asset(
+                  isFavoriteList[index] ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
+                  color: Color(0xFFFFFFFF),),
               ),
             ),
           ],

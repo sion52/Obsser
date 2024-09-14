@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:obsser_1/texts/magazine_text.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MagzScreen extends StatefulWidget {
   final int index;
@@ -35,19 +36,17 @@ class _MagzScreenState extends State<MagzScreen> {
               children: [
                 Image.asset(imageUrl[widget.index], fit: BoxFit.cover, width: double.infinity,),
                 Positioned(
-                  top: 5,
-                  right: 5,
-                  child: IconButton(
-                    onPressed: () {
+                  top: 20,
+                  right: 15,
+                  child: GestureDetector(
+                    onTap: () => {
                       setState(() {
                         isFavorite = !isFavorite; // 해당 카드의 즐겨찾기 상태만 변경
-                      });
+                      })
                     },
-                    icon: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      size: 30,
-                      color: Color(0xFFFFFFFF),
-                    ),
+                    child: SvgPicture.asset(
+                      isFavorite ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
+                      color: Color(0xFFFFFFFF),),
                   ),
                 ),
               ],

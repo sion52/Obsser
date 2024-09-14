@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:obsser_1/screens/dol_detail.dart';
 import 'package:obsser_1/screens/magazine_detail.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 
 class DolScreen extends StatefulWidget {
@@ -158,18 +159,13 @@ class _DolScreenState extends State<DolScreen> {
                   ),
                 ),
                 Positioned(
-                  top: 20,
-                  right: 20,
-                  child: IconButton(
-                    onPressed: () {
-
-                    }, 
-                    icon: Icon(
-                      Icons.notifications_none,
-                      size: 50,
-                      color: Color(0xFF000000),
-                    )),
-                )
+                  top: 30,
+                  right: 30,
+                  child: GestureDetector(
+                    onTap: () => {},
+                    child: SvgPicture.asset('assets/icons/Bell.svg'),
+                  ),
+                ),
               ],
             ),
             // 검색창
