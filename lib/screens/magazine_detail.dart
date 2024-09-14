@@ -5,12 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 class MagzScreen extends StatefulWidget {
   final int index;
 
-  MagzScreen({required this.index}); // 인덱스 전달 받음
+  const MagzScreen({super.key, required this.index}); // 인덱스 전달 받음
 
   @override
+  // ignore: library_private_types_in_public_api
   _MagzScreenState createState() => _MagzScreenState();
 }
-
 class _MagzScreenState extends State<MagzScreen> {
   bool isFavorite = false;
 
@@ -25,10 +25,10 @@ class _MagzScreenState extends State<MagzScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFFFFFF),
+        backgroundColor: const Color(0xFFFFFFFF),
         toolbarHeight: 0,
       ),
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -46,14 +46,18 @@ class _MagzScreenState extends State<MagzScreen> {
                     },
                     child: SvgPicture.asset(
                       isFavorite ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
-                      color: Color(0xFFFFFFFF),),
+                      colorFilter: const ColorFilter.mode(
+                      Color(0xFFFFFFFF),
+                      BlendMode.srcIn,
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             buildContent(widget.index),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
           ],
         ),
       )
@@ -128,12 +132,12 @@ class _MagzScreenState extends State<MagzScreen> {
 
   Widget buildTitle(String text) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w700,
           ),
@@ -144,12 +148,12 @@ class _MagzScreenState extends State<MagzScreen> {
 
   Widget buildText(String text) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w400,
           ),

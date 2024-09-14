@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class HashScreen extends StatefulWidget {
   final Function(int) onKeywordSelected;
 
-  HashScreen({required this.onKeywordSelected});
+  const HashScreen({super.key, required this.onKeywordSelected});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HashScreenState createState() => _HashScreenState();
 }
-
 class _HashScreenState extends State<HashScreen> {
   String? selectedKeyword;
 
@@ -16,10 +16,10 @@ class _HashScreenState extends State<HashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFFFFFF),
+        backgroundColor: const Color(0xFFFFFFFF),
         toolbarHeight: 0,
       ),
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(38, 50, 38, 16),
         child: SingleChildScrollView(
@@ -27,15 +27,15 @@ class _HashScreenState extends State<HashScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               buildKeywordHeader(), // 키워드 헤더 위젯
-              SizedBox(height: 8,),
+              const SizedBox(height: 8,),
               buildKeywordChips(), // 키워드 칩 위젯
-              SizedBox(height: 40,),
+              const SizedBox(height: 40,),
               buildTransportTitle(), // 교통수단별 여행코스 제목
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               buildTransportOptions(), // 교통수단 옵션 위젯
-              SizedBox(height: 40,),
+              const SizedBox(height: 40,),
               buildCategoryTitle(), // 카테고리별 여행지 제목
-              SizedBox(height: 16,),
+              const SizedBox(height: 16,),
               buildCategoryList(), // 카테고리 리스트 위젯
             ],
           ),
@@ -49,7 +49,7 @@ class _HashScreenState extends State<HashScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text.rich(
+        const Text.rich(
           TextSpan(
             children: [
               TextSpan(
@@ -65,7 +65,7 @@ class _HashScreenState extends State<HashScreen> {
         ),
         // 검색 입력 필드
         Container(
-          padding: EdgeInsets.fromLTRB(0, 2, 20, 0),
+          padding: const EdgeInsets.fromLTRB(0, 2, 20, 0),
           width: 155,
           height: 30,
           child: TextField(
@@ -75,10 +75,10 @@ class _HashScreenState extends State<HashScreen> {
                 borderSide: BorderSide.none,
               ),
               filled: true,
-              fillColor: Color(0xFFE0E0E0),
+              fillColor: const Color(0xFFE0E0E0),
               suffixIcon: IconButton(
                 padding: EdgeInsets.zero,
-                icon: Icon(Icons.search, size: 28, color: Color(0xFF000000),),
+                icon: const Icon(Icons.search, size: 28, color: Color(0xFF000000),),
                 onPressed: () {
                   // 검색 버튼 클릭 시 동작
                 },
@@ -86,7 +86,7 @@ class _HashScreenState extends State<HashScreen> {
               suffixIconConstraints: const BoxConstraints(
                 maxWidth: 30,
               ),
-              contentPadding: EdgeInsets.fromLTRB(15, 0, 0, 0), // 수직 패딩 조정
+              contentPadding: const EdgeInsets.fromLTRB(15, 0, 0, 0), // 수직 패딩 조정
             ),
           ),
         ),
@@ -104,16 +104,16 @@ class _HashScreenState extends State<HashScreen> {
         height: 185, // 칩 리스트 높이
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF), // 배경색
+          color: const Color(0xFFFFFFFF), // 배경색
           borderRadius: BorderRadius.circular(20), // 모서리 둥글게
           border: Border.all(
             width: 1,
-            color: Color(0xA6A4A4A4)
+            color: const Color(0xA6A4A4A4)
           )
         ),
         child: GridView.builder(
-          padding: EdgeInsets.fromLTRB(7, 14, 7, 0),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          padding: const EdgeInsets.fromLTRB(7, 14, 7, 0),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, // 3개의 열
             childAspectRatio: 2, // 버튼 비율
           ),
@@ -126,15 +126,15 @@ class _HashScreenState extends State<HashScreen> {
                   // 버튼 클릭 시 동작
                   widget.onKeywordSelected(11);
                 },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(0),
+                  backgroundColor: const Color(0xFFE8F1EA), // 버튼 배경색
+                  foregroundColor: const Color(0xFF000000), // 버튼 텍스트 색
+                  elevation: 0, // 그림자 제거
+                ),
                 child: Text(
                   keywords[index],
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                ),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(0),
-                  backgroundColor: Color(0xFFE8F1EA), // 버튼 배경색
-                  foregroundColor: Color(0xFF000000), // 버튼 텍스트 색
-                  elevation: 0, // 그림자 제거
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                 ),
               ),
             );
@@ -146,7 +146,7 @@ class _HashScreenState extends State<HashScreen> {
 
   // 교통수단 옵션 제목
   Widget buildTransportTitle() {
-    return Text.rich(
+    return const Text.rich(
       TextSpan(
         children: [
           TextSpan(
@@ -180,16 +180,16 @@ class _HashScreenState extends State<HashScreen> {
             Container(
               width: 70,
               height: 70,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Color(0xFFE8E9F1), // 배경색
               ),
               child: Center(
-                child: Icon(option['icon'], size: 40, color: Color(0xFF284029)), // 아이콘
+                child: Icon(option['icon'], size: 40, color: const Color(0xFF284029)), // 아이콘
               ),
             ),
-            SizedBox(height: 3),
-            Text(option['label'], style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800)), // 라벨
+            const SizedBox(height: 3),
+            Text(option['label'], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)), // 라벨
           ],
         );
       }).toList(),
@@ -198,7 +198,7 @@ class _HashScreenState extends State<HashScreen> {
 
   // 카테고리별 여행지 제목
   Widget buildCategoryTitle() {
-    return Text.rich(
+    return const Text.rich(
       TextSpan(
         children: [
           TextSpan(
@@ -227,11 +227,11 @@ class _HashScreenState extends State<HashScreen> {
         return Container(
           width: double.infinity,
           height: 40,
-          margin: EdgeInsets.symmetric(vertical: 7),
-          padding: EdgeInsets.fromLTRB(14, 0, 0, 0),
+          margin: const EdgeInsets.symmetric(vertical: 7),
+          padding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: Color(0xFFE8E9F1),
+            color: const Color(0xFFE8E9F1),
             image: DecorationImage(
               image: AssetImage(category['image']!), // 카테고리 이미지
               fit: BoxFit.cover,
@@ -240,10 +240,10 @@ class _HashScreenState extends State<HashScreen> {
           child: Stack(
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(
                   category['label']!, // 카테고리 라벨
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
                 ),
               ),
               Positioned(
@@ -251,9 +251,9 @@ class _HashScreenState extends State<HashScreen> {
                 top: 0,
                 child: IconButton(
                   onPressed: () {
-                    print('${category['label']} 버튼 클릭됨');
+                    // print('${category['label']} 버튼 클릭됨');
                   }, 
-                  icon: Icon(Icons.arrow_forward_ios, color: Color(0xFF000000),size: 20,)),
+                  icon: const Icon(Icons.arrow_forward_ios, color: Color(0xFF000000),size: 20,)),
               )
             ],
           ),

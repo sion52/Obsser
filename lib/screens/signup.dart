@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _SignupScreenState createState() => _SignupScreenState();
 }
-
 class _SignupScreenState extends State<SignupScreen> {
   bool isVisible = false;
 
@@ -15,10 +17,10 @@ class _SignupScreenState extends State<SignupScreen> {
   final FocusNode confirmPasswordFocusNode = FocusNode(); // 비밀번호 확인 입력창의 FocusNode
 
   // 각각의 테두리 색상
-  Color nameBorderColor = Color(0xFFC5C6CC); 
-  Color emailBorderColor = Color(0xFFC5C6CC); 
-  Color passwordBorderColor = Color(0xFFC5C6CC); 
-  Color confirmPasswordBorderColor = Color(0xFFC5C6CC); 
+  Color nameBorderColor = const Color(0xFFC5C6CC); 
+  Color emailBorderColor = const Color(0xFFC5C6CC); 
+  Color passwordBorderColor = const Color(0xFFC5C6CC); 
+  Color confirmPasswordBorderColor = const Color(0xFFC5C6CC); 
 
   @override
   void initState() {
@@ -27,25 +29,25 @@ class _SignupScreenState extends State<SignupScreen> {
     // FocusNode의 이벤트 리스너 설정
     nameFocusNode.addListener(() {
       setState(() {
-        nameBorderColor = nameFocusNode.hasFocus ? Color(0xFF497F5B) : Color(0xFFC5C6CC);
+        nameBorderColor = nameFocusNode.hasFocus ? const Color(0xFF497F5B) : const Color(0xFFC5C6CC);
       });
     });
 
     emailFocusNode.addListener(() {
       setState(() {
-        emailBorderColor = emailFocusNode.hasFocus ? Color(0xFF497F5B) : Color(0xFFC5C6CC);
+        emailBorderColor = emailFocusNode.hasFocus ? const Color(0xFF497F5B) : const Color(0xFFC5C6CC);
       });
     });
 
     passwordFocusNode.addListener(() {
       setState(() {
-        passwordBorderColor = passwordFocusNode.hasFocus ? Color(0xFF497F5B) : Color(0xFFC5C6CC);
+        passwordBorderColor = passwordFocusNode.hasFocus ? const Color(0xFF497F5B) : const Color(0xFFC5C6CC);
       });
     });
 
     confirmPasswordFocusNode.addListener(() {
       setState(() {
-        confirmPasswordBorderColor = confirmPasswordFocusNode.hasFocus ? Color(0xFF497F5B) : Color(0xFFC5C6CC);
+        confirmPasswordBorderColor = confirmPasswordFocusNode.hasFocus ? const Color(0xFF497F5B) : const Color(0xFFC5C6CC);
       });
     });
   }
@@ -62,13 +64,13 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Align(
+            const Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 '이름',
@@ -78,9 +80,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Container(
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
@@ -91,15 +93,15 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               child: TextField(
                 focusNode: nameFocusNode,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: '이름',
                   hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            Align(
+            const SizedBox(height: 20),
+            const Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 '이메일',
@@ -109,9 +111,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Container(
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
@@ -122,15 +124,15 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               child: TextField(
                 focusNode: emailFocusNode,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: '이메일',
                   hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            Align(
+            const SizedBox(height: 20),
+            const Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 '비밀번호',
@@ -140,9 +142,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Container(
-              padding: EdgeInsets.fromLTRB(15, 0, 5, 0),
+              padding: const EdgeInsets.fromLTRB(15, 0, 5, 0),
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
@@ -157,10 +159,10 @@ class _SignupScreenState extends State<SignupScreen> {
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: '비밀번호',
-                  hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
+                  hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
                   suffixIcon: IconButton(
                     padding: EdgeInsets.zero,
-                    icon: Icon(isVisible ? Icons.visibility : Icons.visibility_off, size: 24, color: Color(0xFFC5C6CC)),
+                    icon: Icon(isVisible ? Icons.visibility : Icons.visibility_off, size: 24, color: const Color(0xFFC5C6CC)),
                     onPressed: () {
                       setState(() {
                         isVisible = !isVisible;
@@ -173,9 +175,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Container(
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
@@ -187,7 +189,7 @@ class _SignupScreenState extends State<SignupScreen> {
               child: TextField(
                 focusNode: confirmPasswordFocusNode,
                 obscureText: !isVisible,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: '비밀번호 확인',
                   hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상

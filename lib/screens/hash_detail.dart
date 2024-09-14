@@ -4,12 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 class HashDetail extends StatefulWidget {
   final Function(int) onKeywordSelected;
 
-  HashDetail({required this.onKeywordSelected});
+  const HashDetail({super.key, required this.onKeywordSelected});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HashDetailState createState() => _HashDetailState();
 }
-
 class _HashDetailState extends State<HashDetail> {
   List<bool> isFavoriteList = [false, false, false, false]; // 각 카드의 즐겨찾기 상태를 저장하는 리스트
 
@@ -17,17 +17,17 @@ class _HashDetailState extends State<HashDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(50, 50, 50, 16),
+              padding: const EdgeInsets.fromLTRB(50, 50, 50, 16),
               child:  Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   buildKeywordHeader(),
-                  SizedBox(height: 8,),
+                  const SizedBox(height: 8,),
                   buildKeywordChips(),
                 ],
               ),
@@ -36,21 +36,21 @@ class _HashDetailState extends State<HashDetail> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     '옵써가 계획한 ',
                     style: TextStyle(
                       fontSize: 16,
                       color: Color(0xFF000000),
                     ),
                   ),
-                  Text(
+                  const Text(
                     '#한적한',
                     style: TextStyle(
                       fontSize: 16,
                       color: Color(0xFF497F5B),
                     ),
                   ),
-                  Text(
+                  const Text(
                     ' 여행루트는 어때요? ',
                     style: TextStyle(
                       fontSize: 16,
@@ -64,7 +64,7 @@ class _HashDetailState extends State<HashDetail> {
                       //   MaterialPageRoute(builder: (context) => SignupScreen()),
                       // );
                     },
-                    child: Text(
+                    child: const Text(
                       '보러가기>',
                       style: TextStyle(
                         fontSize: 16,
@@ -82,7 +82,7 @@ class _HashDetailState extends State<HashDetail> {
   }
 
   Widget buildKeywordHeader() {
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text.rich(
@@ -112,15 +112,15 @@ class _HashDetailState extends State<HashDetail> {
         height: 660,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             width: 1,
-            color: Color(0xA6A4A4A4),
+            color: const Color(0xA6A4A4A4),
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.fromLTRB(12, 14, 12, 14),
+          padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -131,30 +131,30 @@ class _HashDetailState extends State<HashDetail> {
                     // 버튼 클릭 시 동작
                     widget.onKeywordSelected(1);
                   },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(0),
+                    backgroundColor: const Color(0xFFD9D9D9), // 버튼 배경색
+                    foregroundColor: const Color(0xFF000000), // 버튼 텍스트 색
+                    elevation: 0, // 그림자 제거
+                    minimumSize: const Size(110, 50),
+                  ),
                   child: Text(
                     keywords[0],
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(0),
-                    backgroundColor: Color(0xFFD9D9D9), // 버튼 배경색
-                    foregroundColor: Color(0xFF000000), // 버튼 텍스트 색
-                    elevation: 0, // 그림자 제거
-                    minimumSize: Size(110, 50),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                   ),
                 ),
               ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
                       _buildCard(0, '카멜리아 힐', 'assets/pictures/camellia.png'),
-                      SizedBox(height: 5,),
+                      const SizedBox(height: 5,),
                       _buildCard(1, '생각하는 정원', 'assets/pictures/garden.png'),
-                      SizedBox(height: 5,),
+                      const SizedBox(height: 5,),
                       _buildCard(2, '베케', 'assets/pictures/veke.png'),
-                      SizedBox(height: 5,),
+                      const SizedBox(height: 5,),
                       _buildCard(3, '삼성혈', 'assets/pictures/samsung.png'),
                     ],
                   ),
@@ -181,7 +181,7 @@ class _HashDetailState extends State<HashDetail> {
             Positioned(
               bottom: 10,
               left: 15,
-              child: Text(title, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, color: Colors.white)),
+              child: Text(title, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w700, color: Colors.white)),
             ),
             Positioned(
               bottom: 15,
@@ -194,7 +194,11 @@ class _HashDetailState extends State<HashDetail> {
                 },
                 child: SvgPicture.asset(
                   isFavoriteList[index] ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
-                  color: Color(0xFFFFFFFF),),
+                  colorFilter: const ColorFilter.mode(
+                    Color(0xFFFFFFFF),
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ],

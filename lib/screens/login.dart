@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:obsser_1/screens/signup.dart';
-import 'package:obsser_1/screens/findPW.dart';
+import 'package:obsser_1/screens/findpw.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _LoginScreenState createState() => _LoginScreenState();
 }
-
 class _LoginScreenState extends State<LoginScreen> {
   bool isVisible = false;
   final FocusNode emailFocusNode = FocusNode(); // 이메일 입력창의 FocusNode
   final FocusNode passwordFocusNode = FocusNode(); // 비밀번호 입력창의 FocusNode
-  Color emailBorderColor = Color(0xFFC5C6CC); // 이메일 입력창 테두리 색상
-  Color passwordBorderColor = Color(0xFFC5C6CC); // 비밀번호 입력창 테두리 색상
+  Color emailBorderColor = const Color(0xFFC5C6CC); // 이메일 입력창 테두리 색상
+  Color passwordBorderColor = const Color(0xFFC5C6CC); // 비밀번호 입력창 테두리 색상
 
   @override
   void initState() {
@@ -20,13 +22,13 @@ class _LoginScreenState extends State<LoginScreen> {
     // 이메일 FocusNode의 이벤트 리스너 설정
     emailFocusNode.addListener(() {
       setState(() {
-        emailBorderColor = emailFocusNode.hasFocus ? Color(0xFF497F5B) : Color(0xFFC5C6CC); // 포커스 상태에 따라 색상 변경
+        emailBorderColor = emailFocusNode.hasFocus ? const Color(0xFF497F5B) : const Color(0xFFC5C6CC); // 포커스 상태에 따라 색상 변경
       });
     });
     // 비밀번호 FocusNode의 이벤트 리스너 설정
     passwordFocusNode.addListener(() {
       setState(() {
-        passwordBorderColor = passwordFocusNode.hasFocus ? Color(0xFF497F5B) : Color(0xFFC5C6CC); // 포커스 상태에 따라 색상 변경
+        passwordBorderColor = passwordFocusNode.hasFocus ? const Color(0xFF497F5B) : const Color(0xFFC5C6CC); // 포커스 상태에 따라 색상 변경
       });
     });
   }
@@ -41,11 +43,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
+          const Center(
             child: Text(
               '옵써',
               style: TextStyle(
@@ -55,10 +57,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           Center(
             child: Container(
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
@@ -69,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               child: TextField(
                 focusNode: emailFocusNode, // 이메일 FocusNode 연결
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none, // 테두리 없음
                   hintText: '이메일을 입력해 주세요.', // 힌트 텍스트
                   hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
@@ -77,10 +79,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          SizedBox(height: 15,),
+          const SizedBox(height: 15,),
           Center(
             child: Container(
-              padding: EdgeInsets.fromLTRB(15, 0, 5, 0),
+              padding: const EdgeInsets.fromLTRB(15, 0, 5, 0),
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
@@ -95,10 +97,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   border: InputBorder.none, // 테두리 없음
                   hintText: '비밀번호를 입력해 주세요.', // 힌트 텍스트
-                  hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
+                  hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
                   suffixIcon: IconButton(
                     padding: EdgeInsets.zero,
-                    icon: Icon(isVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined, size: 24, color: Color(0xFF8F9098),),
+                    icon: Icon(isVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined, size: 24, color: const Color(0xFF8F9098),),
                     onPressed: () {
                       // 비밀번호 표시
                       setState(() {
@@ -113,38 +115,38 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          SizedBox(height: 15,),
+          const SizedBox(height: 15,),
           Center(
             child: ElevatedButton(
               onPressed: () {
                 // 로그인 로직
               },
-              child: Text(
-                '로그인',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
-              ),
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.fromLTRB(0, 15, 0, 18),
-                backgroundColor: Color(0xFF497F5B),
-                foregroundColor: Color(0xFFFFFFFF),
+                padding: const EdgeInsets.fromLTRB(0, 15, 0, 18),
+                backgroundColor: const Color(0xFF497F5B),
+                foregroundColor: const Color(0xFFFFFFFF),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),
                 ),
-                minimumSize: Size(170, 55),
+                minimumSize: const Size(170, 55),
                 elevation: 0,
+              ),
+              child: const Text(
+                '로그인',
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
               ),
             ),
           ),
-          SizedBox(height: 20,),
+          const SizedBox(height: 20,),
           Center(
             child: GestureDetector(
               onTap: () {
                 Navigator.push(
                   context, 
-                  MaterialPageRoute(builder: (context) => FindpwScreen()),
+                  MaterialPageRoute(builder: (context) => const FindpwScreen()),
                 );
               },
-              child: Text(
+              child: const Text(
                 '비밀번호를 잊으셨나요?',
                 style: TextStyle(
                   fontSize: 17,
@@ -157,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   '계정이 없으신가요? ',
                   style: TextStyle(
                     fontSize: 17,
@@ -168,10 +170,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () {
                     Navigator.push(
                       context, 
-                      MaterialPageRoute(builder: (context) => SignupScreen()),
+                      MaterialPageRoute(builder: (context) => const SignupScreen()),
                     );
                   },
-                  child: Text(
+                  child: const Text(
                     '가입하기',
                     style: TextStyle(
                       fontSize: 17,

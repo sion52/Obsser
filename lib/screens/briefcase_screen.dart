@@ -3,12 +3,12 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
 class BriefcaseScreen extends StatefulWidget {
-  const BriefcaseScreen({Key? key}) : super(key: key);
+  const BriefcaseScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _BriefcaseScreenState createState() => _BriefcaseScreenState();
 }
-
 class _BriefcaseScreenState extends State<BriefcaseScreen> {
   // 월 이름 리스트
   final List<String> _monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'  ];
@@ -17,10 +17,10 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFFFFFF),
+        backgroundColor: const Color(0xFFFFFFFF),
         toolbarHeight: 0,
       ),
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Stack(
         children: [
           Padding(
@@ -29,7 +29,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
               children: [
                 // 달력 컨테이너
                 _buildCalendar(),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 // 여행 히스토리 제목
                 _buildTravelHistoryTitle(),
                 Expanded(
@@ -42,20 +42,20 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
                           date: '2024.08.15 - 2024.08.18',
                           imageUrl: 'assets/histories/photo.png' // 실제 이미지 URL
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         // 추가적인 여행 카드도 여기에 추가할 수 있습니다.
                         _buildTravelCard(
                           title: '8월 힐링 제주도',
                           date: '2024.08.15 - 2024.08.18',
                           imageUrl: 'assets/histories/photo.png' // 실제 이미지 URL
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         _buildTravelCard(
                           title: '8월 힐링 제주도',
                           date: '2024.08.15 - 2024.08.18',
                           imageUrl: 'assets/histories/photo.png' // 실제 이미지 URL
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),
@@ -73,11 +73,11 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
   // 달력 위젯 생성
   Widget _buildCalendar() {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Color(0xFFFAFAFA),
       ),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
         child: TableCalendar(
           focusedDay: DateTime.now(),
           firstDay: DateTime(2024, 1, 1),
@@ -90,17 +90,17 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
             titleTextFormatter: (date, locale) {
               return "${_monthNames[date.month - 1]} ${date.year}";
             },
-            headerPadding: EdgeInsets.fromLTRB(0, 25, 0, 10),
-            titleTextStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+            headerPadding: const EdgeInsets.fromLTRB(0, 25, 0, 10),
+            titleTextStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
           ),
           daysOfWeekStyle: DaysOfWeekStyle(
             dowTextFormatter: (date, locale) {
               return DateFormat.E(locale).format(date).substring(0, 2).toUpperCase(); 
             },
-            weekdayStyle: TextStyle(fontSize: 12),
-            weekendStyle: TextStyle(fontSize: 12),
+            weekdayStyle: const TextStyle(fontSize: 12),
+            weekendStyle: const TextStyle(fontSize: 12),
           ),
-          calendarStyle: CalendarStyle(
+          calendarStyle: const CalendarStyle(
             defaultTextStyle: TextStyle(fontSize: 15, color: Color(0xFF494A50), fontWeight: FontWeight.bold),
             weekendTextStyle: TextStyle(fontSize: 15, color: Color(0xFF494A50), fontWeight: FontWeight.bold),
             outsideDaysVisible: true,
@@ -124,7 +124,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
 
   // 여행 히스토리 제목 위젯 생성
   Widget _buildTravelHistoryTitle() {
-    return Align(
+    return const Align(
       alignment: Alignment.centerLeft,
       child: Text(
         ' 여행 히스토리',
@@ -150,8 +150,8 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: Colors.white)),
-                  Text(date, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w200, color: Colors.white)),
+                  Text(title, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: Colors.white)),
+                  Text(date, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w200, color: Colors.white)),
                 ],
               ),
             ),
@@ -172,19 +172,19 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
           onPressed: () {
             // 일정 추가 로직
           },
-          child: Text(
-            '새로운 일정 추가',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-          ),
           style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            backgroundColor: Color(0xFFFFC04B),
-            foregroundColor: Color(0xFFFFFFFF),
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            backgroundColor: const Color(0xFFFFC04B),
+            foregroundColor: const Color(0xFFFFFFFF),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            minimumSize: Size(170, 50),
+            minimumSize: const Size(170, 50),
             elevation: 0,
+          ),
+          child: const Text(
+            '새로운 일정 추가',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
         ),
       ),

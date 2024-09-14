@@ -1,69 +1,67 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:obsser_1/screens/dol_detail.dart';
-import 'package:obsser_1/screens/magazine_detail.dart';
+import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:convert';
+import 'package:obsser_1/screens/dol_detail.dart';
+import 'package:obsser_1/screens/magazine_detail.dart';
 
+/* ##### 메인 홈 페이지 ##### */
 class DolScreen extends StatefulWidget {
+  const DolScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _DolScreenState createState() => _DolScreenState();
 }
-
 class _DolScreenState extends State<DolScreen> {
-  String dolMessage = 'Loading...'; // 서버 응답 메세지 저장 변수
+  String dolMessage = 'Loading...'; // 서버 응답 메세지 변수
+  late PageController _pageController; // 페이지 컨트롤러
+  int _currentSlide = 0; // 현재 슬라이드 인덱스
+  Timer? _timer; // 자동 슬라이드를 위한 타이머
 
-  // 이미지 목록
-  final List<String> images = [
+  final List<String> images = [ // 슬라이드 이미지 리스트
     'assets/banners/banner1.png',
     'assets/banners/banner2.png',
     'assets/banners/banner3.png',
     'assets/banners/banner4.png',
   ];
 
-  late PageController _pageController; // 페이지 컨트롤러
-  int _currentPage = 0; // 현재 페이지 인덱스
-  Timer? _timer; // 자동 슬라이드를 위한 타이머
-
+  /* ### 페이지 로드 시 실행 함수 ### */
   @override
   void initState() {
     super.initState();
 
     fetchDolData(); // 페이지 로드 시 서버에 데이터 요청
 
-    _pageController = PageController(); // 페이지 컨트롤러 초기화
-    // 페이지 변경 시 현재 페이지 업데이트
+    _pageController = PageController(); // 슬라이드 컨트롤러 초기화
+    // 슬라이드 변경 시 현재 슬라이드 업데이트
     _pageController.addListener(() {
       if (mounted) {
         setState(() {
-          _currentPage = _pageController.page!.round();
+          _currentSlide = _pageController.page!.round();
         });
       }
     });
     _startAutoSlide(); // 자동 슬라이드 시작
   }
 
+  /* ### 서버 데이터 요청 함수 ### */
   Future<void> fetchDolData() async {
     try {
       final response = await http.get(Uri.parse('http://127.0.0.1:5000/dol'));
-      if (response.statusCode == 200) {
-        // 서버 응답 성공시
-        if(mounted) {
-          setState(() {
-            dolMessage = json.decode(response.body)['dolMessage'];
-          });
-        }
-      } else {
-        // 서버 응답 실패시
-        if(mounted) {
-          setState(() {
-            dolMessage = 'Failed to fetch data. Status code: ${response.statusCode}';
-          });
-        }
+      if (mounted && response.statusCode == 200) { // 서버 응답 성공시
+        setState(() {
+          dolMessage = json.decode(response.body)['dolMessage']; // 서버에서 dolMessage 받음
+        });
       }
-    } catch (e) {
-      // 오류 발생시
+      else if (mounted) { // 서버 응답 실패시
+        setState(() {
+          dolMessage = 'Failed to fetch data. Status code: ${response.statusCode}';
+        });
+      }
+    }
+    catch (e) { // 오류 발생시
       if(mounted) {
         setState(() {
           dolMessage = 'Error fetching data: $e';
@@ -72,6 +70,7 @@ class _DolScreenState extends State<DolScreen> {
     }
   }
 
+  /* ### 비동기 해제 ### */
   @override
   void dispose() {
     _pageController.dispose(); // 페이지 컨트롤러 해제
@@ -79,29 +78,32 @@ class _DolScreenState extends State<DolScreen> {
     super.dispose();
   }
 
-  // 자동 슬라이드를 위한 메서드
+  /* ### 자동 슬라이드 함수 ### */
   void _startAutoSlide() {
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) { // 3초마다 변경
       if (!mounted) return;
       setState(() {
-        _currentPage = (_currentPage + 1) % images.length; // 다음 페이지로 이동
+        _currentSlide = (_currentSlide + 1) % images.length; // 다음 페이지로 이동
       });
       _pageController.animateToPage(
-        _currentPage,
-        duration: Duration(milliseconds: 500), // 애니메이션 지속 시간
+        _currentSlide,
+        duration: const Duration(milliseconds: 300), // 애니메이션 지속 시간
         curve: Curves.easeInOut, // 애니메이션 곡선
       );
     });
   }
 
+  /* ### 슬라이드 이미지 클릭 ### */
   void _onImageTap(int index) {
     Navigator.pushReplacement(
       context, 
       MaterialPageRoute(
-        builder: (context) => DolDetail(imageIndex: index,))
+        builder: (context) => DolDetail(imageIndex: index,), // 슬라이드 인덱스 전달
+      )
     );
   }
   
+  /* ### 매거진 이미지 클릭 ### */
   void _onMagazineTap(int index) {
     Navigator.push(
       context, 
@@ -110,24 +112,27 @@ class _DolScreenState extends State<DolScreen> {
       ),
     );
   }
+
+  /* ### 메인 홈 return ### */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Color(0xFFFFFFFF), toolbarHeight: 0,),
-      backgroundColor: Color(0xFFFFFFFF),
+      appBar: AppBar(backgroundColor: const Color(0xFFFFFFFF), toolbarHeight: 0,),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 슬라이드 배너
+
+            /* 이미지 슬라이드 섹션 */
             Stack(
               children: [
-                Container(
-                  height: 470, // 배너의 높이
+                SizedBox( // 슬라이드 이미지
+                  height: 470,
                   child: PageView.builder(
                     controller: _pageController,
-                    itemCount: images.length, // 이미지 수
+                    itemCount: images.length,
                     itemBuilder: (context, index) {
-                      return GestureDetector(
+                      return GestureDetector( // 이미지 클릭 했을 때
                         onTap: () => _onImageTap(index),
                         child: Image.asset(
                           images[index],
@@ -137,7 +142,7 @@ class _DolScreenState extends State<DolScreen> {
                     },
                   ),
                 ),
-                Positioned(
+                Positioned( // 슬라이드 도트
                   bottom: 3,
                   left: 0,
                   right: 0,
@@ -145,20 +150,18 @@ class _DolScreenState extends State<DolScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(images.length, (index) {
                       return Container(
-                        margin: EdgeInsets.all(4.0), // 점 간격
+                        margin: const EdgeInsets.all(4.0), // 점 간격
                         width: 8.0,
                         height: 8.0,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle, // 원형으로 표시
-                          color: _currentPage == index
-                              ? Color(0xFF85C59A) // 현재 페이지 색상
-                              : Color(0xFFFFFFFF), // 비활성 페이지 색상
+                          color: _currentSlide == index ? const Color(0xFF85C59A) : const Color(0xFFFFFFFF),
                         ),
                       );
                     }),
                   ),
                 ),
-                Positioned(
+                Positioned( // 알림 아이콘
                   top: 30,
                   right: 30,
                   child: GestureDetector(
@@ -168,21 +171,22 @@ class _DolScreenState extends State<DolScreen> {
                 ),
               ],
             ),
-            // 검색창
+
+            /* 검색 섹션 */
             Padding(
               padding: const EdgeInsets.all(24),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 height: 130, // 검색창 높이
                 decoration: BoxDecoration(
-                  color: Color(0xFFEFEFEF), // 배경색
+                  color: const Color(0xFFEFEFEF), // 배경색
                   borderRadius: BorderRadius.circular(15), // 모서리 둥글게
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 15, 16, 0),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(16, 15, 16, 0),
                       child: Text(
                         '어떤 여행지를 찾으시나요?', // 질문 텍스트
                         style: TextStyle(
@@ -191,23 +195,16 @@ class _DolScreenState extends State<DolScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         decoration: BoxDecoration(
-                          color: Color(0xFFF8F9FE), // 검색창 배경색
+                          color: const Color(0xFFF8F9FE), // 검색창 배경색
                           borderRadius: BorderRadius.circular(30.0), // 모서리 둥글게
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: Colors.black.withOpacity(0.1), // 그림자 색상
-                          //     blurRadius: 10.0, // 흐림 정도
-                          //     spreadRadius: 2.0, // 확산 정도
-                          //   ),
-                          // ],
                         ),
-                        child: TextField(
+                        child: const TextField(
                           decoration: InputDecoration(
                             border: InputBorder.none, // 테두리 없음
                             hintText: ' 검색', // 힌트 텍스트
@@ -221,7 +218,8 @@ class _DolScreenState extends State<DolScreen> {
                 ),
               ),
             ),
-            // 매거진 섹션
+
+            /* 매거진 섹션 */
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Container(
@@ -229,14 +227,14 @@ class _DolScreenState extends State<DolScreen> {
                 height: 1125, // 창 높이
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color(0xFFE8F1EA), // 배경색
+                  color: const Color(0xFFE8F1EA), // 배경색
                   borderRadius: BorderRadius.circular(15), // 모서리 둥글게
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 18, 0, 5),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 18, 0, 5),
                       child: Text(
                         '옵써의 트렌디한 매거진', // 텍스트
                         style: TextStyle(
@@ -246,7 +244,7 @@ class _DolScreenState extends State<DolScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: GestureDetector(
                         onTap: () => _onMagazineTap(0),
                         child: Card(
@@ -262,7 +260,7 @@ class _DolScreenState extends State<DolScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: GestureDetector(
                         onTap: () => _onMagazineTap(1),
                         child: Card(
@@ -278,7 +276,7 @@ class _DolScreenState extends State<DolScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: GestureDetector(
                         onTap: () => _onMagazineTap(2),
                         child: Card(
@@ -297,8 +295,14 @@ class _DolScreenState extends State<DolScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 25,),
-            // Text(dolMessage, style: TextStyle(fontSize: 18),),
+
+            /* 화면 아래 여백 */
+            const SizedBox(height: 25,),
+            
+            /* 서버 요청 확인 메세지 */
+            Center(
+              child: Text(dolMessage, style: const TextStyle(fontSize: 12, color: Color(0xFFE0E0E0)),),
+            )
           ],
         ),
       ),

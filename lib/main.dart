@@ -6,141 +6,118 @@ import 'screens/hash_screen.dart';
 import 'screens/briefcase_screen.dart';
 import 'screens/menu_screen.dart';
 import 'screens/hash_detail.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 void main(){
-  // 날짜 형식 초기화 후 애플리케이션 실행
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
+/* ##### 앱 종료할지 묻는 팝업 ##### */
 Future<void> _onBackPressed(BuildContext context) async {
   await showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('Do you want to exit?'),
+      backgroundColor: const Color(0xFFFFFFFF),
+      title: const Text('옵써를 종료하시겠습니까?'),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context), 
-          child: const Text('No'),
+          child: const Text('취소'),
         ),
         TextButton(
           onPressed: () => SystemNavigator.pop(), 
-          child: const Text('Yes'),
+          child: const Text('확인'),
         ),
       ],
     ),
   );
 }
 
+/* ##### 앱 설정 ##### */
 class MyApp extends StatelessWidget {
+  const MyApp({super.key}); // key 매개변수
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        fontFamily: 'Pretendard',
-      ),
+      theme: ThemeData(fontFamily: 'Pretendard',), // 기본 폰트: Pretendard
       debugShowCheckedModeBanner: false, // 디버그 배너 숨기기
-      home: MainPage(), // 메인 페이지 설정
+      home: const MainPage(), // 메인 페이지 설정
     );
   }
 }
 
+/* ##### 메인 페이지 ##### */
 class MainPage extends StatefulWidget {
+  const MainPage({super.key}); // key 매개변수
+
   @override
+  // ignore: library_private_types_in_public_api
   _MainPageState createState() => _MainPageState();
 }
-
 class _MainPageState extends State<MainPage> {
-  int _currentIndex = 0; // 현재 선택된 탭 인덱스
-  String message = 'Waiting for server response...';  // 서버 응답 메시지를 저장하는 변수
+  int _currentIndex = 0; // 현재 선택된 네비게이션 버튼 인덱스
 
-  @override
-  void initState() {
-    super.initState();
-    // testServerConnection();  // 앱 시작 시 서버에 연결 시도
-  }
-
-  // 서버에 연결하여 응답을 받는 함수
-  Future<void> testServerConnection() async {
-    try {
-      final response = await http.get(Uri.parse('http://127.0.0.1:5000'));  // Flask 서버에 요청
-      if (response.statusCode == 200) {
-        // 서버로부터 응답 성공 시
-        setState(() {
-          message = json.decode(response.body)['message'];  // 서버의 메시지를 화면에 표시
-        });
-      } else {
-        // 서버 응답 실패 시
-        setState(() {
-          message = 'Failed to connect to the server. Status code: ${response.statusCode}';
-        });
-      }
-    } catch (e) {
-      // 요청 도중 에러가 발생한 경우
-      setState(() {
-        message = 'Error connecting to the server: $e';
-      });
-    }
-  }
-
-  // 하단 네비게이션 아이템 클릭 시 호출되는 함수
+  /* ### 네비게이션 버튼 클릭 함수 ### */
   void _onItemTapped(int index) {
     setState(() {
-      _currentIndex = index; // 선택된 인덱스를 업데이트
+      _currentIndex = index; // 선택된 인덱스 업데이트
     });
   }
 
-  // 선택된 인덱스에 따라 페이지를 반환하는 함수
+  /* ### 선택된 인덱스로 페이지 반환 위젯 ### */
   Widget _buildPage(int index) {
     switch (index) {
-      case 0: return DolScreen(); // 첫 번째 페이지
-      case 1: return HashScreen(onKeywordSelected: _onItemTapped); // 두 번째 페이지
-      case 2: return BriefcaseScreen(); // 세 번째 페이지
-      case 3: return MenuScreen(); // 네 번째 페이지
-      case 11: return HashDetail(onKeywordSelected: _onItemTapped);
-      default: return Container(); // 기본값 (빈 컨테이너)
+      case 0: return const DolScreen(); // 메인 홈 페이지
+      case 1: return HashScreen(onKeywordSelected: _onItemTapped); // 여행지 키워드 페이지
+      case 2: return const BriefcaseScreen(); // 여행 일정 페이지
+      case 3: return const MenuScreen(); // 메뉴 페이지
+      case 11: return HashDetail(onKeywordSelected: _onItemTapped); // 선택된 키워드 페이지
+      default: return Container(); // 기본값(빈 컨테이너)
     }
   }
 
-  // 아이콘 생성 함수
+  /* ### 네비게이션 버튼 생성 위젯 ### */
   Widget _buildIcon(String assetName, int index, {double width = 36, double height = 36}) {
     return GestureDetector(
-      onTap: () => _onItemTapped(index), // 아이콘 클릭 시 탭 인덱스 변경
+      onTap: () => _onItemTapped(index), // 클릭 시 탭 인덱스 변경
       child: SvgPicture.asset(
         assetName, // SVG 아이콘 경로
-        color: _currentIndex == index || _currentIndex == index+10 ? Color(0xFF477C59) : Color(0xFF284029), // 선택된 상태에 따라 색상 변경
+        colorFilter: ColorFilter.mode(
+          _currentIndex == index || _currentIndex == index + 10 ? const Color(0xFF477C59) : const Color(0xFF284029), 
+          BlendMode.srcIn
+        ), // 선택된 상태에 따라 색상 변경
         width: width,
         height: height,
       ),
     );
   }
 
+  /* ### 메인 페이지 return ### */
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    // ignore: deprecated_member_use
+    return WillPopScope( // 뒤로가기 버튼 눌렀을 때 실행
       onWillPop: () async {
-        await _onBackPressed(context);
+        await _onBackPressed(context); // 앱을 종료할지 묻는 팝업
         return false;
       },
       child: Scaffold(
-        backgroundColor: Colors.white, // 배경색 설정
+        backgroundColor: Colors.white,
         body: _buildPage(_currentIndex), // 현재 선택된 페이지 표시
-        // body: Text(message, style: TextStyle(fontSize: 20),),
         bottomNavigationBar: BottomAppBar(
-          color: Color(0xFFF8F8F8), // 하단 네비게이션 바 색상
-          height: 100, // 높이 설정
+          color: const Color(0xFFF8F8F8), // 하단 네비게이션 바 색상
+          height: 90, // 높이 설정
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
             children: <Widget>[
-              _buildIcon('assets/icons/Dol.svg', 0, width: 32, height: 60), // 첫 번째 아이콘
-              SizedBox(width: 60), // 아이콘 사이 간격
-              _buildIcon('assets/icons/Hash.svg', 1), // 두 번째 아이콘
-              SizedBox(width: 60), // 아이콘 사이 간격
-              _buildIcon('assets/icons/Briefcase.svg', 2), // 세 번째 아이콘
-              SizedBox(width: 60), // 아이콘 사이 간격
-              _buildIcon('assets/icons/Menu.svg', 3), // 네 번째 아이콘
-              SizedBox(width: 10), // 아이콘 사이 간격
+              _buildIcon('assets/icons/Dol.svg', 0, width: 32, height: 60), // 메인 홈 아이콘
+              const SizedBox(width: 60),
+              _buildIcon('assets/icons/Hash.svg', 1), // 여행지 키워드 아이콘
+              const SizedBox(width: 60),
+              _buildIcon('assets/icons/Briefcase.svg', 2), // 여행 일정 아이콘
+              const SizedBox(width: 60),
+              _buildIcon('assets/icons/Menu.svg', 3), // 메뉴 아이콘
+              const SizedBox(width: 10),
             ],
           ),
         ),

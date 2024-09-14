@@ -13,12 +13,12 @@ class DolDetail extends StatefulWidget {
     'assets/banners/banner4.png',
   ];
 
-  DolDetail({required this.imageIndex});
+  DolDetail({super.key, required this.imageIndex});
 
   @override
+  // ignore: library_private_types_in_public_api
   _DolDetailState createState() => _DolDetailState();
 }
-
 class _DolDetailState extends State<DolDetail> {
   bool isFavorite = false;
 
@@ -26,10 +26,10 @@ class _DolDetailState extends State<DolDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFFFFFF),
+        backgroundColor: const Color(0xFFFFFFFF),
         toolbarHeight: 0,
       ),
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -43,10 +43,10 @@ class _DolDetailState extends State<DolDetail> {
                     onPressed: () {
                       Navigator.pushReplacement(
                         context, 
-                        MaterialPageRoute(builder: (context) => MainPage()),
+                        MaterialPageRoute(builder: (context) => const MainPage()),
                       );
                     }, 
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.arrow_back_ios,
                       size: 30,
                       color: Color(0xFF000000),
@@ -56,7 +56,7 @@ class _DolDetailState extends State<DolDetail> {
               ],
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(15, 10, 10, 0), // 오른쪽 패딩 추가
+              padding: const EdgeInsets.fromLTRB(15, 10, 10, 0), // 오른쪽 패딩 추가
               child: Column(
                 children: [
                    Row(
@@ -66,7 +66,7 @@ class _DolDetailState extends State<DolDetail> {
                         onTap: () {
                           // 상품 페이지로 이동하는 코드
                         },
-                        child: Text(
+                        child: const Text(
                           '상품>',
                           style: TextStyle(
                             fontSize: 17,
@@ -80,15 +80,10 @@ class _DolDetailState extends State<DolDetail> {
                           Share.share('Test', subject: 'Cool');
                         },
                         child: SvgPicture.asset('assets/icons/Share.svg'),
-                        // child: Icon(
-                        //   Icons.share_outlined,
-                        //   color: Color(0xFF717A75),
-                        //   size: 25, // 아이콘 크기를 줄임
-                        // ),
                       ),
                     ],
                   ),
-                  Align(
+                  const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       '제주마음샌드 케이크',
@@ -98,7 +93,7 @@ class _DolDetailState extends State<DolDetail> {
                       ),
                     ),
                   ),
-                  Align(
+                  const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       '오직 제주도 파리바게뜨에서만 만날 수 있는 케이크',
@@ -109,8 +104,8 @@ class _DolDetailState extends State<DolDetail> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10,),
-                  Align(
+                  const SizedBox(height: 10,),
+                  const Align(
                     alignment: Alignment.centerRight,
                     child: Text(
                       '정가 33,000원',
@@ -120,7 +115,7 @@ class _DolDetailState extends State<DolDetail> {
                       ),
                     ),
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -168,7 +163,7 @@ class _DolDetailState extends State<DolDetail> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Color(0xFFE8F1EA),
+        color: const Color(0xFFE8F1EA),
         height: 90,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -183,17 +178,20 @@ class _DolDetailState extends State<DolDetail> {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: const Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(10)
                 ),
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: SvgPicture.asset(
                   isFavorite ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
-                  color: Color(0xFF000000),
+                  colorFilter: const ColorFilter.mode(
+                    Color(0xFF000000),
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
             ),
-            SizedBox(width: 15),
+            const SizedBox(width: 15),
             GestureDetector(
               onTap: () => {
               },
@@ -201,17 +199,20 @@ class _DolDetailState extends State<DolDetail> {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: const Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(10)
                 ),
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: SvgPicture.asset(
                   'assets/icons/Briefcase.svg',
-                  color: Color(0xFF000000),
+                  colorFilter: const ColorFilter.mode(
+                    Color(0xFF000000),
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
             ),
-            SizedBox(width: 30),
+            const SizedBox(width: 30),
             GestureDetector(
               onTap: () => {
                 setState(() {
@@ -222,11 +223,11 @@ class _DolDetailState extends State<DolDetail> {
                 width: 210,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: const Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(10)
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                child: Center(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: const Center(
                   child: Text(
                     '예약하기',
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),

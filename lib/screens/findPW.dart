@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class FindpwScreen extends StatefulWidget {
+  const FindpwScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _FindpwScreenState createState() => _FindpwScreenState();
 }
-
 class _FindpwScreenState extends State<FindpwScreen> {
   final FocusNode emailFocusNode = FocusNode(); // 이메일 입력창의 FocusNode
-  Color emailBorderColor = Color(0xFFC5C6CC); // 이메일 입력창 테두리 색상
+  Color emailBorderColor = const Color(0xFFC5C6CC); // 이메일 입력창 테두리 색상
 
   @override
   void initState() {
@@ -15,7 +17,7 @@ class _FindpwScreenState extends State<FindpwScreen> {
     // FocusNode의 이벤트 리스너 설정
     emailFocusNode.addListener(() {
       setState(() {
-        emailBorderColor = emailFocusNode.hasFocus ? Color(0xFF497F5B) : Color(0xFFC5C6CC); // 포커스 상태에 따라 색상 변경
+        emailBorderColor = emailFocusNode.hasFocus ? const Color(0xFF497F5B) : const Color(0xFFC5C6CC); // 포커스 상태에 따라 색상 변경
       });
     });
   }
@@ -29,11 +31,11 @@ class _FindpwScreenState extends State<FindpwScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
+          const Center(
             child: Text(
               '옵써',
               style: TextStyle(
@@ -43,8 +45,8 @@ class _FindpwScreenState extends State<FindpwScreen> {
               ),
             ),
           ),
-          SizedBox(height: 15,),
-          Center(
+          const SizedBox(height: 15,),
+          const Center(
             child: Text(
               '비밀번호 찾기',
               style: TextStyle(
@@ -53,8 +55,8 @@ class _FindpwScreenState extends State<FindpwScreen> {
               ),
             ),
           ),
-          SizedBox(height: 5,),
-          Center(
+          const SizedBox(height: 5,),
+          const Center(
             child: Text(
               '비밀번호를 찾고자하는 아이디를 입력하세요.',
               style: TextStyle(
@@ -64,7 +66,7 @@ class _FindpwScreenState extends State<FindpwScreen> {
               ),
             ),
           ),
-          Center(
+          const Center(
             child: Text(
               '가입하신 이메일로 메일이 전송됩니다.',
               style: TextStyle(
@@ -74,10 +76,10 @@ class _FindpwScreenState extends State<FindpwScreen> {
               ),
             ),
           ),
-          SizedBox(height: 15,),
+          const SizedBox(height: 15,),
           Center(
             child: Container(
-              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
@@ -88,7 +90,7 @@ class _FindpwScreenState extends State<FindpwScreen> {
               ),
               child: TextField(
                 focusNode: emailFocusNode, // FocusNode 연결
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none, // 테두리 없음
                   hintText: '아이디를 입력해 주세요.', // 힌트 텍스트
                   hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
@@ -96,25 +98,25 @@ class _FindpwScreenState extends State<FindpwScreen> {
               ),
             ),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           Center(
             child: ElevatedButton(
               onPressed: () {
                 // 이메일 보내기 로직
               },
-              child: Text(
-                '이메일 보내기',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
-              ),
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.fromLTRB(0, 15, 0, 18),
-                backgroundColor: Color(0xFF497F5B),
-                foregroundColor: Color(0xFFFFFFFF),
+                padding: const EdgeInsets.fromLTRB(0, 15, 0, 18),
+                backgroundColor: const Color(0xFF497F5B),
+                foregroundColor: const Color(0xFFFFFFFF),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),
                 ),
-                minimumSize: Size(170, 55),
+                minimumSize: const Size(170, 55),
                 elevation: 0,
+              ),
+              child: const Text(
+                '이메일 보내기',
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
               ),
             ),
           ),
