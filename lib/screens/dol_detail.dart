@@ -161,7 +161,7 @@ class _DolDetailState extends State<DolDetail> {
                 ],
               ),
             ),
-            Text('상세페이지 ${widget.imageIndex}', style: TextStyle(fontSize: 24)),
+            // Text('상세페이지 ${widget.imageIndex}', style: TextStyle(fontSize: 24)),
           ],
         ),
       ),
