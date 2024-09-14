@@ -21,9 +21,9 @@ class MenuScreen extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => const LoginScreen()),
-                    );
+                  context, 
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.fromLTRB(0, 15, 0, 18),

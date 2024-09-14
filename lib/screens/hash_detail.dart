@@ -194,8 +194,8 @@ class _HashDetailState extends State<HashDetail> {
                 },
                 child: SvgPicture.asset(
                   isFavoriteList[index] ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
-                  colorFilter: const ColorFilter.mode(
-                    Color(0xFFFFFFFF),
+                  colorFilter: ColorFilter.mode(
+                    isFavoriteList[index] ? const Color(0xFFFF5555) : const Color(0xFFFFFFFF),
                     BlendMode.srcIn,
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:obsser_1/screens/new_trip_screen.dart';
 
 class BriefcaseScreen extends StatefulWidget {
   const BriefcaseScreen({super.key});
@@ -81,7 +82,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
         child: TableCalendar(
           focusedDay: DateTime.now(),
           firstDay: DateTime(2024, 1, 1),
-          lastDay: DateTime(2024, 12, 31),
+          lastDay: DateTime(2030, 12, 31),
           daysOfWeekHeight: 40,
           headerStyle: HeaderStyle(
             leftChevronPadding: EdgeInsets.zero,
@@ -170,15 +171,16 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
       child: Center(
         child: ElevatedButton(
           onPressed: () {
-            // 일정 추가 로직
+            Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => const NewTScreen()),
+            );
           },
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 5),
             backgroundColor: const Color(0xFFFFC04B),
             foregroundColor: const Color(0xFFFFFFFF),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),),
             minimumSize: const Size(170, 50),
             elevation: 0,
           ),
