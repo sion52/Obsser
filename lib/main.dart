@@ -6,13 +6,12 @@ import 'screens/hash_screen.dart';
 import 'screens/briefcase_screen.dart';
 import 'screens/menu_screen.dart';
 import 'screens/hash_detail.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 void main(){
   // 날짜 형식 초기화 후 애플리케이션 실행
-  initializeDateFormatting().then((_) => runApp(MyApp()));
+  runApp(MyApp());
 }
 
 Future<void> _onBackPressed(BuildContext context) async {
@@ -39,7 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        fontFamily: 'Inter',
+        fontFamily: 'Pretendard',
       ),
       debugShowCheckedModeBanner: false, // 디버그 배너 숨기기
       home: MainPage(), // 메인 페이지 설정
@@ -59,7 +58,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    testServerConnection();  // 앱 시작 시 서버에 연결 시도
+    // testServerConnection();  // 앱 시작 시 서버에 연결 시도
   }
 
   // 서버에 연결하여 응답을 받는 함수

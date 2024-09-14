@@ -54,11 +54,11 @@ class _HashScreenState extends State<HashScreen> {
             children: [
               TextSpan(
                 text: '키워드별',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Color(0xFF497F5B)),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
               ),
               TextSpan(
                 text: ' 여행지',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Colors.black),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.black),
               ),
             ],
           ),
@@ -151,11 +151,11 @@ class _HashScreenState extends State<HashScreen> {
         children: [
           TextSpan(
             text: '교통수단별',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Color(0xFF497F5B)),
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
           ),
           TextSpan(
             text: ' 여행코스',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Colors.black),
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.black),
           ),
         ],
       ),
@@ -189,7 +189,7 @@ class _HashScreenState extends State<HashScreen> {
               ),
             ),
             SizedBox(height: 3),
-            Text(option['label'], style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900)), // 라벨
+            Text(option['label'], style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800)), // 라벨
           ],
         );
       }).toList(),
@@ -230,7 +230,7 @@ class _HashScreenState extends State<HashScreen> {
           margin: EdgeInsets.symmetric(vertical: 7),
           padding: EdgeInsets.fromLTRB(14, 0, 0, 0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
             color: Color(0xFFE8E9F1),
             image: DecorationImage(
               image: AssetImage(category['image']!), // 카테고리 이미지
@@ -240,10 +240,10 @@ class _HashScreenState extends State<HashScreen> {
           child: Stack(
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: Text(
                   category['label']!, // 카테고리 라벨
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
                 ),
               ),
               Positioned(

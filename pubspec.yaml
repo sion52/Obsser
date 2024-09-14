@@ -40,6 +40,7 @@ dependencies:
   table_calendar: ^3.1.2
   google_fonts: ^6.2.1
   http: ^1.2.2
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
@@ -75,25 +76,25 @@ flutter:
     - assets/magazines/
 
   fonts:
-    - family: Inter
+    - family: Pretendard
       fonts:
-        - asset: fonts/Inter_18pt-Thin.ttf
+        - asset: fonts/Pretendard-Thin.otf
           weight: 100
-        - asset: fonts/Inter_18pt-ExtraLight.ttf
+        - asset: fonts/Pretendard-ExtraLight.otf
           weight: 200
-        - asset: fonts/Inter_18pt-Light.ttf
+        - asset: fonts/Pretendard-Light.otf
           weight: 300
-        - asset: fonts/Inter_18pt-Regular.ttf
+        - asset: fonts/Pretendard-Regular.otf
           weight: 400
-        - asset: fonts/Inter_18pt-Medium.ttf
+        - asset: fonts/Pretendard-Medium.otf
           weight: 500
-        - asset: fonts/Inter_18pt-SemiBold.ttf
+        - asset: fonts/Pretendard-SemiBold.otf
           weight: 600
-        - asset: fonts/Inter_18pt-Bold.ttf
+        - asset: fonts/Pretendard-Bold.otf
           weight: 700
-        - asset: fonts/Inter_18pt-ExtraBold.ttf
+        - asset: fonts/Pretendard-ExtraBold.otf
           weight: 800
-        - asset: fonts/Inter_18pt-Black.ttf
+        - asset: fonts/Pretendard-Black.otf
           weight: 900
     - family: NanumMyeongjo
       fonts:

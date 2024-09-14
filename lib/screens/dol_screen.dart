@@ -34,9 +34,11 @@ class _DolScreenState extends State<DolScreen> {
     _pageController = PageController(); // 페이지 컨트롤러 초기화
     // 페이지 변경 시 현재 페이지 업데이트
     _pageController.addListener(() {
-      setState(() {
-        _currentPage = _pageController.page!.round();
-      });
+      if (mounted) {
+        setState(() {
+          _currentPage = _pageController.page!.round();
+        });
+      }
     });
     _startAutoSlide(); // 자동 슬라이드 시작
   }
@@ -46,20 +48,26 @@ class _DolScreenState extends State<DolScreen> {
       final response = await http.get(Uri.parse('http://127.0.0.1:5000/dol'));
       if (response.statusCode == 200) {
         // 서버 응답 성공시
-        setState(() {
-          dolMessage = json.decode(response.body)['dolMessage'];
-        });
+        if(mounted) {
+          setState(() {
+            dolMessage = json.decode(response.body)['dolMessage'];
+          });
+        }
       } else {
         // 서버 응답 실패시
-        setState(() {
-          dolMessage = 'Failed to fetch data. Status code: ${response.statusCode}';
-        });
+        if(mounted) {
+          setState(() {
+            dolMessage = 'Failed to fetch data. Status code: ${response.statusCode}';
+          });
+        }
       }
     } catch (e) {
       // 오류 발생시
-      setState(() {
-        dolMessage = 'Error fetching data: $e';
-      });
+      if(mounted) {
+        setState(() {
+          dolMessage = 'Error fetching data: $e';
+        });
+      }
     }
   }
 
@@ -73,6 +81,7 @@ class _DolScreenState extends State<DolScreen> {
   // 자동 슬라이드를 위한 메서드
   void _startAutoSlide() {
     _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      if (!mounted) return;
       setState(() {
         _currentPage = (_currentPage + 1) % images.length; // 다음 페이지로 이동
       });
@@ -104,6 +113,7 @@ class _DolScreenState extends State<DolScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(backgroundColor: Color(0xFFFFFFFF), toolbarHeight: 0,),
+      backgroundColor: Color(0xFFFFFFFF),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -181,7 +191,7 @@ class _DolScreenState extends State<DolScreen> {
                         '어떤 여행지를 찾으시나요?', // 질문 텍스트
                         style: TextStyle(
                           fontSize: 24,
-                          fontWeight: FontWeight.w900, // 굵은 텍스트
+                          fontWeight: FontWeight.w800, // 굵은 텍스트
                         ),
                       ),
                     ),
@@ -229,30 +239,15 @@ class _DolScreenState extends State<DolScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 18, 0, 5),
-                          child: Text(
-                            '옵써의 트렌디한 매거진', // 텍스트
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w900,
-                            )
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 18, 16, 5),
-                          child: Text(
-                            '더보기', // 텍스트
-                            style: TextStyle(
-                              color: Color(0xFF477C59),
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 18, 0, 5),
+                      child: Text(
+                        '옵써의 트렌디한 매거진', // 텍스트
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                        )
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 10, 0, 0),

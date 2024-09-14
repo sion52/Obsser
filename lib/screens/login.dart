@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
               '옵써',
               style: TextStyle(
                 fontFamily: 'NanumMyeongjo',
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 fontSize: 65,
               ),
             ),
@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
-                  width: 2,
+                  width: 1.3,
                   color: emailBorderColor, // 이메일 테두리 색상 변경
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   border: InputBorder.none, // 테두리 없음
                   hintText: '이메일을 입력해 주세요.', // 힌트 텍스트
-                  hintStyle: TextStyle(fontSize: 16, color: Color(0xFFC5C6CC)), // 힌트 색상
+                  hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
                 ),
               ),
             ),
@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
-                  width: 2,
+                  width: 1.3,
                   color: passwordBorderColor, // 비밀번호 테두리 색상 변경
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -95,10 +95,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   border: InputBorder.none, // 테두리 없음
                   hintText: '비밀번호를 입력해 주세요.', // 힌트 텍스트
-                  hintStyle: TextStyle(fontSize: 16, color: Color(0xFFC5C6CC)), // 힌트 색상
+                  hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
                   suffixIcon: IconButton(
                     padding: EdgeInsets.zero,
-                    icon: Icon(isVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined, size: 24, color: Color(0xFFC5C6CC),),
+                    icon: Icon(isVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined, size: 24, color: Color(0xFF8F9098),),
                     onPressed: () {
                       // 비밀번호 표시
                       setState(() {
@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   suffixIconConstraints: const BoxConstraints(
-                    maxHeight: 35,
+                    maxHeight: 30,
                   ),
                 ),
               ),

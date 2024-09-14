@@ -73,7 +73,7 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Text(
                 '이름',
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   fontSize: 15,
                 ),
               ),
@@ -84,7 +84,7 @@ class _SignupScreenState extends State<SignupScreen> {
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
-                  width: 2,
+                  width: 1.3,
                   color: nameBorderColor,
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -94,7 +94,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: '이름',
-                  hintStyle: TextStyle(fontSize: 16, color: Color(0xFFC5C6CC)),
+                  hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
                 ),
               ),
             ),
@@ -104,7 +104,7 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Text(
                 '이메일',
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   fontSize: 15,
                 ),
               ),
@@ -115,7 +115,7 @@ class _SignupScreenState extends State<SignupScreen> {
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
-                  width: 2,
+                  width: 1.3,
                   color: emailBorderColor,
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -125,7 +125,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: '이메일',
-                  hintStyle: TextStyle(fontSize: 16, color: Color(0xFFC5C6CC)),
+                  hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
                 ),
               ),
             ),
@@ -135,7 +135,7 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Text(
                 '비밀번호',
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   fontSize: 15,
                 ),
               ),
@@ -146,7 +146,7 @@ class _SignupScreenState extends State<SignupScreen> {
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
-                  width: 2,
+                  width: 1.3,
                   color: passwordBorderColor,
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -157,7 +157,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: '비밀번호',
-                  hintStyle: TextStyle(fontSize: 16, color: Color(0xFFC5C6CC)),
+                  hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
                   suffixIcon: IconButton(
                     padding: EdgeInsets.zero,
                     icon: Icon(isVisible ? Icons.visibility : Icons.visibility_off, size: 24, color: Color(0xFFC5C6CC)),
@@ -179,7 +179,7 @@ class _SignupScreenState extends State<SignupScreen> {
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
-                  width: 2,
+                  width: 1.3,
                   color: confirmPasswordBorderColor,
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -190,7 +190,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: '비밀번호 확인',
-                  hintStyle: TextStyle(fontSize: 16, color: Color(0xFFC5C6CC)),
+                  hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
                 ),
               ),
             ),

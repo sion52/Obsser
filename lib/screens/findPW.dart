@@ -81,7 +81,7 @@ class _FindpwScreenState extends State<FindpwScreen> {
               width: 400,
               decoration: BoxDecoration(
                 border: Border.all(
-                  width: 2,
+                  width: 1.3,
                   color: emailBorderColor // 테두리 색상 변경
                 ),
                 borderRadius: BorderRadius.circular(10),
@@ -91,7 +91,7 @@ class _FindpwScreenState extends State<FindpwScreen> {
                 decoration: InputDecoration(
                   border: InputBorder.none, // 테두리 없음
                   hintText: '아이디를 입력해 주세요.', // 힌트 텍스트
-                  hintStyle: TextStyle(fontSize: 16, color: Color(0xFFC5C6CC)), // 힌트 색상
+                  hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w300 ,color: Color(0xFF8F9098)), // 힌트 색상
                 ),
               ),
             ),

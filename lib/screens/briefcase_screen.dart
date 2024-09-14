@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart';
 
 class BriefcaseScreen extends StatefulWidget {
   const BriefcaseScreen({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class BriefcaseScreen extends StatefulWidget {
 
 class _BriefcaseScreenState extends State<BriefcaseScreen> {
   // 월 이름 리스트
-  final List<String> _monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'  ];
+  final List<String> _monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'  ];
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +82,6 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
           focusedDay: DateTime.now(),
           firstDay: DateTime(2024, 1, 1),
           lastDay: DateTime(2024, 12, 31),
-          locale: 'ko-KR',
           daysOfWeekHeight: 40,
           headerStyle: HeaderStyle(
             leftChevronPadding: EdgeInsets.zero,
@@ -91,9 +91,12 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
               return "${_monthNames[date.month - 1]} ${date.year}";
             },
             headerPadding: EdgeInsets.fromLTRB(0, 25, 0, 10),
-            titleTextStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.w900),
+            titleTextStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
           ),
           daysOfWeekStyle: DaysOfWeekStyle(
+            dowTextFormatter: (date, locale) {
+              return DateFormat.E(locale).format(date).substring(0, 2).toUpperCase(); 
+            },
             weekdayStyle: TextStyle(fontSize: 12),
             weekendStyle: TextStyle(fontSize: 12),
           ),
@@ -125,7 +128,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
       alignment: Alignment.centerLeft,
       child: Text(
         ' 여행 히스토리',
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
       ),
     );
   }
@@ -147,8 +150,8 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
-                  Text(date, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w100, color: Colors.white)),
+                  Text(title, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: Colors.white)),
+                  Text(date, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w200, color: Colors.white)),
                 ],
               ),
             ),
@@ -171,12 +174,12 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
           },
           child: Text(
             '새로운 일정 추가',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(vertical: 5),
-            backgroundColor: Color(0xFFFFDEA0),
-            foregroundColor: Color(0xFF000000),
+            backgroundColor: Color(0xFFFFC04B),
+            foregroundColor: Color(0xFFFFFFFF),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),

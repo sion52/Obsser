@@ -67,7 +67,7 @@ class _HashDetailState extends State<HashDetail> {
                       '보러가기>',
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w800,
                         color: Color(0xFF497F5B),
                       ),
                     ),
@@ -89,11 +89,11 @@ class _HashDetailState extends State<HashDetail> {
             children: [
               TextSpan(
                 text: '키워드별',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Color(0xFF497F5B)),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
               ),
               TextSpan(
                 text: ' 여행지',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Colors.black),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.black),
               ),
             ],
           ),

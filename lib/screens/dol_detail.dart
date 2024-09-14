@@ -47,7 +47,7 @@ class DolDetail extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(15, 10, 10, 10), // 오른쪽 패딩 추가
+              padding: EdgeInsets.fromLTRB(15, 10, 10, 0), // 오른쪽 패딩 추가
               child: Column(
                 children: [
                    Row(
@@ -65,11 +65,15 @@ class DolDetail extends StatelessWidget {
                           ),
                         ),
                       ),
-                      IconButton(
-                        icon: Icon(Icons.share_outlined, color: Color(0xFF717A75)),
-                        onPressed: () {
+                      GestureDetector(
+                        onTap: () {
                           // 공유 기능 구현
                         },
+                        child: Icon(
+                          Icons.share_outlined,
+                          color: Color(0xFF717A75),
+                          size: 25, // 아이콘 크기를 줄임
+                        ),
                       ),
                     ],
                   ),
@@ -79,7 +83,7 @@ class DolDetail extends StatelessWidget {
                       '제주마음샌드 케이크',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                        fontSize: 26,
                       ),
                     ),
                   ),
