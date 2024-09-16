@@ -178,8 +178,8 @@ class _HashScreenState extends State<HashScreen> {
           children: [
             // 아이콘 원형 배경
             Container(
-              width: 70,
-              height: 70,
+              width: 60,
+              height: 60,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Color(0xFFE8E9F1), // 배경색
@@ -226,7 +226,7 @@ class _HashScreenState extends State<HashScreen> {
       children: categories.map((category) {
         return Container(
           width: double.infinity,
-          height: 40,
+          height: 35,
           margin: const EdgeInsets.symmetric(vertical: 7),
           padding: const EdgeInsets.fromLTRB(14, 0, 0, 0),
           decoration: BoxDecoration(
@@ -240,7 +240,7 @@ class _HashScreenState extends State<HashScreen> {
           child: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                 child: Text(
                   category['label']!, // 카테고리 라벨
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
@@ -250,6 +250,10 @@ class _HashScreenState extends State<HashScreen> {
                 right: 0,
                 top: 0,
                 child: IconButton(
+                  constraints: BoxConstraints(
+                    minWidth: 24,
+                    minHeight: 24,
+                  ),
                   onPressed: () {
                     // print('${category['label']} 버튼 클릭됨');
                   }, 

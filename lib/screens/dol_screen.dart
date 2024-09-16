@@ -199,7 +199,7 @@ class _DolScreenState extends State<DolScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),
                         decoration: BoxDecoration(
                           color: const Color(0xFFF8F9FE), // 검색창 배경색
                           borderRadius: BorderRadius.circular(30.0), // 모서리 둥글게
@@ -208,7 +208,7 @@ class _DolScreenState extends State<DolScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none, // 테두리 없음
                             hintText: ' 검색', // 힌트 텍스트
-                            hintStyle: TextStyle(fontSize: 18, color: Colors.grey), // 힌트 색상
+                            hintStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Color(0xFF8F9098)), // 힌트 색상
                             prefixIcon: Icon(Icons.search, color: Color(0xFF000000)), // 검색 아이콘
                           ),
                         ),
@@ -224,7 +224,7 @@ class _DolScreenState extends State<DolScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                height: 1125, // 창 높이
+                height: 1120, // 창 높이
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: const Color(0xFFE8F1EA), // 배경색
@@ -234,7 +234,7 @@ class _DolScreenState extends State<DolScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Padding(
-                      padding: EdgeInsets.fromLTRB(10, 18, 0, 5),
+                      padding: EdgeInsets.fromLTRB(10, 18, 0, 0),
                       child: Text(
                         '옵써의 트렌디한 매거진', // 텍스트
                         style: TextStyle(

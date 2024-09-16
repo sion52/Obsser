@@ -72,7 +72,7 @@ class _NewTScreenState extends State<NewTScreen> {
           const SizedBox(height: 20,),
           Center(
             child: Container(
-              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
               width: double.infinity,
               decoration: BoxDecoration(
                 border: Border.all(
@@ -83,10 +83,21 @@ class _NewTScreenState extends State<NewTScreen> {
               ),
               child: TextField(
                 controller: _controller,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: '힐링하러 떠나는 제주도',
                   hintStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w300, color: Color(0xFFC5C6CC)),
+                  suffixIcon: IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: const Icon(Icons.autorenew, size: 28, color: Color(0xFF477C59),),
+                    onPressed: () {
+                      // 검색 버튼 클릭 시 동작
+                    },
+                  ),
+                  suffixIconConstraints: const BoxConstraints(
+                    maxWidth: 30,
+                    maxHeight: 30,
+                  ),
                 ),
               ),
             ),
