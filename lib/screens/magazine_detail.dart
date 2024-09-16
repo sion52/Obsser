@@ -47,7 +47,7 @@ class _MagzScreenState extends State<MagzScreen> {
                     child: SvgPicture.asset(
                       isFavorite ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
                       colorFilter: ColorFilter.mode(
-                      isFavorite ? Color(0xFFFF5555) : Color(0xFFFFFFFF),
+                      isFavorite ? const Color(0xFFFF5555) : const Color(0xFFFFFFFF),
                       BlendMode.srcIn,
                       ),
                     ),
