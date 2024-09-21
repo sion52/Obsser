@@ -12,6 +12,18 @@ class DolDetail extends StatefulWidget {
     'assets/banners/banner3.png',
     'assets/banners/banner4.png',
   ];
+  final List<String> title = [
+    '제주마음샌드 케이크',
+    '베케의 돌담: 정원 도슨트',
+    '올레식당 예약',
+    '렌트카 예약'
+  ];
+  final List<String> explanation = [
+    '오직 제주도 파리바게뜨에서만 만날 수 있는 케이크',
+    '베케의 돌담 감상하기, 정원 도슨트를 예약하세요',
+    '올레식당 웨이팅 없이 이용하기',
+    '렌트카 22% 할인 받기'
+  ];
 
   DolDetail({super.key, required this.imageIndex});
 
@@ -83,20 +95,20 @@ class _DolDetailState extends State<DolDetail> {
                       ),
                     ],
                   ),
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      '제주마음샌드 케이크',
-                      style: TextStyle(
+                      widget.title[widget.imageIndex],
+                      style: const TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: 26,
                       ),
                     ),
                   ),
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      '오직 제주도 파리바게뜨에서만 만날 수 있는 케이크',
+                      widget.explanation[widget.imageIndex],
                       style: TextStyle(
                         color: Color(0xFF4D5049),
                         fontWeight: FontWeight.w500,

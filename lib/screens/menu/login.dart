@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:obsser_1/screens/signup.dart';
-import 'package:obsser_1/screens/findpw.dart';
+import 'package:obsser_1/screens/menu/signup.dart';
+import 'package:obsser_1/screens/menu/findpw.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

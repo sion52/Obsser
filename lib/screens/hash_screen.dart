@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:obsser_1/screens/hash/hash_detail.dart';
 
 class HashScreen extends StatefulWidget {
   final Function(int) onKeywordSelected;
@@ -124,7 +125,15 @@ class _HashScreenState extends State<HashScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // 버튼 클릭 시 동작
-                  widget.onKeywordSelected(11);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HashDetail(
+                        selectedKeyword: keywords[index],
+                        onKeywordSelected: widget.onKeywordSelected,
+                      )
+                    )
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(0),

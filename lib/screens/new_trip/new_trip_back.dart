@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:obsser_1/main.dart';
 
 class NewTBackScreen extends StatefulWidget {
   final String tripTitle;
-  final DateTime rangeStart;
-  final DateTime rangeEnd;
+  final String rangeStart;
+  final String rangeEnd;
   const NewTBackScreen({super.key, required this.tripTitle, required this.rangeStart, required this.rangeEnd});
 
   @override
@@ -15,6 +17,27 @@ class NewTBackScreen extends StatefulWidget {
 class _NewTBackScreenState extends State<NewTBackScreen> {
   bool isNextEnabled = true; // 다음 버튼 활성화 여부
   String selectedImage = 'assets/histories/back_0.png'; // 초기 이미지
+
+  Future<void> saveTravelData(String title, String startDate, String endDate, String imageUrl) async {
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/travel_data'), // 서버 주소에 맞게 수정
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'title': title,
+        'date' : '$startDate - $endDate',
+        'imageUrl': imageUrl,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // 서버에서 성공적으로 저장됨
+      print('Data saved successfully');
+    } else {
+      throw Exception('Failed to save data');
+    }
+  }
 
   Widget _buildPNButton() {
     return Row(
@@ -37,9 +60,21 @@ class _NewTBackScreenState extends State<NewTBackScreen> {
         const SizedBox(width: 25),
         ElevatedButton(
           onPressed: isNextEnabled
-              ? () {
-                  // 다음 버튼 눌렀을 때 동작
-                }
+              ? () async {
+                  // 다음 버튼 눌렀을 때 서버에 데이터 전송
+                String startDate = widget.rangeStart.toString();
+                String endDate = widget.rangeEnd.toString();
+                await saveTravelData(widget.tripTitle, startDate, endDate, selectedImage);
+                
+                // 메인 페이지로 이동하고 초기 인덱스를 2로 설정
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MainPage(initialIndex: 2), // 초기 인덱스 2
+                  ),
+                  (Route<dynamic> route) => false, // 스택의 모든 이전 페이지 제거
+                );
+              }
               : null,
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 5),

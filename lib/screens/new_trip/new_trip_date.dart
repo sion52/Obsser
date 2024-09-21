@@ -47,19 +47,23 @@ class _NewTDateScreenState extends State<NewTDateScreen> {
         ElevatedButton(
           onPressed: isNextEnabled
             ? () {
-              // 다음 버튼 눌렀을 때 동작
+              // 날짜 형식을 yyyy.MM.dd로 변환
+              String formattedStartDate = DateFormat('yyyy.MM.dd').format(_rangeStart!);
+              String formattedEndDate = DateFormat('yyyy.MM.dd').format(_rangeEnd!);
+              
+              // 다음 페이지로 이동하면서 변환된 날짜 데이터를 문자열로 전달
               Navigator.push(
-                context, 
+                context,
                 MaterialPageRoute(
                   builder: (context) => NewTBackScreen(
-                    tripTitle: widget.tripTitle, 
-                    rangeStart: _rangeStart!, 
-                    rangeEnd: _rangeEnd!,
+                    tripTitle: widget.tripTitle,
+                    rangeStart: formattedStartDate,  // 문자열로 전달
+                    rangeEnd: formattedEndDate,      // 문자열로 전달
                   ),
                 ),
               );
             }
-            : null, 
+          : null,
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 5),
             backgroundColor: const Color(0xFFFFC04B), 

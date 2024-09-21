@@ -1,18 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:obsser_1/screens/new_trip/new_trip_screen.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
-import 'package:obsser_1/screens/new_trip_screen.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class BriefcaseScreen extends StatefulWidget {
   const BriefcaseScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _BriefcaseScreenState createState() => _BriefcaseScreenState();
 }
+
 class _BriefcaseScreenState extends State<BriefcaseScreen> {
-  // 월 이름 리스트
-  final List<String> _monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'  ];
+  final List<String> _monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  List<Map<String, String>> travelCards = []; // 서버에서 받아온 여행 카드 데이터 저장
+  bool isLoading = true; // 로딩 상태 변수
+
+  // 서버에서 여행 데이터를 받아오는 함수
+  Future<List<Map<String, String>>> fetchTravelData() async {
+  final response = await http.get(Uri.parse('http://127.0.0.1:5000/travel_data'));
+
+  if (response.statusCode == 200) {
+    // JSON 응답을 파싱하고 List<dynamic>으로 반환됨
+    List<dynamic> data = json.decode(response.body);
+
+    // 각 항목을 Map<String, String>으로 변환
+    List<Map<String, String>> travelData = data.map((item) {
+      return {
+        'title': item['title'].toString(),   // 명시적으로 String으로 변환
+        'date': item['date'].toString(),
+        'imageUrl': item['imageUrl'].toString(),
+      };
+    }).toList();
+
+    return travelData;  // List<Map<String, String>> 반환
+  } else {
+    throw Exception('Failed to load travel data');
+  }
+}
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTravelData().then((data) {
+      if (mounted) {
+        setState(() {
+          travelCards = data; // 서버에서 받은 데이터를 travelCards에 저장
+          isLoading = false; // 로딩 완료
+        });
+      }
+    }).catchError((e) {
+      setState(() {
+        isLoading = false; // 로딩 완료
+      });
+      print('Error fetching data: $e');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,50 +73,37 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
             padding: const EdgeInsets.fromLTRB(25, 30, 25, 0),
             child: Column(
               children: [
-                // 달력 컨테이너
                 _buildCalendar(),
                 const SizedBox(height: 30),
-                // 여행 히스토리 제목
                 _buildTravelHistoryTitle(),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        // 여행 카드
-                        _buildTravelCard(
-                          title: '8월 힐링 제주도',
-                          date: '2024.08.15 - 2024.08.18',
-                          imageUrl: 'assets/histories/photo.png' // 실제 이미지 URL
+                  child: isLoading
+                      ? const Center(child: CircularProgressIndicator()) // 로딩 중일 때
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: travelCards.map((card) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                child: _buildTravelCard(
+                                  title: card['title']!,
+                                  date: card['date']!,
+                                  imageUrl: card['imageUrl']!,
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ),
-                        const SizedBox(height: 5),
-                        // 추가적인 여행 카드도 여기에 추가할 수 있습니다.
-                        _buildTravelCard(
-                          title: '8월 힐링 제주도',
-                          date: '2024.08.15 - 2024.08.18',
-                          imageUrl: 'assets/histories/photo.png' // 실제 이미지 URL
-                        ),
-                        const SizedBox(height: 5),
-                        _buildTravelCard(
-                          title: '8월 힐링 제주도',
-                          date: '2024.08.15 - 2024.08.18',
-                          imageUrl: 'assets/histories/photo.png' // 실제 이미지 URL
-                        ),
-                        const SizedBox(height: 10),
-                      ],
-                    ),
-                  ),
                 ),
               ],
             ),
           ),
-          // 새로운 일정 추가 버튼
           _buildAddScheduleButton(),
         ],
       ),
     );
   }
 
-  // 달력 위젯 생성
+  // 달력 위젯
   Widget _buildCalendar() {
     return Container(
       decoration: const BoxDecoration(
@@ -96,7 +128,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
           ),
           daysOfWeekStyle: DaysOfWeekStyle(
             dowTextFormatter: (date, locale) {
-              return DateFormat.E(locale).format(date).substring(0, 2).toUpperCase(); 
+              return DateFormat.E(locale).format(date).substring(0, 2).toUpperCase();
             },
             weekdayStyle: const TextStyle(fontSize: 12),
             weekendStyle: const TextStyle(fontSize: 12),
@@ -123,7 +155,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
     );
   }
 
-  // 여행 히스토리 제목 위젯 생성
+  // 여행 히스토리 제목 위젯
   Widget _buildTravelHistoryTitle() {
     return const Align(
       alignment: Alignment.centerLeft,
@@ -134,7 +166,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
     );
   }
 
-  // 여행 카드 위젯 생성
+  // 여행 카드 위젯
   Widget _buildTravelCard({required String title, required String date, required String imageUrl}) {
     return Card(
       shape: RoundedRectangleBorder(
@@ -162,7 +194,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
     );
   }
 
-  // 새로운 일정 추가 버튼 위젯 생성
+  // 새로운 일정 추가 버튼
   Widget _buildAddScheduleButton() {
     return Positioned(
       left: 20,

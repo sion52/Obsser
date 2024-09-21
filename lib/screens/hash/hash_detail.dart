@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:obsser_1/screens/hash/hash_detail_route.dart';
 
 class HashDetail extends StatefulWidget {
   final Function(int) onKeywordSelected;
+  final String selectedKeyword;
 
-  const HashDetail({super.key, required this.onKeywordSelected});
+  const HashDetail({super.key, required this.selectedKeyword, required this.onKeywordSelected, });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -43,9 +45,9 @@ class _HashDetailState extends State<HashDetail> {
                       color: Color(0xFF000000),
                     ),
                   ),
-                  const Text(
-                    '#한적한',
-                    style: TextStyle(
+                  Text(
+                    widget.selectedKeyword,
+                    style: const TextStyle(
                       fontSize: 16,
                       color: Color(0xFF497F5B),
                     ),
@@ -59,10 +61,10 @@ class _HashDetailState extends State<HashDetail> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Navigator.push(
-                      //   context, 
-                      //   MaterialPageRoute(builder: (context) => SignupScreen()),
-                      // );
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(builder: (context) => HashDetailRoute(selectedKeyword: widget.selectedKeyword,)),
+                      );
                     },
                     child: const Text(
                       '보러가기>',
@@ -104,7 +106,6 @@ class _HashDetailState extends State<HashDetail> {
   }
 
   Widget buildKeywordChips() {
-    List<String> keywords = ['#한적한', '#감성적인', '#휴양지', '#맛집', '#야경', '#여유로운', '#술', "#촬영지", "#드라이브", ];
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -119,50 +120,62 @@ class _HashDetailState extends State<HashDetail> {
             color: const Color(0xA6A4A4A4),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // 버튼 클릭 시 동작
-                    widget.onKeywordSelected(1);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(0),
-                    backgroundColor: const Color(0xFFD9D9D9), // 버튼 배경색
-                    foregroundColor: const Color(0xFF000000), // 버튼 텍스트 색
-                    elevation: 0, // 그림자 제거
-                    minimumSize: const Size(110, 50),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 14, 12, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // 버튼 클릭 시 동작
+                        Navigator.pop(context, widget.selectedKeyword);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(0),
+                        backgroundColor: const Color(0xFFD9D9D9), // 버튼 배경색
+                        foregroundColor: const Color(0xFF000000), // 버튼 텍스트 색
+                        elevation: 0, // 그림자 제거
+                        minimumSize: const Size(110, 50),
+                      ),
+                      child: Text(
+                        widget.selectedKeyword,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                      ),
+                    ),
                   ),
-                  child: Text(
-                    keywords[0],
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                  const SizedBox(height: 10,),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          _buildCard(0, '카멜리아 힐', 'assets/pictures/camellia.png'),
+                          const SizedBox(height: 5,),
+                          _buildCard(1, '생각하는 정원', 'assets/pictures/garden.png'),
+                          const SizedBox(height: 5,),
+                          _buildCard(2, '베케', 'assets/pictures/veke.png'),
+                          const SizedBox(height: 5,),
+                          _buildCard(3, '삼성혈', 'assets/pictures/samsung.png'),
+                          const SizedBox(height: 10,),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-              const SizedBox(height: 10,),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _buildCard(0, '카멜리아 힐', 'assets/pictures/camellia.png'),
-                      const SizedBox(height: 5,),
-                      _buildCard(1, '생각하는 정원', 'assets/pictures/garden.png'),
-                      const SizedBox(height: 5,),
-                      _buildCard(2, '베케', 'assets/pictures/veke.png'),
-                      const SizedBox(height: 5,),
-                      _buildCard(3, '삼성혈', 'assets/pictures/samsung.png'),
-                    ],
-                  ),
-                ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter, // 가로 가운데, 세로는 아래
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 15.0), // 아래로부터 15의 간격
+                child: SvgPicture.asset('assets/icons/Down.svg'),
               ),
-            ],
-          ),
-        ),
+            ),
+          ],
+        )
       ),
     );
   }

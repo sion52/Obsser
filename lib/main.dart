@@ -5,7 +5,6 @@ import 'screens/dol_screen.dart';
 import 'screens/hash_screen.dart';
 import 'screens/briefcase_screen.dart';
 import 'screens/menu_screen.dart';
-import 'screens/hash_detail.dart';
 
 void main(){
   runApp(const MyApp());
@@ -48,7 +47,8 @@ class MyApp extends StatelessWidget {
 
 /* ##### 메인 페이지 ##### */
 class MainPage extends StatefulWidget {
-  const MainPage({super.key}); // key 매개변수
+  final int initialIndex;
+  const MainPage({super.key, this.initialIndex=0}); // key 매개변수
 
   @override
   // ignore: library_private_types_in_public_api
@@ -56,6 +56,12 @@ class MainPage extends StatefulWidget {
 }
 class _MainPageState extends State<MainPage> {
   int _currentIndex = 0; // 현재 선택된 네비게이션 버튼 인덱스
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex; // 초기인덱스
+  }
 
   /* ### 네비게이션 버튼 클릭 함수 ### */
   void _onItemTapped(int index) {
@@ -71,7 +77,6 @@ class _MainPageState extends State<MainPage> {
       case 1: return HashScreen(onKeywordSelected: _onItemTapped); // 여행지 키워드 페이지
       case 2: return const BriefcaseScreen(); // 여행 일정 페이지
       case 3: return const MenuScreen(); // 메뉴 페이지
-      case 11: return HashDetail(onKeywordSelected: _onItemTapped); // 선택된 키워드 페이지
       default: return Container(); // 기본값(빈 컨테이너)
     }
   }
