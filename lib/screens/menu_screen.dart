@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:obsser_1/screens/menu/inquiry.dart';
 import 'package:obsser_1/screens/menu/notice.dart';
 import 'package:obsser_1/screens/menu/notification.dart';
 import 'package:obsser_1/screens/menu/setting.dart';
@@ -143,7 +144,12 @@ class MenuScreen extends StatelessWidget {
                       SizedBox(height: 40,),
                       GestureDetector(
                         onTap: () {
-                          // 1:1 문의 Row 클릭 시 동작
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: (context) => InquiryScreen()
+                            ),
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween, 
