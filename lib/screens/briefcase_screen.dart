@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:obsser_1/screens/new_trip/new_trip_screen.dart';
+import 'package:obsser_1/screens/new_trip/trip.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
@@ -75,19 +76,44 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
               children: [
                 _buildCalendar(),
                 const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                  children: [
+                    Text(' 나의 관심장소', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),),
+                    GestureDetector(
+                      onTap: () {
+                        
+                      },
+                      child: Icon(Icons.arrow_forward_ios,),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 30,),
                 _buildTravelHistoryTitle(),
                 Expanded(
                   child: isLoading
                       ? const Center(child: CircularProgressIndicator()) // 로딩 중일 때
                       : SingleChildScrollView(
                           child: Column(
-                            children: travelCards.map((card) {
+                            children: travelCards.asMap().entries.map((entry) {
+                              int index = entry.key;
+                              Map<String, String> card = entry.value;
                               return Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 5),
-                                child: _buildTravelCard(
-                                  title: card['title']!,
-                                  date: card['date']!,
-                                  imageUrl: card['imageUrl']!,
+                                child:GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context, 
+                                      MaterialPageRoute(
+                                        builder: (context) => TripScreen(index: index)
+                                      ),
+                                    );
+                                  },
+                                  child: _buildTravelCard(
+                                    title: card['title']!,
+                                    date: card['date']!,
+                                    imageUrl: card['imageUrl']!,
+                                  ),
                                 ),
                               );
                             }).toList(),
