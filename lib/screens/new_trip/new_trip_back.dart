@@ -3,49 +3,46 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:obsser_1/main.dart';
 
+/* ##### 새로운 여행 이미지 선택 화면 ##### */
 class NewTBackScreen extends StatefulWidget {
-  final String tripTitle;
-  final String rangeStart;
-  final String rangeEnd;
+  final String tripTitle; // 여행 제목
+  final String rangeStart; // 여행 시작 날짜
+  final String rangeEnd; // 여행 종료 날짜
+
   const NewTBackScreen({super.key, required this.tripTitle, required this.rangeStart, required this.rangeEnd});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _NewTBackScreenState createState() => _NewTBackScreenState();
+  State<NewTBackScreen> createState() => _NewTBackScreenState();
 }
 
 class _NewTBackScreenState extends State<NewTBackScreen> {
   bool isNextEnabled = true; // 다음 버튼 활성화 여부
-  String selectedImage = 'assets/histories/back_0.png'; // 초기 이미지
+  String selectedImage = 'assets/histories/back_0.png'; // 초기 선택 이미지
 
+  // ### 서버로 여행 데이터를 전송하는 함수 ###
   Future<void> saveTravelData(String title, String startDate, String endDate, String imageUrl) async {
+    // ignore: unused_local_variable
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/travel_data'), // 서버 주소에 맞게 수정
+      Uri.parse('http://127.0.0.1:5000/travel_data'), // 서버 주소 (환경에 맞게 수정)
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
         'title': title,
-        'date' : '$startDate - $endDate',
-        'imageUrl': imageUrl,
+        'date': '$startDate - $endDate', // 날짜 범위
+        'imageUrl': imageUrl, // 선택된 이미지 URL
       }),
     );
-
-    if (response.statusCode == 200) {
-      // 서버에서 성공적으로 저장됨
-      print('Data saved successfully');
-    } else {
-      throw Exception('Failed to save data');
-    }
   }
 
+  // ### 이전 및 다음 버튼 UI 및 동작 정의 ###
   Widget _buildPNButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context); // 이전 버튼 클릭 시 이전 화면으로 이동
           },
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 5),
@@ -61,20 +58,21 @@ class _NewTBackScreenState extends State<NewTBackScreen> {
         ElevatedButton(
           onPressed: isNextEnabled
               ? () async {
-                  // 다음 버튼 눌렀을 때 서버에 데이터 전송
-                String startDate = widget.rangeStart.toString();
-                String endDate = widget.rangeEnd.toString();
-                await saveTravelData(widget.tripTitle, startDate, endDate, selectedImage);
-                
-                // 메인 페이지로 이동하고 초기 인덱스를 2로 설정
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MainPage(initialIndex: 2), // 초기 인덱스 2
-                  ),
-                  (Route<dynamic> route) => false, // 스택의 모든 이전 페이지 제거
-                );
-              }
+                  // 다음 버튼 눌렀을 때 서버에 데이터 전송 및 메인 화면으로 이동
+                  String startDate = widget.rangeStart.toString();
+                  String endDate = widget.rangeEnd.toString();
+                  await saveTravelData(widget.tripTitle, startDate, endDate, selectedImage);
+
+                  // 메인 페이지로 이동하며 초기 인덱스를 2로 설정
+                  Navigator.pushAndRemoveUntil(
+                    // ignore: use_build_context_synchronously
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MainPage(initialIndex: 2), // 메인 페이지의 2번째 탭으로 이동
+                    ),
+                    (Route<dynamic> route) => false, // 이전 페이지 스택을 모두 제거
+                  );
+                }
               : null,
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 5),
@@ -92,194 +90,139 @@ class _NewTBackScreenState extends State<NewTBackScreen> {
     );
   }
 
+  // ### 이미지 선택 화면 UI ###
   Widget _buildDatePage() {
-  List<String> images = [
-    'assets/histories/back_0.png',
-    'assets/histories/back_1.png',
-    'assets/histories/back_2.png',
-    'assets/histories/back_3.png',
-    'assets/histories/back_4.png',
-  ];
+    // 선택 가능한 이미지 목록
+    List<String> images = [
+      'assets/histories/back_0.png',
+      'assets/histories/back_1.png',
+      'assets/histories/back_2.png',
+      'assets/histories/back_3.png',
+      'assets/histories/back_4.png',
+    ];
 
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(25, 150, 25, 0),
-    child: Column(
-      children: [
-        const Center(
-          child: Text(
-            '여행에 어울리는 이미지를 선택해주세요!',
-            style: TextStyle(
-              fontSize: 23,
-              fontWeight: FontWeight.w800,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(25, 150, 25, 0),
+      child: Column(
+        children: [
+          const Center(
+            child: Text(
+              '여행에 어울리는 이미지를 선택해주세요!',
+              style: TextStyle(
+                fontSize: 23,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 40),
-        // 선택된 이미지가 표시될 큰 이미지 영역
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.asset(
-            selectedImage,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: 100,
-          ),
-        ),
-        const SizedBox(height: 15),
-        Row(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedImage = images[0]; // 클릭된 이미지로 큰 이미지 변경
-                  });
-                },
-                child: Container(
-                  height: 100, // 고정된 높이
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(13),
-                    border: Border.all(
-                      color: selectedImage == images[0] ? Colors.blue : Colors.transparent,
-                      width: 3, // 선택된 이미지 강조
-                    ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      images[0],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 15), // 이미지 사이의 간격
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedImage = images[1]; // 클릭된 이미지로 큰 이미지 변경
-                  });
-                },
-                child: Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(13),
-                    border: Border.all(
-                      color: selectedImage == images[1] ? Colors.blue : Colors.transparent,
-                      width: 3,
-                    ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      images[1],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 15),
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedImage = images[2]; // 클릭된 이미지로 큰 이미지 변경
-                  });
-                },
-                child: Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(13),
-                    border: Border.all(
-                      color: selectedImage == images[2] ? Colors.blue : Colors.transparent,
-                      width: 3,
-                    ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      images[2],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 15),
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedImage = images[3]; // 클릭된 이미지로 큰 이미지 변경
-                  });
-                },
-                child: Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(13),
-                    border: Border.all(
-                      color: selectedImage == images[3] ? Colors.blue : Colors.transparent,
-                      width: 3,
-                    ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      images[3],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 15),
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedImage = images[4]; // 클릭된 이미지로 큰 이미지 변경
-                  });
-                },
-                child: Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(13),
-                    border: Border.all(
-                      color: selectedImage == images[4] ? Colors.blue : Colors.transparent,
-                      width: 3,
-                    ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      images[4],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
+          const SizedBox(height: 40),
 
+          // 선택된 이미지가 표시되는 큰 이미지 영역
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset(
+              selectedImage,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: 100,
+            ),
+          ),
+          const SizedBox(height: 15),
+
+          // 이미지 선택을 위한 작은 이미지 목록
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedImage = images[0]; // 클릭한 이미지로 변경
+                    });
+                  },
+                  child: _buildImageCard(images[0], selectedImage == images[0]),
+                ),
+              ),
+              const SizedBox(width: 15), // 이미지 사이의 간격
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedImage = images[1];
+                    });
+                  },
+                  child: _buildImageCard(images[1], selectedImage == images[1]),
+                ),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedImage = images[2];
+                    });
+                  },
+                  child: _buildImageCard(images[2], selectedImage == images[2]),
+                ),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedImage = images[3];
+                    });
+                  },
+                  child: _buildImageCard(images[3], selectedImage == images[3]),
+                ),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedImage = images[4];
+                    });
+                  },
+                  child: _buildImageCard(images[4], selectedImage == images[4]),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ### 이미지 선택 UI (작은 이미지 카드) ###
+  Widget _buildImageCard(String imageUrl, bool isSelected) {
+    return Container(
+      height: 100, // 고정된 높이
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(13),
+        border: Border.all(
+          color: isSelected ? Colors.blue : Colors.transparent, // 선택된 이미지 강조
+          width: 3,
+        ),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Image.asset(
+          imageUrl,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF), // 배경색 설정
       body: Column(
         children: [
-          _buildDatePage(),
-          const Spacer(),
-          _buildPNButton(),
-          const SizedBox(height: 60),
+          _buildDatePage(), // 이미지 선택 페이지
+          const Spacer(), // 아래 버튼 영역을 위해 공간 확보
+          _buildPNButton(), // 이전 및 다음 버튼
+          const SizedBox(height: 60), // 버튼 아래 여백
         ],
       ),
     );

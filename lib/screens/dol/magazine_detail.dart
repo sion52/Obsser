@@ -2,74 +2,99 @@ import 'package:flutter/material.dart';
 import 'package:obsser_1/texts/magazine_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+/* ##### 매거진 상세 페이지 ##### */
 class MagzScreen extends StatefulWidget {
-  final int index;
+  final int index; // 매거진 인덱스 전달
 
-  const MagzScreen({super.key, required this.index}); // 인덱스 전달 받음
+  const MagzScreen({super.key, required this.index});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _MagzScreenState createState() => _MagzScreenState();
+  State<MagzScreen> createState() => _MagzScreenState();
 }
-class _MagzScreenState extends State<MagzScreen> {
-  bool isFavorite = false;
 
-  // 이미지 목록
+class _MagzScreenState extends State<MagzScreen> {
+  bool isFavorite = false; // 즐겨찾기 상태 관리
+
+  // 매거진 이미지 URL 리스트
   final List<String> imageUrl = [
     'assets/magazines/m_0d.png',
     'assets/magazines/m_1d.png',
     'assets/magazines/m_2d.png',
   ];
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFFFFFF),
-        toolbarHeight: 0,
+        backgroundColor: const Color(0xFFFFFFFF), // 배경 흰색
+        toolbarHeight: 0, // 툴바 높이 설정
       ),
-      backgroundColor: const Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xFFFFFFFF), // 배경 흰색
       body: SingleChildScrollView(
         child: Column(
           children: [
+            /* ### 이미지 및 즐겨찾기 버튼 ### */
             Stack(
               children: [
-                Image.asset(imageUrl[widget.index], fit: BoxFit.cover, width: double.infinity,),
+                // 매거진 이미지 표시
+                Image.asset(
+                  imageUrl[widget.index], 
+                  fit: BoxFit.cover, 
+                  width: double.infinity,
+                ),
+                // 즐겨찾기 아이콘
                 Positioned(
                   top: 20,
                   right: 15,
                   child: GestureDetector(
-                    onTap: () => {
+                    onTap: () {
                       setState(() {
-                        isFavorite = !isFavorite; // 해당 카드의 즐겨찾기 상태만 변경
-                      })
+                        isFavorite = !isFavorite; // 즐겨찾기 상태 토글
+                      });
                     },
                     child: SvgPicture.asset(
                       isFavorite ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
                       colorFilter: ColorFilter.mode(
-                      isFavorite ? const Color(0xFFFF5555) : const Color(0xFFFFFFFF),
-                      BlendMode.srcIn,
+                        isFavorite ? const Color(0xFFFF5555) : const Color(0xFFFFFFFF), // 즐겨찾기 상태에 따른 색상
+                        BlendMode.srcIn,
                       ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 20,
+                  left: 20,
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      size: 30,
+                      color: Color(0xFF000000),
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 20,),
-            buildContent(widget.index),
-            const SizedBox(height: 20,),
+            const SizedBox(height: 20),
+            /* ### 매거진 콘텐츠 ### */
+            buildContent(widget.index), // 매거진 내용 생성
+            const SizedBox(height: 20),
           ],
         ),
-      )
+      ),
     );
   }
 
+  /* ### 매거진 내용 생성 함수 ### */
   Widget buildContent(int index) {
-    switch (widget.index) {
+    // 매거진 인덱스에 따라 다른 콘텐츠를 반환
+    switch (index) {
       case 0:
         return Column(
           children: [
-            buildText(t_0_0),
+            buildText(t_0_0), // 각 텍스트와 제목을 매거진 콘텐츠로 표시
             buildTitle('1. 협재 해수욕장'),
             buildText(t_0_1),
             buildTitle('2. 함덕 해수욕장'),
@@ -126,31 +151,33 @@ class _MagzScreenState extends State<MagzScreen> {
           ],
         );
       default:
-        return Container();
+        return Container(); // 기본 값: 빈 컨테이너 반환
     }
   }
 
+  /* ### 제목 스타일 위젯 ### */
   Widget buildTitle(String text) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0), // 패딩 설정
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.centerLeft, // 왼쪽 정렬
         child: Text(
           text,
           style: const TextStyle(
-            fontSize: 22,
+            fontSize: 22, 
             fontWeight: FontWeight.w700,
           ),
         ),
-      )
+      ),
     );
   }
 
+  /* ### 내용 텍스트 스타일 위젯 ### */
   Widget buildText(String text) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20), // 패딩 설정
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.centerLeft, // 왼쪽 정렬
         child: Text(
           text,
           style: const TextStyle(
@@ -158,7 +185,7 @@ class _MagzScreenState extends State<MagzScreen> {
             fontWeight: FontWeight.w400,
           ),
         ),
-      )
+      ),
     );
   }
 }

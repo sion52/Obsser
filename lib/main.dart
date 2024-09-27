@@ -6,11 +6,11 @@ import 'screens/hash_screen.dart';
 import 'screens/briefcase_screen.dart';
 import 'screens/menu_screen.dart';
 
-void main(){
-  runApp(MyApp());
+void main() {
+  runApp(const MyApp());
 }
 
-/* ##### 앱 종료할지 묻는 팝업 ##### */
+/* ##### 앱 종료 확인 팝업 ##### */
 Future<void> _onBackPressed(BuildContext context) async {
   await showDialog(
     context: context,
@@ -31,64 +31,74 @@ Future<void> _onBackPressed(BuildContext context) async {
   );
 }
 
-/* ##### 앱 설정 ##### */
+/* ##### 앱 메인 설정 ##### */
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: 'Pretendard',), // 기본 폰트: Pretendard
+      theme: ThemeData(
+        fontFamily: 'Pretendard', // 기본 폰트 설정
+      ),
       debugShowCheckedModeBanner: false, // 디버그 배너 숨기기
-      home: const MainPage(), // 메인 페이지 설정
+      home: const MainPage(), // 메인 페이지 지정
     );
   }
 }
 
 /* ##### 메인 페이지 ##### */
 class MainPage extends StatefulWidget {
-  final int initialIndex;
-  const MainPage({this.initialIndex=0});
+  final int initialIndex; // 초기 네비게이션 인덱스
+
+  const MainPage({super.key, this.initialIndex = 0}); // 기본값을 0으로 설정
 
   @override
-  _MainPageState createState() => _MainPageState();
+  State<MainPage> createState() => _MainPageState();
 }
-class _MainPageState extends State<MainPage> {
-  int _currentIndex = 0; // 현재 선택된 네비게이션 버튼 인덱스
 
-  /**### 페이지 로드 시 실행 ### */
+class _MainPageState extends State<MainPage> {
+  int _currentIndex = 0; // 현재 선택된 네비게이션 인덱스
+
+  /* ### 초기 상태 설정 ### */
   @override
   void initState() {
     super.initState();
-    _currentIndex = widget.initialIndex; // 초기 인덱스
+    _currentIndex = widget.initialIndex; // 초기 페이지 설정
   }
 
-  /* ### 네비게이션 버튼 클릭 함수 ### */
+  /* ### 네비게이션 버튼 클릭 시 실행 ### */
   void _onItemTapped(int index) {
     setState(() {
       _currentIndex = index; // 선택된 인덱스 업데이트
     });
   }
 
-  /* ### 선택된 인덱스로 페이지 반환 위젯 ### */
+  /* ### 인덱스에 따라 페이지 반환 ### */
   Widget _buildPage(int index) {
     switch (index) {
-      case 0: return DolScreen(); // 메인 홈 페이지
-      case 1: return HashScreen(onKeywordSelected: _onItemTapped); // 여행지 키워드 페이지
-      case 2: return BriefcaseScreen(); // 여행 일정 페이지
-      case 3: return MenuScreen(); // 메뉴 페이지
-      default: return Container(); // 기본값(빈 컨테이너)
+      case 0:
+        return const DolScreen(); // 메인 홈 페이지
+      case 1:
+        return HashScreen(onKeywordSelected: _onItemTapped); // 키워드 페이지
+      case 2:
+        return const BriefcaseScreen(); // 일정 페이지
+      case 3:
+        return const MenuScreen(); // 메뉴 페이지
+      default:
+        return Container(); // 기본 빈 컨테이너
     }
   }
 
-  /* ### 네비게이션 버튼 생성 위젯 ### */
+  /* ### 하단 네비게이션 아이콘 생성 ### */
   Widget _buildIcon(String assetName, int index, {double width = 36, double height = 36}) {
     return GestureDetector(
-      onTap: () => _onItemTapped(index), // 클릭 시 탭 인덱스 변경
+      onTap: () => _onItemTapped(index), // 아이콘 클릭 시 페이지 변경
       child: SvgPicture.asset(
-        assetName, // SVG 아이콘 경로
+        assetName,
         colorFilter: ColorFilter.mode(
-          _currentIndex == index || _currentIndex == index + 10 ? const Color(0xFF477C59) : const Color(0xFF284029), 
-          BlendMode.srcIn
+          _currentIndex == index ? const Color(0xFF477C59) : const Color(0xFF284029),
+          BlendMode.srcIn,
         ), // 선택된 상태에 따라 색상 변경
         width: width,
         height: height,
@@ -96,14 +106,14 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  /* ### 메인 페이지 return ### */
+  /* ### 메인 화면 생성 ### */
   @override
   Widget build(BuildContext context) {
     // ignore: deprecated_member_use
-    return WillPopScope( // 뒤로가기 버튼 눌렀을 때 실행
+    return WillPopScope(
       onWillPop: () async {
-        await _onBackPressed(context); // 앱을 종료할지 묻는 팝업
-        return false;
+        await _onBackPressed(context); // 뒤로가기 시 앱 종료 확인 팝업
+        return false; // 팝업 이후 동작 방지
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -116,9 +126,9 @@ class _MainPageState extends State<MainPage> {
             children: <Widget>[
               _buildIcon('assets/icons/Dol.svg', 0, width: 32, height: 60), // 메인 홈 아이콘
               const SizedBox(width: 60),
-              _buildIcon('assets/icons/Hash.svg', 1), // 여행지 키워드 아이콘
+              _buildIcon('assets/icons/Hash.svg', 1), // 키워드 아이콘
               const SizedBox(width: 60),
-              _buildIcon('assets/icons/Briefcase.svg', 2), // 여행 일정 아이콘
+              _buildIcon('assets/icons/Briefcase.svg', 2), // 일정 아이콘
               const SizedBox(width: 60),
               _buildIcon('assets/icons/Menu.svg', 3), // 메뉴 아이콘
               const SizedBox(width: 10),
