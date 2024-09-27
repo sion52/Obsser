@@ -13,7 +13,7 @@ travel_data = [
     },
 ]
 
-@app.route('/dol', methods=['GET'])
+@app.route('/', methods=['GET'])
 def dol_data():
     return jsonify({"dolMessage": f"{datetime.today().strftime('%Y.%m.%d %H:%M:%S')}"}), 200
 
@@ -31,7 +31,7 @@ def save_travel_data():
     # 응답 반환
     return jsonify({"message": "Travel data saved successfully!"}), 200
 
-@app.route('/travel_data', methods=['GET'])
+@app.route('/mytrip', methods=['GET'])
 def brief_data():
     return jsonify(travel_data), 200
 

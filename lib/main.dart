@@ -7,7 +7,7 @@ import 'screens/briefcase_screen.dart';
 import 'screens/menu_screen.dart';
 
 void main(){
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 /* ##### 앱 종료할지 묻는 팝업 ##### */
@@ -33,7 +33,6 @@ Future<void> _onBackPressed(BuildContext context) async {
 
 /* ##### 앱 설정 ##### */
 class MyApp extends StatelessWidget {
-  const MyApp({super.key}); // key 매개변수
 
   @override
   Widget build(BuildContext context) {
@@ -48,19 +47,19 @@ class MyApp extends StatelessWidget {
 /* ##### 메인 페이지 ##### */
 class MainPage extends StatefulWidget {
   final int initialIndex;
-  const MainPage({super.key, this.initialIndex=0}); // key 매개변수
+  const MainPage({this.initialIndex=0});
 
   @override
-  // ignore: library_private_types_in_public_api
   _MainPageState createState() => _MainPageState();
 }
 class _MainPageState extends State<MainPage> {
   int _currentIndex = 0; // 현재 선택된 네비게이션 버튼 인덱스
 
+  /**### 페이지 로드 시 실행 ### */
   @override
   void initState() {
     super.initState();
-    _currentIndex = widget.initialIndex; // 초기인덱스
+    _currentIndex = widget.initialIndex; // 초기 인덱스
   }
 
   /* ### 네비게이션 버튼 클릭 함수 ### */
@@ -73,10 +72,10 @@ class _MainPageState extends State<MainPage> {
   /* ### 선택된 인덱스로 페이지 반환 위젯 ### */
   Widget _buildPage(int index) {
     switch (index) {
-      case 0: return const DolScreen(); // 메인 홈 페이지
+      case 0: return DolScreen(); // 메인 홈 페이지
       case 1: return HashScreen(onKeywordSelected: _onItemTapped); // 여행지 키워드 페이지
-      case 2: return const BriefcaseScreen(); // 여행 일정 페이지
-      case 3: return const MenuScreen(); // 메뉴 페이지
+      case 2: return BriefcaseScreen(); // 여행 일정 페이지
+      case 3: return MenuScreen(); // 메뉴 페이지
       default: return Container(); // 기본값(빈 컨테이너)
     }
   }

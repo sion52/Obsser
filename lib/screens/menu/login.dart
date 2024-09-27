@@ -3,7 +3,8 @@ import 'package:obsser_1/screens/menu/signup.dart';
 import 'package:obsser_1/screens/menu/findpw.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final Function onLogin;
+  const LoginScreen({super.key, required this.onLogin});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -120,6 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
             child: ElevatedButton(
               onPressed: () {
                 // 로그인 로직
+                widget.onLogin();
+                Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.fromLTRB(0, 15, 0, 18),

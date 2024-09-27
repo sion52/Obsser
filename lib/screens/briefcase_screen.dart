@@ -20,7 +20,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
 
   // 서버에서 여행 데이터를 받아오는 함수
   Future<List<Map<String, String>>> fetchTravelData() async {
-  final response = await http.get(Uri.parse('http://127.0.0.1:5000/travel_data'));
+  final response = await http.get(Uri.parse('http://127.0.0.1:5000/mytrip'));
 
   if (response.statusCode == 200) {
     // JSON 응답을 파싱하고 List<dynamic>으로 반환됨

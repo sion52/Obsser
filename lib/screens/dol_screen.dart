@@ -5,14 +5,13 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:obsser_1/screens/dol/dol_detail.dart';
 import 'package:obsser_1/screens/dol/magazine_detail.dart';
+import 'package:obsser_1/screens/menu/notice.dart';
 
 /* ##### 메인 홈 페이지 ##### */
 class DolScreen extends StatefulWidget {
-  const DolScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _DolScreenState createState() => _DolScreenState();
+  State<DolScreen> createState() => _DolScreenState();
 }
 class _DolScreenState extends State<DolScreen> {
   String dolMessage = 'Loading...'; // 서버 응답 메세지 변수
@@ -49,7 +48,7 @@ class _DolScreenState extends State<DolScreen> {
   /* ### 서버 데이터 요청 함수 ### */
   Future<void> fetchDolData() async {
     try {
-      final response = await http.get(Uri.parse('http://127.0.0.1:5000/dol'));
+      final response = await http.get(Uri.parse('http://127.0.0.1:5000/'));
       if (mounted && response.statusCode == 200) { // 서버 응답 성공시
         setState(() {
           dolMessage = json.decode(response.body)['dolMessage']; // 서버에서 dolMessage 받음
@@ -165,7 +164,14 @@ class _DolScreenState extends State<DolScreen> {
                   top: 30,
                   right: 30,
                   child: GestureDetector(
-                    onTap: () => {},
+                    onTap: () => {
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(
+                          builder: (context) => NoticeScreen()
+                        ),
+                      ),
+                    },
                     child: SvgPicture.asset('assets/icons/Bell.svg'),
                   ),
                 ),

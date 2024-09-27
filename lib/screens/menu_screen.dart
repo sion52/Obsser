@@ -1,11 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:obsser_1/screens/menu/login_screen.dart';
+import 'package:obsser_1/screens/menu/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:obsser_1/screens/menu/inquiry.dart';
 import 'package:obsser_1/screens/menu/notice.dart';
 import 'package:obsser_1/screens/menu/notification.dart';
 import 'package:obsser_1/screens/menu/setting.dart';
 
-class MenuScreen extends StatelessWidget {
+class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
+
+  @override
+  State<MenuScreen> createState() => _MenuScreenState();
+}
+
+class _MenuScreenState extends State<MenuScreen> {
+  bool isLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _chechLoginStatus();
+  }
+
+  // SharedPreferences에서 로그인 상태 확인
+  Future<void> _chechLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    });
+  }
+
+  // 로그인 상태 저장 함수
+  Future<void> _login() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', true);
+    setState(() {
+      isLoggedIn = true;
+    });
+  }
+
+  Future<void> _logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', false);
+    setState(() {
+      isLoggedIn = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +68,35 @@ class MenuScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Image.asset('assets/profile.png',width: 50,height: 50,),
-                            SizedBox(width: 15,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('로그인하세요',style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),),
-                                Text('', style: TextStyle(fontSize: 12,color: Color(0xFF727272)),),
-                              ],
-                            ),
-                          ],
+                        GestureDetector(
+                          onTap: () {
+                            if (!isLoggedIn) {
+                              Navigator.push(
+                                context, 
+                                MaterialPageRoute(builder: (context) => LoginScreen(onLogin: _login)),
+                                // MaterialPageRoute(builder: (context) => LogIn(onLogin: _login)),
+                              );
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset('assets/profile.png',width: 50,height: 50,),
+                              SizedBox(width: 15,),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    isLoggedIn ? '옵써' : '로그인하세요',
+                                    style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
+                                  ),
+                                  Text(
+                                    isLoggedIn ? 'example@gmail.com' : 'example@gmail.com', 
+                                    style: TextStyle(fontSize: 12,color: Color(0xFF727272)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                         GestureDetector(
                           onTap: () {
@@ -189,6 +247,7 @@ class MenuScreen extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           // 로그아웃 Row 클릭 시 동작
+                          _logout();
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween, 
