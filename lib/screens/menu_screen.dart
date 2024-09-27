@@ -83,6 +83,12 @@ class _MenuScreenState extends State<MenuScreen> {
       decoration: BoxDecoration(
         color: const Color(0xFFE8F1EA),
         borderRadius: BorderRadius.circular(20),
+        boxShadow: [BoxShadow(
+          color: Colors.grey.withOpacity(0.3),
+          spreadRadius: 1,
+          blurRadius: 3,
+          offset: const Offset(0, 3),
+        )],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),

@@ -32,11 +32,11 @@ class _HashScreenState extends State<HashScreen> {
               const SizedBox(height: 8),
               buildKeywordChips(), // 키워드 칩 리스트 위젯
               const SizedBox(height: 40),
-              buildTransportTitle(), // 교통수단별 여행코스 제목
+              buildTitle('교통수단별',' 여행코스'), // 교통수단별 여행코스 제목
               const SizedBox(height: 10),
               buildTransportOptions(), // 교통수단 선택 위젯
               const SizedBox(height: 40),
-              buildCategoryTitle(), // 카테고리별 여행지 제목
+              buildTitle('카테고리별',' 여행지'), // 카테고리별 여행지 제목
               const SizedBox(height: 16),
               buildCategoryList(), // 카테고리 리스트 위젯
             ],
@@ -107,9 +107,15 @@ class _HashScreenState extends State<HashScreen> {
         height: 185, // 칩 리스트 높이
         width: double.infinity,
         decoration: BoxDecoration(
-          color: const Color(0xFFFFFFFF), // 배경색 흰색
+          color: const Color(0xFFFAFAFA), // 배경색 흰색
           borderRadius: BorderRadius.circular(20), // 모서리 둥글게
-          border: Border.all(width: 1, color: const Color(0xA6A4A4A4)) // 테두리 색
+          //border: Border.all(width: 1, color: const Color(0xA6A4A4A4)) // 테두리 색
+          boxShadow: [BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: const Offset(0, 3),
+          )],
         ),
         child: GridView.builder(
           padding: const EdgeInsets.fromLTRB(7, 14, 7, 0),
@@ -152,18 +158,18 @@ class _HashScreenState extends State<HashScreen> {
     );
   }
 
-  /* ##### 교통수단별 여행코스 제목 ##### */
-  Widget buildTransportTitle() {
-    return const Text.rich(
+  /* ##### 여행코스 제목 ##### */
+  Widget buildTitle(String a, String b) {
+    return Text.rich(
       TextSpan(
         children: [
           TextSpan(
-            text: '교통수단별',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
+            text: a,
+            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
           ),
           TextSpan(
-            text: ' 여행코스',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.black),
+            text: b,
+            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.black),
           ),
         ],
       ),
@@ -189,9 +195,15 @@ class _HashScreenState extends State<HashScreen> {
             Container(
               width: 60,
               height: 60,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Color(0xFFE8E9F1), // 배경색
+                color: const Color(0xFFE8E9F1), // 배경색
+                boxShadow: [BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: const Offset(0, 3),
+                )],
               ),
               child: Center(
                 child: Icon(option['icon'], size: 40, color: const Color(0xFF284029)), // 아이콘
@@ -202,24 +214,6 @@ class _HashScreenState extends State<HashScreen> {
           ],
         );
       }).toList(),
-    );
-  }
-
-  /* ##### 카테고리별 여행지 제목 ##### */
-  Widget buildCategoryTitle() {
-    return const Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(
-            text: '카테고리별',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
-          ),
-          TextSpan(
-            text: ' 여행지',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.black),
-          ),
-        ],
-      ),
     );
   }
 
@@ -246,6 +240,12 @@ class _HashScreenState extends State<HashScreen> {
               image: AssetImage(category['image']!), // 배경 이미지
               fit: BoxFit.cover,
             ),
+            boxShadow: [BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: const Offset(0, 3),
+            )],
           ),
           child: Stack(
             children: [

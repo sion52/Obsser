@@ -164,8 +164,8 @@ class _DolScreenState extends State<DolScreen> {
                   ),
                 ),
                 Positioned( // 알림 아이콘 (오른쪽 상단)
-                  top: 30,
-                  right: 30,
+                  top: 25,
+                  right: 20,
                   child: GestureDetector(
                     onTap: () => Navigator.push( // 알림 페이지로 이동
                       context, 
@@ -173,7 +173,8 @@ class _DolScreenState extends State<DolScreen> {
                         builder: (context) => const NoticeScreen(), // 알림 페이지
                       ),
                     ),
-                    child: SvgPicture.asset('assets/icons/Bell.svg',), // 알림 아이콘
+                    // ignore: deprecated_member_use
+                    child: SvgPicture.asset('assets/icons/Bell.svg', color: Colors.white, width: 40,), // 알림 아이콘
                   ),
                 ),
               ],
@@ -186,8 +187,14 @@ class _DolScreenState extends State<DolScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 height: 130,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEFEFEF),
+                  color: const Color(0xFFF2F2F2),
                   borderRadius: BorderRadius.circular(15),
+                  boxShadow: [BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: const Offset(0, 3),
+                  )],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,7 +215,7 @@ class _DolScreenState extends State<DolScreen> {
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF8F9FE),
+                          color: const Color(0xFFFFFFFF),
                           borderRadius: BorderRadius.circular(30.0),
                         ),
                         child: const TextField(
@@ -235,6 +242,12 @@ class _DolScreenState extends State<DolScreen> {
                 decoration: BoxDecoration(
                   color: const Color(0xFFE8F1EA),
                   borderRadius: BorderRadius.circular(15),
+                  boxShadow: [BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: const Offset(0, 3),
+                  )],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

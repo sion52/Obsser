@@ -44,8 +44,8 @@ class _MagzScreenState extends State<MagzScreen> {
                 ),
                 // 즐겨찾기 아이콘
                 Positioned(
-                  top: 20,
-                  right: 15,
+                  top: 25,
+                  right: 25,
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
@@ -53,6 +53,7 @@ class _MagzScreenState extends State<MagzScreen> {
                       });
                     },
                     child: SvgPicture.asset(
+                      width: 30,
                       isFavorite ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
                       colorFilter: ColorFilter.mode(
                         isFavorite ? const Color(0xFFFF5555) : const Color(0xFFFFFFFF), // 즐겨찾기 상태에 따른 색상
@@ -71,7 +72,7 @@ class _MagzScreenState extends State<MagzScreen> {
                     icon: const Icon(
                       Icons.arrow_back_ios,
                       size: 30,
-                      color: Color(0xFF000000),
+                      color: Colors.white,
                     ),
                   ),
                 ),

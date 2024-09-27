@@ -100,8 +100,15 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
   /* ### 달력 위젯 ### */
   Widget _buildCalendar() {
     return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFFFAFAFA), // 배경색 설정
+      decoration: BoxDecoration(
+        color: const Color(0xFFFAFAFA), // 배경색 설정
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [BoxShadow(
+          color: Colors.grey.withOpacity(0.3),
+          spreadRadius: 1,
+          blurRadius: 3,
+          offset: const Offset(0, 3),
+        )],
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -212,7 +219,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10), // 모서리 둥글게
       ),
-      elevation: 0,
+      elevation: 2,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Stack(
