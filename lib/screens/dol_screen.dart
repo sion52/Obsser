@@ -174,7 +174,7 @@ class _DolScreenState extends State<DolScreen> {
                       ),
                     ),
                     // ignore: deprecated_member_use
-                    child: SvgPicture.asset('assets/icons/Bell.svg', color: Colors.white, width: 40,), // 알림 아이콘
+                    child: SvgPicture.asset('assets/icons/Bell.svg', color: Color(0xFF121212), width: 40,), // 알림 아이콘
                   ),
                 ),
               ],

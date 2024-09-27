@@ -56,7 +56,7 @@ class _MagzScreenState extends State<MagzScreen> {
                       width: 30,
                       isFavorite ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
                       colorFilter: ColorFilter.mode(
-                        isFavorite ? const Color(0xFFFF5555) : const Color(0xFFFFFFFF), // 즐겨찾기 상태에 따른 색상
+                        isFavorite ? const Color(0xFFFF5555) : const Color(0xFF000000), // 즐겨찾기 상태에 따른 색상
                         BlendMode.srcIn,
                       ),
                     ),
@@ -72,7 +72,7 @@ class _MagzScreenState extends State<MagzScreen> {
                     icon: const Icon(
                       Icons.arrow_back_ios,
                       size: 30,
-                      color: Colors.white,
+                      color: Color(0xFF000000),
                     ),
                   ),
                 ),

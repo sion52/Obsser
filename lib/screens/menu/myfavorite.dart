@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 /* ##### 관심 목록 화면 ##### */
 class FavoriteScreen extends StatefulWidget {
@@ -10,11 +12,52 @@ class FavoriteScreen extends StatefulWidget {
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
   String selectedCategory = "전체"; // 선택된 카테고리를 저장하는 변수
+  List<Map<String, String>> travelCards = []; // 서버에서 받아온 여행 카드 데이터 저장
+  bool isLoading = true; // 로딩 상태 표시 변수
 
   // 카테고리 버튼 클릭 시 호출되는 함수
   void onCategoryTap(String category) {
     setState(() {
       selectedCategory = category; // 선택된 카테고리를 업데이트
+    });
+  }
+
+  /* ### 서버에서 여행 데이터를 받아오는 함수 ### */
+  Future<List<Map<String, String>>> fetchPlaceData() async {
+    final response = await http.get(Uri.parse('http://127.0.0.1:5000/mytrip/myplace')); // 서버 요청
+
+    if (response.statusCode == 200) {
+      // 응답 성공시, 데이터를 파싱하고 Map<String, String>으로 변환
+      List<dynamic> data = json.decode(response.body);
+      List<Map<String, String>> travelData = data.map((item) {
+        return {
+          'title': item['title'].toString(),   // String으로 변환
+          'date': item['date'].toString(),
+          'imageUrl': item['imageUrl'].toString(),
+        };
+      }).toList();
+
+      return travelData;
+    } else {
+      throw Exception('Failed to load travel data');
+    }
+  }
+
+  /* ### 페이지 로드 시 서버에서 데이터 가져오기 ### */
+  @override
+  void initState() {
+    super.initState();
+    fetchPlaceData().then((data) {
+      if (mounted) {
+        setState(() {
+          travelCards = data; // 서버에서 받은 데이터 저장
+          isLoading = false;  // 로딩 완료
+        });
+      }
+    }).catchError((e) {
+      setState(() {
+        isLoading = false; // 오류 발생 시에도 로딩 완료 상태로 설정
+      });
     });
   }
 

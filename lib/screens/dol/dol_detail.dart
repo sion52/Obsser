@@ -70,7 +70,7 @@ class _DolDetailState extends State<DolDetail> {
                     icon: const Icon(
                       Icons.arrow_back_ios,
                       size: 30,
-                      color: Color(0xFF000000),
+                      color: Color(0xFF121212),
                     ),
                   ),
                 ),
