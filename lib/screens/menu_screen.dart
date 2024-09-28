@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:obsser_1/main.dart';
 import 'package:obsser_1/screens/menu/login_screen.dart';
 import 'package:obsser_1/screens/menu/myfavorite.dart';
+import 'package:obsser_1/screens/menu/service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:obsser_1/screens/menu/inquiry.dart';
 import 'package:obsser_1/screens/menu/notice.dart';
@@ -84,7 +86,7 @@ class _MenuScreenState extends State<MenuScreen> {
         color: const Color(0xFFE8F1EA),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [BoxShadow(
-          color: Colors.grey.withOpacity(0.3),
+          color: Colors.grey.withOpacity(0.2),
           spreadRadius: 1,
           blurRadius: 3,
           offset: const Offset(0, 3),
@@ -140,31 +142,39 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   /* ### 나의 관심장소 및 나의 일정 섹션 ### */
-  Widget _buildMenuOptions() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const FavoriteScreen()),
-              );
-            },
-            child: _buildMenuRow(' 나의 관심장소'), // 관심장소 메뉴
-          ),
-          const SizedBox(height: 40),
-          GestureDetector(
-            onTap: () {
-              // 나의 일정 클릭 시 동작
-            },
-            child: _buildMenuRow(' 나의 일정'), // 나의 일정 메뉴
-          ),
-        ],
-      ),
-    );
-  }
+Widget _buildMenuOptions() {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+    child: Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FavoriteScreen()),
+            );
+          },
+          child: _buildMenuRow(' 나의 관심장소'), // 관심장소 메뉴
+        ),
+        const SizedBox(height: 40),
+        GestureDetector(
+          onTap: () {
+            // '나의 일정' 클릭 시 'MainPage'로 이동하며, initialIndex를 2로 설정
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MainPage(initialIndex: 2), // '나의 일정' 탭으로 이동
+              ),
+              (route) => false, // 뒤로가기 버튼을 비활성화하여 이전 페이지로 돌아가지 않음
+            );
+          },
+          child: _buildMenuRow(' 나의 일정'), // 나의 일정 메뉴
+        ),
+      ],
+    ),
+  );
+}
+
 
   /* ### 구분선 위젯 ### */
   Widget _buildDivider() {
@@ -187,16 +197,52 @@ class _MenuScreenState extends State<MenuScreen> {
           const SizedBox(height: 40),
           _buildSettingsRow(' 1:1 문의', const InquiryScreen()), // 1:1 문의 메뉴
           const SizedBox(height: 40),
-          _buildSettingsRow(' 서비스 약관', null), // 서비스 약관 메뉴
+          _buildSettingsRow(' 서비스 이용 약관', const ServiceScreen()), // 서비스 약관 메뉴
           const SizedBox(height: 40),
-          _buildSettingsRow(' 앱버전', null), // 앱버전 메뉴
+          _buildAppVersionRow(' 앱버전', '1.0.0'), // 앱버전 메뉴 - 팝업 추가
           const SizedBox(height: 40),
-          GestureDetector(
-            onTap: _logout, // 로그아웃 버튼 클릭 시 동작
-            child: _buildMenuRow(' 로그아웃'),
-          ),
+          if (isLoggedIn) // 로그인 상태일 때만 로그아웃 버튼을 표시
+            GestureDetector(
+              onTap: _logout, // 로그아웃 버튼 클릭 시 동작
+              child: _buildMenuRow(' 로그아웃'),
+            ),
         ],
       ),
+    );
+  }
+
+  /* ### 앱버전 메뉴 항목 생성 함수 ### */
+  Widget _buildAppVersionRow(String title, String version) {
+    return GestureDetector(
+      onTap: () {
+        _showVersionDialog(version); // 앱 버전 팝업을 띄우는 함수 호출
+      },
+      child: _buildMenuRow(title),
+    );
+  }
+
+  /* ### 앱버전 팝업 표시 함수 ### */
+  void _showVersionDialog(String version) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text('현재 앱 버전은 $version 입니다.'),
+          content: Image.asset('assets/splash.png'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 팝업 닫기
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: const Color(0xFF121212),
+              ),
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
     );
   }
 

@@ -174,7 +174,7 @@ class _DolScreenState extends State<DolScreen> {
                       ),
                     ),
                     // ignore: deprecated_member_use
-                    child: SvgPicture.asset('assets/icons/Bell.svg', color: Color(0xFF121212), width: 40,), // 알림 아이콘
+                    child: SvgPicture.asset('assets/icons/Bell.svg', color: const Color(0xFFFFFFFF), width: 40,), // 알림 아이콘
                   ),
                 ),
               ],
@@ -190,7 +190,7 @@ class _DolScreenState extends State<DolScreen> {
                   color: const Color(0xFFF2F2F2),
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
+                    color: Colors.grey.withOpacity(0.2),
                     spreadRadius: 1,
                     blurRadius: 3,
                     offset: const Offset(0, 3),
@@ -243,7 +243,7 @@ class _DolScreenState extends State<DolScreen> {
                   color: const Color(0xFFE8F1EA),
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
+                    color: Colors.grey.withOpacity(0.2),
                     spreadRadius: 1,
                     blurRadius: 3,
                     offset: const Offset(0, 3),
@@ -255,7 +255,7 @@ class _DolScreenState extends State<DolScreen> {
                     const Padding(
                       padding: EdgeInsets.fromLTRB(10, 18, 0, 0),
                       child: Text(
-                        '옵써의 트렌디한 매거진',
+                        ' 옵써의 트렌디한 매거진',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w800,

@@ -111,7 +111,7 @@ class _HashScreenState extends State<HashScreen> {
           borderRadius: BorderRadius.circular(20), // 모서리 둥글게
           //border: Border.all(width: 1, color: const Color(0xA6A4A4A4)) // 테두리 색
           boxShadow: [BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: Colors.grey.withOpacity(0.2),
             spreadRadius: 1,
             blurRadius: 3,
             offset: const Offset(0, 3),
@@ -199,7 +199,7 @@ class _HashScreenState extends State<HashScreen> {
                 shape: BoxShape.circle,
                 color: const Color(0xFFE8E9F1), // 배경색
                 boxShadow: [BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
+                  color: Colors.grey.withOpacity(0.2),
                   spreadRadius: 1,
                   blurRadius: 3,
                   offset: const Offset(0, 3),
@@ -241,7 +241,7 @@ class _HashScreenState extends State<HashScreen> {
               fit: BoxFit.cover,
             ),
             boxShadow: [BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.grey.withOpacity(0.2),
               spreadRadius: 1,
               blurRadius: 3,
               offset: const Offset(0, 3),

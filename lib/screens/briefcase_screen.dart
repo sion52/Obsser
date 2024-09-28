@@ -104,7 +104,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
         color: const Color(0xFFFAFAFA), // 배경색 설정
         borderRadius: BorderRadius.circular(15),
         boxShadow: [BoxShadow(
-          color: Colors.grey.withOpacity(0.3),
+          color: Colors.grey.withOpacity(0.2),
           spreadRadius: 1,
           blurRadius: 3,
           offset: const Offset(0, 3),
@@ -189,29 +189,33 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
   Widget _buildTravelHistoryList() {
     return SingleChildScrollView(
       child: Column(
-        children: travelCards.asMap().entries.map((entry) {
-          int index = entry.key;
-          Map<String, String> card = entry.value;
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => TripScreen(index: index)),
-                );
-              },
-              child: _buildTravelCard(
-                title: card['title']!,
-                date: card['date']!,
-                imageUrl: card['imageUrl']!,
+        children: [
+          ...travelCards.asMap().entries.map((entry) {
+            int index = entry.key;
+            Map<String, String> card = entry.value;
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => TripScreen(index: index)),
+                  );
+                },
+                child: _buildTravelCard(
+                  title: card['title']!,
+                  date: card['date']!,
+                  imageUrl: card['imageUrl']!,
+                ),
               ),
-            ),
-          );
-        }).toList(),
+            );
+          }),
+          const SizedBox(height: 50), // 맨 아래 여백 추가
+        ],
       ),
     );
   }
+
 
   /* ### 여행 카드 위젯 ### */
   Widget _buildTravelCard({required String title, required String date, required String imageUrl}) {
@@ -219,7 +223,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10), // 모서리 둥글게
       ),
-      elevation: 2,
+      elevation: 3,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Stack(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:obsser_1/screens/new_trip/new_trip_date.dart';
+import 'dart:math'; // 랜덤 숫자 생성을 위해 추가
 
 /* ##### 새로운 여행 만들기 화면 ##### */
 class NewTScreen extends StatefulWidget {
@@ -12,7 +13,34 @@ class NewTScreen extends StatefulWidget {
 class _NewTScreenState extends State<NewTScreen> {
   bool isNextEnabled = false; // '다음' 버튼 활성화 여부
   final TextEditingController _controller = TextEditingController(); // 여행 제목 입력 컨트롤러
-  
+
+  // 랜덤 제목 리스트
+  final List<String> randomTitles = [
+    '힐링하러 떠나는 제주도',
+    '제주의 바람을 느끼다',
+    '자연과 함께하는 힐링 제주',
+    '푸른 여정',
+    '제주 바다를 담은 하루',
+    '유채꽃과 함께 걷는 제주',
+    '돌담길 따라 만나는 제주의 숨결',
+    '한라산에서 제주를 바라보다',
+    '제주의 별빛 아래, 낭만 여행',
+    '제주 미식 여행',
+    '제주의 숨은 보석, 비밀 여행지 탐방',
+    '제주 해수욕장 투어',
+    '친환경 여행으로 떠나보자',
+    '제주 문화의 매력 체험하기',
+    '차타고 제주도 드라이브',
+  ];
+
+  // 랜덤 제목 선택 함수
+  void _setRandomTitle() {
+    final random = Random();
+    setState(() {
+      _controller.text = randomTitles[random.nextInt(randomTitles.length)]; // 랜덤 제목 선택
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -94,9 +122,7 @@ class _NewTScreenState extends State<NewTScreen> {
                   suffixIcon: IconButton(
                     padding: EdgeInsets.zero,
                     icon: const Icon(Icons.autorenew, size: 28, color: Color(0xFF477C59)), // 리프레시 아이콘
-                    onPressed: () {
-                      // 버튼 클릭 시 동작 설정 (현재 비어 있음)
-                    },
+                    onPressed: _setRandomTitle, // 랜덤 제목 설정
                   ),
                   suffixIconConstraints: const BoxConstraints(maxWidth: 30, maxHeight: 30),
                 ),

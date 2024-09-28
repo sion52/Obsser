@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /* ##### 알림 설정 화면 ##### */
 class NotificationScreen extends StatefulWidget {
@@ -11,6 +12,26 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   bool _isChecked = false; // 야간 수신 스위치 상태를 저장하는 변수
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSwitchState();
+  }
+
+  /* ### 스위치 상태 로드 ### */
+  Future<void> _loadSwitchState() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isChecked = prefs.getBool('isNightReceiveChecked') ?? false;
+    });
+  }
+
+  /* ### 스위치 상태 저장 ### */
+  Future<void> _saveSwitchState(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isNightReceiveChecked', value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +126,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 onChanged: (bool? value) {
                                   setState(() {
                                     _isChecked = value ?? false; // 스위치 상태 변경
+                                    _saveSwitchState(_isChecked);
                                   });
                                 },
                               ),
