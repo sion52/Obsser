@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:obsser_1/screens/hash/hash_detail.dart';
+import 'package:obsser_1/screens/search_screen.dart';
 
 /* ##### 키워드 검색 및 카테고리 선택 페이지 ##### */
 class HashScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class HashScreen extends StatefulWidget {
 
 class _HashScreenState extends State<HashScreen> {
   String? selectedKeyword;
+  final TextEditingController _searchController = TextEditingController(); // 검색창 컨트롤러 추가
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +34,7 @@ class _HashScreenState extends State<HashScreen> {
               const SizedBox(height: 8),
               buildKeywordChips(), // 키워드 칩 리스트 위젯
               const SizedBox(height: 40),
-              buildTitle('교통수단별',' 여행코스'), // 교통수단별 여행코스 제목
-              const SizedBox(height: 10),
-              buildTransportOptions(), // 교통수단 선택 위젯
-              const SizedBox(height: 40),
-              buildTitle('카테고리별',' 여행지'), // 카테고리별 여행지 제목
+              buildTitle('카테고리별', ' 여행지'), // 카테고리별 여행지 제목
               const SizedBox(height: 16),
               buildCategoryList(), // 카테고리 리스트 위젯
             ],
@@ -72,18 +70,28 @@ class _HashScreenState extends State<HashScreen> {
           width: 155,
           height: 30,
           child: TextField(
+            controller: _searchController, // 검색창 컨트롤러 연결
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide.none, // 테두리 없음
               ),
               filled: true,
-              fillColor: const Color(0xFFE0E0E0), // 배경색 회색
+              fillColor: const Color(0xFFF2F2F2), // 배경색 회색
               suffixIcon: IconButton(
                 padding: EdgeInsets.zero,
                 icon: const Icon(Icons.search, size: 28, color: Color(0xFF000000)),
                 onPressed: () {
-                  // 검색 버튼 클릭 시 동작
+                  // 검색 버튼 클릭 시 SearchScreen으로 입력값 전달
+                  String query = _searchController.text;
+                  if (query.isNotEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SearchScreen(query: query), // 검색어를 SearchScreen으로 전달
+                      ),
+                    );
+                  }
                 },
               ),
               suffixIconConstraints: const BoxConstraints(
@@ -109,7 +117,6 @@ class _HashScreenState extends State<HashScreen> {
         decoration: BoxDecoration(
           color: const Color(0xFFFAFAFA), // 배경색 흰색
           borderRadius: BorderRadius.circular(20), // 모서리 둥글게
-          //border: Border.all(width: 1, color: const Color(0xA6A4A4A4)) // 테두리 색
           boxShadow: [BoxShadow(
             color: Colors.grey.withOpacity(0.2),
             spreadRadius: 1,
@@ -136,8 +143,8 @@ class _HashScreenState extends State<HashScreen> {
                       builder: (context) => HashDetail(
                         selectedKeyword: keywords[index],
                         onKeywordSelected: widget.onKeywordSelected,
-                      )
-                    )
+                      ),
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -173,47 +180,6 @@ class _HashScreenState extends State<HashScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  /* ##### 교통수단 선택 위젯 ##### */
-  Widget buildTransportOptions() {
-    // 교통수단 리스트
-    List<Map<String, dynamic>> transportOptions = [
-      {'icon': Icons.directions_car, 'label': '자동차'},
-      {'icon': Icons.pedal_bike, 'label': '자전거'},
-      {'icon': Icons.directions_walk, 'label': '도보'},
-      {'icon': Icons.directions_bus, 'label': '버스'},
-    ];
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: transportOptions.map((option) {
-        return Column(
-          children: [
-            // 교통수단 아이콘 원형 배경
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: const Color(0xFFE8E9F1), // 배경색
-                boxShadow: [BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 1,
-                  blurRadius: 3,
-                  offset: const Offset(0, 3),
-                )],
-              ),
-              child: Center(
-                child: Icon(option['icon'], size: 40, color: const Color(0xFF284029)), // 아이콘
-              ),
-            ),
-            const SizedBox(height: 3),
-            Text(option['label'], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)), // 라벨
-          ],
-        );
-      }).toList(),
     );
   }
 

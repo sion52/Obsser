@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:obsser_1/screens/new_trip/new_trip_screen.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 

@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:obsser_1/screens/dol/dol_detail.dart';
 import 'package:obsser_1/screens/dol/magazine_detail.dart';
 import 'package:obsser_1/screens/menu/notice.dart';
+import 'package:obsser_1/screens/search_screen.dart';
 
 /* ##### 메인 홈 페이지 ##### */
 class DolScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class _DolScreenState extends State<DolScreen> {
   late PageController _pageController; // 페이지 슬라이드 컨트롤러
   int _currentSlide = 0; // 현재 슬라이드 인덱스 저장 변수
   Timer? _timer; // 자동 슬라이드를 위한 타이머
+  final TextEditingController _searchController = TextEditingController(); // 검색창 컨트롤러 추가
 
   final List<String> images = [ // 슬라이드 이미지 리스트
     'assets/banners/banner1.png',
@@ -75,6 +77,7 @@ class _DolScreenState extends State<DolScreen> {
   void dispose() {
     _pageController.dispose(); // 페이지 컨트롤러 해제
     _timer?.cancel(); // 타이머 해제
+    _searchController.dispose(); // 검색창 컨트롤러 해제
     super.dispose();
   }
 
@@ -218,13 +221,25 @@ class _DolScreenState extends State<DolScreen> {
                           color: const Color(0xFFFFFFFF),
                           borderRadius: BorderRadius.circular(30.0),
                         ),
-                        child: const TextField(
-                          decoration: InputDecoration(
+                        child: TextField(
+                          controller: _searchController, // 검색창 컨트롤러 연결
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: ' 검색',
                             hintStyle: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Color(0xFF8F9098)),
                             prefixIcon: Icon(Icons.search, color: Color(0xFF000000)),
                           ),
+                          onSubmitted: (query) {
+                            // 검색어를 입력하고 엔터를 눌렀을 때
+                            if (query.isNotEmpty) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SearchScreen(query: query), // 검색어를 SearchScreen으로 전달
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ),
                     ),
