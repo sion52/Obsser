@@ -47,12 +47,12 @@ class _SignupScreenState extends State<SignupScreen> {
     try {
       // 서버에 POST 요청 보내기
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:5000/auth/login'),
+        Uri.parse('http://127.0.0.1:5000/auth/signin'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'name': name3Controller.text,
-          'email': email3Controller.text,
+          'username': name3Controller.text,
           'password': password2Controller.text,
+          'email': email3Controller.text,
         }),
       );
 

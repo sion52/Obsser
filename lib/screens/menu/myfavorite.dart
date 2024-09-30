@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -14,11 +16,68 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   String selectedCategory = "전체"; // 선택된 카테고리를 저장하는 변수
   List<Map<String, String>> travelCards = []; // 서버에서 받아온 여행 카드 데이터 저장
   bool isLoading = true; // 로딩 상태 표시 변수
+  List<int> selectedPlaces = []; // 선택된 관심장소의 인덱스 리스트
+
+  List<Map<String, String>> favoritePlaces = [
+    {
+      'title': '카멜리아 힐',
+      'imageUrl': 'assets/pictures/camellia.png', // 로컬 이미지 경로
+      'cate': '관광명소',
+    },
+    {
+      'title': '생각하는 정원',
+      'imageUrl': 'assets/pictures/garden.png', // 로컬 이미지 경로
+      'cate': '관광명소',
+    },
+    {
+      'title': '삼성혈',
+      'imageUrl': 'assets/pictures/samsung.png', // 로컬 이미지 경로
+      'cate': '관광명소',
+    },
+    {
+      'title': '베케',
+      'imageUrl': 'assets/pictures/veke.png', // 로컬 이미지 경로
+      'cate': '관광명소',
+    },
+    {
+      'title': '카멜리아 힐2',
+      'imageUrl': 'assets/pictures/camellia.png', // 로컬 이미지 경로
+      'cate': '식당',
+    },
+    {
+      'title': '생각하는 정원2',
+      'imageUrl': 'assets/pictures/garden.png', // 로컬 이미지 경로
+      'cate': '카페',
+    },
+    {
+      'title': '삼성혈2',
+      'imageUrl': 'assets/pictures/samsung.png', // 로컬 이미지 경로
+      'cate': '식당',
+    },
+    {
+      'title': '베케2',
+      'imageUrl': 'assets/pictures/veke.png', // 로컬 이미지 경로
+      'cate': '카페',
+    },
+    // 필요한 만큼 데이터를 추가
+  ];
 
   // 카테고리 버튼 클릭 시 호출되는 함수
   void onCategoryTap(String category) {
     setState(() {
       selectedCategory = category; // 선택된 카테고리를 업데이트
+    });
+  }
+
+  void onPlaceTap(int index) {
+    setState(() {
+      if (selectedPlaces.contains(index)) {
+        // 이미 선택된 경우 선택 취소
+        selectedPlaces.remove(index);
+      } else {
+        // 선택되지 않은 경우 선택 추가
+        selectedPlaces.add(index);
+      }
     });
   }
 
@@ -31,9 +90,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       List<dynamic> data = json.decode(response.body);
       List<Map<String, String>> travelData = data.map((item) {
         return {
-          'title': item['title'].toString(),   // String으로 변환
-          'date': item['date'].toString(),
-          'imageUrl': item['imageUrl'].toString(),
+          'name': item['name'].toString(),   // String으로 변환
+          'description': item['description'].toString(),
+          'tags': item['tags'].toString(),
+          'image': item['image'].toString(),
         };
       }).toList();
 
@@ -42,6 +102,45 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       throw Exception('Failed to load travel data');
     }
   }
+
+  /* ### 서버에 관심 장소를 저장하는 POST 요청 함수 ### */
+Future<void> removePlaces() async {
+  List<String> selectedPlaceTitles = selectedPlaces.map((index) {
+    return favoritePlaces[index]['title']!; // 선택된 장소들의 제목을 추출
+  }).toList();
+
+  try {
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/mytrip/myplace'), // 서버의 POST 경로
+      headers: {'Content-Type': 'application/json'}, // JSON으로 전송
+      body: jsonEncode({
+        'delete_table': selectedPlaceTitles, // 선택된 장소 제목 리스트를 서버에 전송
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // 성공적으로 저장되었을 때
+      final responseData = json.decode(response.body);
+      if (responseData['success']) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('관심 장소가 성공적으로 삭제되었습니다!')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('삭제 실패: ${responseData['message']}')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('서버에 문제가 있습니다. 나중에 다시 시도해 주세요.')),
+      );
+    }
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('오류가 발생했습니다. 다시 시도해 주세요.')),
+    );
+  }
+}
 
   /* ### 페이지 로드 시 서버에서 데이터 가져오기 ### */
   @override
@@ -126,7 +225,89 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               ),
             ],
           ),
+          const SizedBox(height: 20),
+          selectedCategory == '전체' ? _buildGridFavoritePlaces() : Container(),
         ],
+      ),
+    );
+  }
+
+  // 관심장소 이미지 카드 UI
+  Widget _buildFavoritePlaceCard({required String cate, required String title, required String imageUrl, required bool isSelected}) {
+    return GestureDetector(
+      onTap: () => onPlaceTap(favoritePlaces.indexWhere((place) => place['title'] == title && place['imageUrl'] == imageUrl)),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15), // 카드 모서리 둥글게
+          side: isSelected ? const BorderSide(color: Color(0xFFFFC04B), width: 10) : BorderSide.none, // 선택된 카드에만 테두리 추가
+        ),
+        elevation: 1,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15), // 이미지 모서리 둥글게
+          child: Stack(
+            children: [
+              Image.asset(imageUrl, fit: BoxFit.cover, width: double.infinity, height: double.infinity),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.center, // 그라데이션 시작점
+                    end: Alignment.bottomCenter, // 그라데이션 끝점
+                    colors: [
+                      Colors.transparent, // 상단은 투명
+                      Colors.black.withOpacity(1), // 하단은 검정색, 투명도 1
+                    ],
+                  ),
+                ),
+                alignment: Alignment.bottomLeft, // 텍스트를 왼쪽 아래로 배치
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end, // 텍스트가 아래쪽에 위치하도록 설정
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Transform.translate(
+                      offset: const Offset(0, 6),
+                      child: Text(
+                        cate,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300, color: Colors.white), // 카테고리 텍스트
+                      ),
+                    ),
+                    Text(
+                      title,
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.white), // 제목 텍스트
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
+
+  // 새로운 관심장소 카드를 그리드 형식으로 보여주는 GridView
+  Widget _buildGridFavoritePlaces() {
+    return Expanded(
+      child: GridView.builder(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 60), // 하단에 50의 여백 추가
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // 2열로 설정
+          crossAxisSpacing: 10, // 좌우 간격
+          mainAxisSpacing: 10, // 상하 간격
+          childAspectRatio: 1, // 이미지의 가로 세로 비율
+        ),
+        itemCount: favoritePlaces.length, // 관심장소 데이터 개수
+        itemBuilder: (context, index) {
+          final place = favoritePlaces[index];
+          return _buildFavoritePlaceCard(
+            cate: place['cate']!, // 카테고리 추가
+            title: place['title']!,
+            imageUrl: place['imageUrl']!,
+            isSelected: selectedPlaces.contains(index), // 선택된 인덱스에 해당하는 카드에만 테두리 표시
+          );
+        },
       ),
     );
   }

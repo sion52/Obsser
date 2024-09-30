@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 class SearchScreen extends StatelessWidget {
   final String query;
 
-  SearchScreen({super.key, required this.query});
+  const SearchScreen({super.key, required this.query});
 
   @override
   Widget build(BuildContext context) {
     // TextEditingController에 query 값을 설정
-    final TextEditingController _searchController = TextEditingController(text: query);
+    final TextEditingController searchController = TextEditingController(text: query);
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF), // 배경 흰색
@@ -38,7 +38,7 @@ class SearchScreen extends StatelessWidget {
                   width: 300,
                   height: 30,
                   child: TextField(
-                    controller: _searchController, // 검색창에 query 설정
+                    controller: searchController, // 검색창에 query 설정
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),

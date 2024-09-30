@@ -102,6 +102,41 @@ class _TripScreenState extends State<TripScreen> {
     }
   }
 
+  // ### 2차원 행렬 데이터를 서버에 POST 요청하는 함수 ###
+  Future<void> postMatrixData() async {
+    // 2차원 행렬 예시 (여행 관련 데이터라고 가정)
+    List<List<String>> matrixData = [
+      ['Point A', 'Point B', '12km'],
+      ['Point B', 'Point C', '8km'],
+      ['Point C', 'Point D', '15km'],
+    ];
+
+    // Map으로 감싸서 'distance_matrix'라는 키로 2차원 리스트를 전송
+    Map<String, dynamic> dataToSend = {
+      'distance_matrix': matrixData, // key로 2차원 배열을 전송
+    };
+
+    // JSON으로 변환
+    String jsonData = jsonEncode(dataToSend);
+
+    try {
+      // 서버로 POST 요청
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:5000/plan/path'), // 서버 주소
+        headers: {'Content-Type': 'application/json'}, // JSON으로 전송
+        body: jsonData, // 'distance_matrix' key로 2차원 리스트 데이터를 전송
+      );
+
+      if (response.statusCode == 200) {
+        print('서버에 데이터가 성공적으로 전송되었습니다.');
+      } else {
+        print('서버에 데이터 전송 실패: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('오류 발생: $error');
+    }
+  }
+
   @override
   void initState() {
     super.initState();

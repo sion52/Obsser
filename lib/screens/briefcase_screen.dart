@@ -33,9 +33,9 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
       List<dynamic> data = json.decode(response.body);
       List<Map<String, String>> travelData = data.map((item) {
         return {
-          'title': item['title'].toString(),   // String으로 변환
+          'name': item['title'].toString(),   // String으로 변환
           'date': item['date'].toString(),
-          'imageUrl': item['imageUrl'].toString(),
+          'image_url': item['imageUrl'].toString(),
         };
       }).toList();
 

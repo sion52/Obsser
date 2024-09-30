@@ -21,18 +21,35 @@ class _NewTBackScreenState extends State<NewTBackScreen> {
 
   // ### 서버로 여행 데이터를 전송하는 함수 ###
   Future<void> saveTravelData(String title, String startDate, String endDate, String imageUrl) async {
-    // ignore: unused_local_variable
+    // 날짜를 DateTime 형식으로 변환
+    DateTime startDateTime = DateTime.parse(startDate);
+    DateTime endDateTime = DateTime.parse(endDate);
+
+    // yyyymmdd 형식으로 변환
+    String formattedStartDate = "${startDateTime.year}${_twoDigits(startDateTime.month)}${_twoDigits(startDateTime.day)}";
+    String formattedEndDate = "${endDateTime.year}${_twoDigits(endDateTime.month)}${_twoDigits(endDateTime.day)}";
+
+    // 두 날짜를 이어붙여 16자리 숫자 문자열 생성 후 int로 변환
+    int formattedDate = int.parse("$formattedStartDate$formattedEndDate");
+
+    // 서버에 POST 요청
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/travel_data'), // 서버 주소 (환경에 맞게 수정)
+      Uri.parse('http://127.0.0.1:5000/plan'), // 서버 주소 (환경에 맞게 수정)
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
-        'title': title,
-        'date': '$startDate - $endDate', // 날짜 범위
-        'imageUrl': imageUrl, // 선택된 이미지 URL
+      body: jsonEncode(<String, dynamic>{ // 'date'를 int로 전송하기 위해 <String, dynamic> 사용
+        'name': title,
+        'date': formattedDate, // "yyyymmddyyyymmdd" 형식의 int 날짜
+        'image_url': imageUrl, // 선택된 이미지 URL
       }),
     );
+  }
+
+  // ### 두 자리 숫자를 맞추기 위한 헬퍼 함수 ###
+  // 한 자릿수인 월과 일을 두 자리로 만들어주는 함수
+  String _twoDigits(int n) {
+    return n.toString().padLeft(2, '0'); // 숫자가 한 자리일 경우 앞에 0을 붙임
   }
 
   // ### 이전 및 다음 버튼 UI 및 동작 정의 ###
