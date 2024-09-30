@@ -219,9 +219,13 @@ Future<void> removePlaces() async {
                 onTap: () => onCategoryTap('카페'), // '카페' 카테고리 선택
                 child: CategoryButton(label: '카페', isSelected: selectedCategory == '카페'),
               ),
+              // GestureDetector(
+              //   onTap: () => onCategoryTap('매거진'), // '매거진' 카테고리 선택
+              //   child: CategoryButton(label: '매거진', isSelected: selectedCategory == '매거진'),
+              // ),
               GestureDetector(
-                onTap: () => onCategoryTap('매거진'), // '매거진' 카테고리 선택
-                child: CategoryButton(label: '매거진', isSelected: selectedCategory == '매거진'),
+                onTap: () => onCategoryTap('상품'), // '상품' 카테고리 선택
+                child: CategoryButton(label: '상품', isSelected: selectedCategory == '상품'),
               ),
             ],
           ),

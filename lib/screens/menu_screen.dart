@@ -154,7 +154,7 @@ Widget _buildMenuOptions() {
               MaterialPageRoute(builder: (context) => const FavoriteScreen()),
             );
           },
-          child: _buildMenuRow(' 나의 관심장소'), // 관심장소 메뉴
+          child: _buildMenuRow(' 나의 관심'), // 관심장소 메뉴
         ),
         const SizedBox(height: 40),
         GestureDetector(

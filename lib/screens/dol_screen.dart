@@ -35,7 +35,7 @@ class _DolScreenState extends State<DolScreen> {
     {
       'title': '첫 번째 게시물',
       'description': '이것은 첫 번째 게시물입니다.',
-      'imageUrl': 'https://via.placeholder.com/400x200.png?text=1',
+      'imageUrl': 'assets/pictures/camellia.png',
     },
     {
       'title': '두 번째 게시물',
@@ -130,18 +130,26 @@ class _DolScreenState extends State<DolScreen> {
   /* ### 슬라이드 게시판 카드 생성 메서드 ### */
   Widget _buildPostCard(Map<String, String> post) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white, // 배경색 흰색
+          borderRadius: BorderRadius.circular(15), // 모서리 둥글게
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2), // 그림자 색상 및 투명도
+              spreadRadius: 1, // 그림자가 퍼지는 정도
+              blurRadius: 3, // 그림자 블러 정도
+              offset: const Offset(0, 3), // 그림자의 위치
+            ),
+          ],
         ),
-        elevation: 5,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-              child: Image.network(
+              child: Image.asset(
                 post['imageUrl']!,
                 fit: BoxFit.cover,
                 height: 200,
@@ -155,7 +163,10 @@ class _DolScreenState extends State<DolScreen> {
                 children: [
                   Text(
                     post['title']!,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Text(
@@ -170,6 +181,7 @@ class _DolScreenState extends State<DolScreen> {
       ),
     );
   }
+
 
   /* ### 매거진 이미지 클릭 이벤트 처리 ### */
   void _onMagazineTap(int index) {
@@ -250,7 +262,7 @@ class _DolScreenState extends State<DolScreen> {
 
             /* ### 검색 섹션 ### */
             Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.fromLTRB(24,24,24,16),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 height: 130,
@@ -313,6 +325,17 @@ class _DolScreenState extends State<DolScreen> {
               ),
             ),
 
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20,0,0,5), // 왼쪽으로 20만큼 패딩 추가
+              child: Align(
+                alignment: Alignment.centerLeft, // 텍스트를 왼쪽 정렬
+                child: Text(
+                  '  게시판(이름미정)',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700), // 텍스트 스타일 예시
+                ),
+              ),
+            ),
+
             /* ### 슬라이드 게시판 섹션 추가 ### */
             SizedBox(
               height: 400, // 슬라이드 게시판 높이 설정
@@ -324,6 +347,8 @@ class _DolScreenState extends State<DolScreen> {
                 },
               ),
             ),
+
+            SizedBox(height: 5,),
 
             /* ### 매거진 섹션 ### */
             Padding(

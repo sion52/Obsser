@@ -15,6 +15,95 @@ class HashScreen extends StatefulWidget {
 class _HashScreenState extends State<HashScreen> {
   String? selectedKeyword;
   final TextEditingController _searchController = TextEditingController(); // 검색창 컨트롤러 추가
+  late PageController _pageController;
+
+  final List<Map<String, String>> posts = [
+    {
+      'title': '첫 번째 게시물',
+      'description': '이것은 첫 번째 게시물입니다.',
+      'imageUrl': 'assets/pictures/camellia.png',
+    },
+    {
+      'title': '두 번째 게시물',
+      'description': '이것은 두 번째 게시물입니다.',
+      'imageUrl': 'assets/pictures/camellia.png',
+    },
+    {
+      'title': '세 번째 게시물',
+      'description': '이것은 세 번째 게시물입니다.',
+      'imageUrl': 'assets/pictures/camellia.png',
+    },
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pageController = PageController();  // 게시판용 페이지 컨트롤러 초기화
+  }
+
+  /* ### 리소스 해제 메서드 ### */
+  @override
+  void dispose() {
+    _pageController.dispose();  // 게시판용 페이지 컨트롤러 해제
+    super.dispose();
+  }
+
+  /* ### 슬라이드 게시판 카드 생성 메서드 ### */
+  Widget _buildPostCard(Map<String, String> post) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white, // 배경색 흰색
+          borderRadius: BorderRadius.circular(15), // 모서리 둥글게
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2), // 그림자 색상 및 투명도
+              spreadRadius: 1, // 그림자가 퍼지는 정도
+              blurRadius: 3, // 그림자 블러 정도
+              offset: const Offset(0, 3), // 그림자의 위치
+            ),
+          ],
+        ),
+        clipBehavior: Clip.none, // 그림자가 짤리지 않도록 설정
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+              child: Image.asset(
+                post['imageUrl']!,
+                fit: BoxFit.cover,
+                height: 200,
+                width: double.infinity,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16,10,16,16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    post['title']!,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    post['description']!,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +114,33 @@ class _HashScreenState extends State<HashScreen> {
       ),
       backgroundColor: const Color(0xFFFFFFFF), // 페이지 배경색 흰색
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(38, 50, 38, 16),
+        padding: const EdgeInsets.fromLTRB(38, 30, 38, 0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start, // 좌측 정렬
             children: [
               buildKeywordHeader(), // 키워드 검색 헤더 위젯
-              const SizedBox(height: 8),
+              const SizedBox(height: 5),
               buildKeywordChips(), // 키워드 칩 리스트 위젯
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
+
+              buildTitle('오늘의 추천', ' 여행지'), // 카테고리별 여행지 제목
+              const SizedBox(height: 5),
+              /* ### 슬라이드 게시판 섹션 추가 ### */
+              SizedBox(
+                height: 300, // 슬라이드 게시판 높이 설정
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: posts.length,
+                  itemBuilder: (context, index) {
+                    return _buildPostCard(posts[index]); // 슬라이드 게시판 내용
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
+              
               buildTitle('카테고리별', ' 여행지'), // 카테고리별 여행지 제목
-              const SizedBox(height: 16),
+              const SizedBox(height: 3),
               buildCategoryList(), // 카테고리 리스트 위젯
             ],
           ),

@@ -168,7 +168,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(' 나의 관심장소', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
+          Text(' 나의 관심', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
           Icon(Icons.arrow_forward_ios),
         ],
       ),

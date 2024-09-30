@@ -90,9 +90,9 @@ class _TripScreenState extends State<TripScreen> {
       // 응답 데이터를 List<Map<String, String>> 형식으로 변환
       List<Map<String, String>> travelData = data.map((item) {
         return {
-          'title': item['title'].toString(), // 명시적으로 String 변환
+          'name': item['name'].toString(), // 명시적으로 String 변환
           'date': item['date'].toString(),
-          'imageUrl': item['imageUrl'].toString(),
+          'image_url': item['image_url'].toString(),
         };
       }).toList();
 
@@ -234,9 +234,9 @@ class _TripScreenState extends State<TripScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20), // 좌우 padding 설정
       child: _buildTravelCard(
-        title: selectedCard['title']!,
+        title: selectedCard['name']!,
         date: selectedCard['date']!,
-        imageUrl: selectedCard['imageUrl']!,
+        imageUrl: selectedCard['image_url']!,
       ),
     );
   }

@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:obsser_1/main.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
 
 /* ##### 상세 페이지 화면 ##### */
@@ -35,6 +37,58 @@ class DolDetail extends StatefulWidget {
 
 class _DolDetailState extends State<DolDetail> {
   bool isFavorite = false; // 즐겨찾기 상태
+  String price = ''; // 서버에서 받아올 price
+  String description = ''; // 서버에서 받아올 description
+  String image = ''; // 서버에서 받아올 image URL
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData(); // 페이지 로드 시 서버에서 데이터 가져오기
+  }
+
+  // 서버에서 price, description, image 데이터를 가져오는 함수
+  Future<void> fetchData() async {
+    try {
+      final response = await http.get(Uri.parse('http://127.0.0.1:5000/detail/${widget.imageIndex}')); // 서버 요청 URL에 이미지 인덱스를 포함
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          price = data['price'].toString(); // price 데이터 가져오기
+          description = data['description']; // description 데이터 가져오기
+          image = data['image']; // image URL 데이터 가져오기
+        });
+      } else {
+        print('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+  }
+
+  // 찜 상태를 서버에 저장하는 함수
+  Future<void> postFavoriteStatus(bool isFavorite) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:5000/detail/${widget.imageIndex}/like'), // 서버의 찜 상태 저장 API URL
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'item_id': widget.imageIndex, // 찜한 항목의 인덱스
+          'is_favorite': isFavorite, // 찜 상태 (true/false)
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('찜 상태가 성공적으로 저장되었습니다.');
+      } else {
+        print('찜 상태 저장 실패: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('찜 상태 저장 중 오류 발생: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +104,10 @@ class _DolDetailState extends State<DolDetail> {
             /* ### 이미지 및 뒤로가기 버튼 ### */
             Stack(
               children: [
-                // 선택된 이미지 표시
-                Image.asset(
-                  widget.images[widget.imageIndex], 
-                  height: 470, 
-                  fit: BoxFit.cover,
-                ),
+                // 서버에서 가져온 이미지 표시
+                image.isNotEmpty
+                    ? Image.network(image, height: 470, fit: BoxFit.cover)
+                    : Image.asset(widget.images[widget.imageIndex], height: 470, fit: BoxFit.cover),
                 // 뒤로가기 버튼
                 Positioned(
                   top: 20,
@@ -117,11 +169,11 @@ class _DolDetailState extends State<DolDetail> {
                       ),
                     ),
                   ),
-                  // 상품 설명
+                  // 서버에서 가져온 상품 설명
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      widget.explanation[widget.imageIndex],
+                      description.isNotEmpty ? description : widget.explanation[widget.imageIndex],
                       style: const TextStyle(
                         color: Color(0xFF4D5049),
                         fontWeight: FontWeight.w500,
@@ -130,18 +182,18 @@ class _DolDetailState extends State<DolDetail> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  // 정가 텍스트
-                  const Align(
+                  // 서버에서 가져온 정가 텍스트
+                  Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      '정가 33,000원',
-                      style: TextStyle(
+                      '정가 $price원',
+                      style: const TextStyle(
                         fontWeight: FontWeight.w300,
                         fontSize: 15,
                       ),
                     ),
                   ),
-                  // 할인율과 가격 표시
+                  // 할인율과 가격 표시 (데이터 추가 시 여기서 수정 가능)
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -175,6 +227,7 @@ class _DolDetailState extends State<DolDetail> {
                       ),
                     ],
                   ),
+                  Image.asset('assets/banners/detail2.png'),
                 ],
               ),
             ),
@@ -190,10 +243,11 @@ class _DolDetailState extends State<DolDetail> {
           children: [
             // 즐겨찾기 버튼
             GestureDetector(
-              onTap: () => {
+              onTap: () async {
                 setState(() {
-                  isFavorite = !isFavorite;
-                })
+                  isFavorite = !isFavorite; // 즐겨찾기 상태 변경
+                });
+                await postFavoriteStatus(isFavorite); // 서버에 찜 상태 전송
               },
               child: Container(
                 width: 50,
@@ -216,7 +270,13 @@ class _DolDetailState extends State<DolDetail> {
             // 브리프케이스 아이콘 버튼
             GestureDetector(
               onTap: () {
-                // 브리프케이스 버튼 동작
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MainPage(initialIndex: 2), // '나의 일정' 탭으로 이동
+                  ),
+                  (route) => false, // 뒤로가기 버튼을 비활성화하여 이전 페이지로 돌아가지 않음
+                );
               },
               child: Container(
                 width: 50,
