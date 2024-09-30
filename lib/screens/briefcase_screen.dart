@@ -33,11 +33,12 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
       List<dynamic> data = json.decode(response.body);
       List<Map<String, String>> travelData = data.map((item) {
         return {
-          'name': item['title'].toString(),   // String으로 변환
+          'name': item['name'].toString(),
           'date': item['date'].toString(),
-          'image_url': item['imageUrl'].toString(),
+          'image_url': item['image_url'].toString(),
         };
       }).toList();
+
 
       return travelData;
     } else {
@@ -203,9 +204,9 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
                   );
                 },
                 child: _buildTravelCard(
-                  title: card['title']!,
+                  title: card['name']!,
                   date: card['date']!,
-                  imageUrl: card['imageUrl']!,
+                  image_url: card['image_url']!,
                 ),
               ),
             );
@@ -218,7 +219,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
 
 
   /* ### 여행 카드 위젯 ### */
-  Widget _buildTravelCard({required String title, required String date, required String imageUrl}) {
+  Widget _buildTravelCard({required String title, required String date, required String image_url}) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10), // 모서리 둥글게
@@ -228,7 +229,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
         borderRadius: BorderRadius.circular(10),
         child: Stack(
           children: [
-            Image.asset(imageUrl, fit: BoxFit.cover, width: double.infinity, height: 100), // 카드 이미지
+            Image.asset(image_url, fit: BoxFit.cover, width: double.infinity, height: 100), // 카드 이미지
             Container(
               padding: const EdgeInsets.fromLTRB(12, 5, 0, 0),
               child: Column(

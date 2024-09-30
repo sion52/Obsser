@@ -7,9 +7,9 @@ CORS(app)  # CORS 정책 해결을 위해 사용
 
 travel_data = [
     {
-        "title": "8월 힐링 제주도",
+        "name": "8월 힐링 제주도",
         "date": "2024.08.15 - 2024.08.18",
-        "imageUrl": "assets/histories/back_0.png"
+        "image_url": "assets/histories/back_0.png"
     },
 ]
 
@@ -17,15 +17,15 @@ travel_data = [
 def dol_data():
     return jsonify({"dolMessage": f"{datetime.today().strftime('%Y.%m.%d %H:%M:%S')}"}), 200
 
-@app.route('/travel_data', methods=['POST'])
+@app.route('/plan', methods=['POST'])
 def save_travel_data():
     data = request.get_json()
     
     # 받은 데이터를 리스트에 저장
     travel_data.append({
-        'title': data['title'],
+        'name': data['name'],
         'date' : data['date'],
-        'imageUrl': data['imageUrl'],
+        'image_url': data['image_url'],
     })
 
     # 응답 반환

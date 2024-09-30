@@ -18,7 +18,8 @@ class DolScreen extends StatefulWidget {
 
 class _DolScreenState extends State<DolScreen> {
   String dolMessage = 'Loading...'; // 서버 응답 메시지 저장 변수
-  late PageController _pageController; // 페이지 슬라이드 컨트롤러
+  late PageController _imagePageController; // 이미지 슬라이드용 페이지 컨트롤러
+  late PageController _postPageController;  // 게시판용 페이지 컨트롤러
   int _currentSlide = 0; // 현재 슬라이드 인덱스 저장 변수
   Timer? _timer; // 자동 슬라이드를 위한 타이머
   final TextEditingController _searchController = TextEditingController(); // 검색창 컨트롤러 추가
@@ -30,19 +31,38 @@ class _DolScreenState extends State<DolScreen> {
     'assets/banners/banner4.png',
   ];
 
+  final List<Map<String, String>> posts = [
+    {
+      'title': '첫 번째 게시물',
+      'description': '이것은 첫 번째 게시물입니다.',
+      'imageUrl': 'https://via.placeholder.com/400x200.png?text=1',
+    },
+    {
+      'title': '두 번째 게시물',
+      'description': '이것은 두 번째 게시물입니다.',
+      'imageUrl': 'https://via.placeholder.com/400x200.png?text=2',
+    },
+    {
+      'title': '세 번째 게시물',
+      'description': '이것은 세 번째 게시물입니다.',
+      'imageUrl': 'https://via.placeholder.com/400x200.png?text=3',
+    },
+  ];
+
   /* ### 초기화 메서드 ### */
   @override
   void initState() {
     super.initState();
 
     fetchDolData(); // 페이지 로드 시 서버에서 데이터 요청
-    _pageController = PageController(); // 페이지 컨트롤러 초기화
+    _imagePageController = PageController(); // 이미지 슬라이드용 페이지 컨트롤러 초기화
+    _postPageController = PageController();  // 게시판용 페이지 컨트롤러 초기화
     
     // 페이지 변경 시 현재 슬라이드 인덱스 업데이트
-    _pageController.addListener(() {
+    _imagePageController.addListener(() {
       if (mounted) {
         setState(() {
-          _currentSlide = _pageController.page!.round();
+          _currentSlide = _imagePageController.page!.round();
         });
       }
     });
@@ -75,7 +95,8 @@ class _DolScreenState extends State<DolScreen> {
   /* ### 리소스 해제 메서드 ### */
   @override
   void dispose() {
-    _pageController.dispose(); // 페이지 컨트롤러 해제
+    _imagePageController.dispose(); // 이미지 슬라이드용 페이지 컨트롤러 해제
+    _postPageController.dispose();  // 게시판용 페이지 컨트롤러 해제
     _timer?.cancel(); // 타이머 해제
     _searchController.dispose(); // 검색창 컨트롤러 해제
     super.dispose();
@@ -88,7 +109,7 @@ class _DolScreenState extends State<DolScreen> {
       setState(() {
         _currentSlide = (_currentSlide + 1) % images.length; // 다음 슬라이드로 이동
       });
-      _pageController.animateToPage(
+      _imagePageController.animateToPage(
         _currentSlide,
         duration: const Duration(milliseconds: 300), // 애니메이션 지속 시간
         curve: Curves.easeInOut, // 애니메이션 효과
@@ -103,6 +124,50 @@ class _DolScreenState extends State<DolScreen> {
       MaterialPageRoute(
         builder: (context) => DolDetail(imageIndex: index,), // 클릭한 슬라이드 인덱스 전달
       )
+    );
+  }
+
+  /* ### 슬라이드 게시판 카드 생성 메서드 ### */
+  Widget _buildPostCard(Map<String, String> post) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        elevation: 5,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+              child: Image.network(
+                post['imageUrl']!,
+                fit: BoxFit.cover,
+                height: 200,
+                width: double.infinity,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    post['title']!,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    post['description']!,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -134,7 +199,7 @@ class _DolScreenState extends State<DolScreen> {
                 SizedBox( // 슬라이드 이미지 컨테이너
                   height: 470,
                   child: PageView.builder(
-                    controller: _pageController, // 페이지 컨트롤러 연결
+                    controller: _imagePageController, // 페이지 컨트롤러 연결
                     itemCount: images.length, // 이미지 개수
                     itemBuilder: (context, index) {
                       return GestureDetector( // 이미지 클릭 이벤트
@@ -245,6 +310,18 @@ class _DolScreenState extends State<DolScreen> {
                     ),
                   ],
                 ),
+              ),
+            ),
+
+            /* ### 슬라이드 게시판 섹션 추가 ### */
+            SizedBox(
+              height: 400, // 슬라이드 게시판 높이 설정
+              child: PageView.builder(
+                controller: _postPageController,
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  return _buildPostCard(posts[index]); // 슬라이드 게시판 내용
+                },
               ),
             ),
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:obsser_1/main.dart';
 
 /* ##### 새로운 여행 이미지 선택 화면 ##### */
@@ -22,8 +23,9 @@ class _NewTBackScreenState extends State<NewTBackScreen> {
   // ### 서버로 여행 데이터를 전송하는 함수 ###
   Future<void> saveTravelData(String title, String startDate, String endDate, String imageUrl) async {
     // 날짜를 DateTime 형식으로 변환
-    DateTime startDateTime = DateTime.parse(startDate);
-    DateTime endDateTime = DateTime.parse(endDate);
+    DateFormat dateFormat = DateFormat('yyyy.MM.dd'); // 날짜 형식 지정
+    DateTime startDateTime = dateFormat.parse(startDate);
+    DateTime endDateTime = dateFormat.parse(endDate);
 
     // yyyymmdd 형식으로 변환
     String formattedStartDate = "${startDateTime.year}${_twoDigits(startDateTime.month)}${_twoDigits(startDateTime.day)}";
