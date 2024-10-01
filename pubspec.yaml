@@ -78,6 +78,7 @@ flutter:
     - assets/magazines/
     - assets/profile.png
     - assets/splash.png
+    - assets/film.png
 
   fonts:
     - family: Pretendard

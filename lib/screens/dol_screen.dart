@@ -35,17 +35,17 @@ class _DolScreenState extends State<DolScreen> {
     {
       'title': '첫 번째 게시물',
       'description': '이것은 첫 번째 게시물입니다.',
-      'imageUrl': 'assets/pictures/camellia.png',
+      'imageUrl': 'assets/pictures/garden.png',
     },
     {
       'title': '두 번째 게시물',
       'description': '이것은 두 번째 게시물입니다.',
-      'imageUrl': 'https://via.placeholder.com/400x200.png?text=2',
+      'imageUrl': 'assets/pictures/garden.png',
     },
     {
       'title': '세 번째 게시물',
       'description': '이것은 세 번째 게시물입니다.',
-      'imageUrl': 'https://via.placeholder.com/400x200.png?text=3',
+      'imageUrl': 'assets/pictures/garden.png',
     },
   ];
 
@@ -130,7 +130,7 @@ class _DolScreenState extends State<DolScreen> {
   /* ### 슬라이드 게시판 카드 생성 메서드 ### */
   Widget _buildPostCard(Map<String, String> post) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white, // 배경색 흰색
@@ -148,39 +148,40 @@ class _DolScreenState extends State<DolScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(15), bottom: Radius.circular(15)), // 상단 모서리 둥글게
               child: Image.asset(
                 post['imageUrl']!,
                 fit: BoxFit.cover,
-                height: 200,
+                height: 227,
                 width: double.infinity,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    post['title']!,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    post['description']!,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(16.0),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Text(
+            //         post['title']!,
+            //         style: const TextStyle(
+            //           fontSize: 24,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //       ),
+            //       const SizedBox(height: 10),
+            //       Text(
+            //         post['description']!,
+            //         style: const TextStyle(fontSize: 16),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
     );
   }
+
 
 
   /* ### 매거진 이미지 클릭 이벤트 처리 ### */
@@ -326,29 +327,41 @@ class _DolScreenState extends State<DolScreen> {
             ),
 
             const Padding(
-              padding: EdgeInsets.fromLTRB(20,0,0,5), // 왼쪽으로 20만큼 패딩 추가
+              padding: EdgeInsets.fromLTRB(10,10,0,5), // 왼쪽으로 20만큼 패딩 추가
               child: Align(
                 alignment: Alignment.centerLeft, // 텍스트를 왼쪽 정렬
                 child: Text(
-                  '  게시판(이름미정)',
+                  '  게시판',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700), // 텍스트 스타일 예시
                 ),
               ),
             ),
 
-            /* ### 슬라이드 게시판 섹션 추가 ### */
-            SizedBox(
-              height: 400, // 슬라이드 게시판 높이 설정
-              child: PageView.builder(
-                controller: _postPageController,
-                itemCount: posts.length,
-                itemBuilder: (context, index) {
-                  return _buildPostCard(posts[index]); // 슬라이드 게시판 내용
-                },
-              ),
+            Stack(
+              children: [
+                // 배경 이미지
+                Image.asset('assets/film.png'),
+                
+                // 슬라이드 게시판을 중앙에 위치시킴
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.center, // 중앙에 배치
+                    child: SizedBox(
+                      height: 227, // 슬라이드 게시판 높이 설정
+                      child: PageView.builder(
+                        controller: _postPageController,
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          return _buildPostCard(posts[index]); // 슬라이드 게시판 내용
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
 
-            SizedBox(height: 5,),
+            const SizedBox(height: 30,),
 
             /* ### 매거진 섹션 ### */
             Padding(

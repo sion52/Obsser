@@ -17,7 +17,7 @@ travel_data = [
 def dol_data():
     return jsonify({"dolMessage": f"{datetime.today().strftime('%Y.%m.%d %H:%M:%S')}"}), 200
 
-@app.route('/plan', methods=['POST'])
+@app.route('/mytrip', methods=['POST'])
 def save_travel_data():
     data = request.get_json()
     

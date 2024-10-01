@@ -60,7 +60,7 @@ class _SignupScreenState extends State<SignupScreen> {
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
-        if (responseData['success']) {
+        if (responseData['result'] == 'success') {
           setState(() {
             successMessage = '회원가입에 성공했습니다!';
             errorMessage = '';

@@ -43,25 +43,25 @@ class _MagzScreenState extends State<MagzScreen> {
                   width: double.infinity,
                 ),
                 // 즐겨찾기 아이콘
-                Positioned(
-                  top: 25,
-                  right: 25,
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isFavorite = !isFavorite; // 즐겨찾기 상태 토글
-                      });
-                    },
-                    child: SvgPicture.asset(
-                      width: 30,
-                      isFavorite ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
-                      colorFilter: ColorFilter.mode(
-                        isFavorite ? const Color(0xFFFF5555) : const Color(0xFF000000), // 즐겨찾기 상태에 따른 색상
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   top: 25,
+                //   right: 25,
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       setState(() {
+                //         isFavorite = !isFavorite; // 즐겨찾기 상태 토글
+                //       });
+                //     },
+                //     child: SvgPicture.asset(
+                //       width: 30,
+                //       isFavorite ? 'assets/icons/Heart_f.svg' : 'assets/icons/Heart.svg',
+                //       colorFilter: ColorFilter.mode(
+                //         isFavorite ? const Color(0xFFFF5555) : const Color(0xFF000000), // 즐겨찾기 상태에 따른 색상
+                //         BlendMode.srcIn,
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 Positioned(
                   top: 20,
                   left: 20,

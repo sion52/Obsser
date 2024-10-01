@@ -227,7 +227,7 @@ class _DolDetailState extends State<DolDetail> {
                       ),
                     ],
                   ),
-                  Image.asset('assets/banners/detail2.png'),
+                  Image.asset('assets/banners/detail.png'),
                 ],
               ),
             ),

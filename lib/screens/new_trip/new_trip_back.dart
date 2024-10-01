@@ -36,7 +36,7 @@ class _NewTBackScreenState extends State<NewTBackScreen> {
 
     // 서버에 POST 요청
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/plan'), // 서버 주소 (환경에 맞게 수정)
+      Uri.parse('http://127.0.0.1:5000/mytrip/add'), // 서버 주소 (환경에 맞게 수정)
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

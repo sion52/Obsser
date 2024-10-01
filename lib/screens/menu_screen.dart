@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:obsser_1/main.dart';
 import 'package:obsser_1/screens/menu/login_screen.dart';
 import 'package:obsser_1/screens/menu/myfavorite.dart';
-import 'package:obsser_1/screens/menu/service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:obsser_1/screens/menu/inquiry.dart';
 import 'package:obsser_1/screens/menu/notice.dart';
 import 'package:obsser_1/screens/menu/notification.dart';
 import 'package:obsser_1/screens/menu/setting.dart';
+import 'package:obsser_1/screens/menu/service.dart';
 
 /* ##### 메뉴 페이지 ##### */
 class MenuScreen extends StatefulWidget {
@@ -19,11 +19,13 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   bool isLoggedIn = false; // 로그인 상태 저장 변수
+  String? email;
 
   @override
   void initState() {
     super.initState();
     _checkLoginStatus(); // 로그인 상태 확인
+    _getEmail();
   }
 
   /* ### 로그인 상태 확인 함수 ### */
@@ -34,12 +36,21 @@ class _MenuScreenState extends State<MenuScreen> {
     });
   }
 
+  /* ### 저장된 이메일 가져오기 ### */
+  Future<void> _getEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      email = prefs.getString('email') ?? 'example@gmail.com'; // 이메일 없으면 기본값으로 설정
+    });
+  }
+
   /* ### 로그인 상태 저장 함수 ### */
   Future<void> _login() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', true);
     setState(() {
       isLoggedIn = true;
+      _getEmail();
     });
   }
 
@@ -49,6 +60,7 @@ class _MenuScreenState extends State<MenuScreen> {
     await prefs.setBool('isLoggedIn', false);
     setState(() {
       isLoggedIn = false;
+      email = 'example@gmail.com';
     });
   }
 
@@ -117,9 +129,9 @@ class _MenuScreenState extends State<MenuScreen> {
                         isLoggedIn ? '옵써' : '로그인하세요', // 로그인 상태에 따른 텍스트
                         style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
                       ),
-                      const Text(
-                        'example@gmail.com', // 이메일 텍스트 (고정)
-                        style: TextStyle(fontSize: 12, color: Color(0xFF727272)),
+                      Text(
+                        email ?? 'example@gmail.com', // 로그인된 이메일 또는 기본 텍스트
+                        style: const TextStyle(fontSize: 12, color: Color(0xFF727272)),
                       ),
                     ],
                   ),
@@ -142,39 +154,38 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   /* ### 나의 관심장소 및 나의 일정 섹션 ### */
-Widget _buildMenuOptions() {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-    child: Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const FavoriteScreen()),
-            );
-          },
-          child: _buildMenuRow(' 나의 관심'), // 관심장소 메뉴
-        ),
-        const SizedBox(height: 40),
-        GestureDetector(
-          onTap: () {
-            // '나의 일정' 클릭 시 'MainPage'로 이동하며, initialIndex를 2로 설정
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MainPage(initialIndex: 2), // '나의 일정' 탭으로 이동
-              ),
-              (route) => false, // 뒤로가기 버튼을 비활성화하여 이전 페이지로 돌아가지 않음
-            );
-          },
-          child: _buildMenuRow(' 나의 일정'), // 나의 일정 메뉴
-        ),
-      ],
-    ),
-  );
-}
-
+  Widget _buildMenuOptions() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const FavoriteScreen()),
+              );
+            },
+            child: _buildMenuRow(' 나의 관심'), // 관심장소 메뉴
+          ),
+          const SizedBox(height: 40),
+          GestureDetector(
+            onTap: () {
+              // '나의 일정' 클릭 시 'MainPage'로 이동하며, initialIndex를 2로 설정
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MainPage(initialIndex: 2), // '나의 일정' 탭으로 이동
+                ),
+                (route) => false, // 뒤로가기 버튼을 비활성화하여 이전 페이지로 돌아가지 않음
+              );
+            },
+            child: _buildMenuRow(' 나의 일정'), // 나의 일정 메뉴
+          ),
+        ],
+      ),
+    );
+  }
 
   /* ### 구분선 위젯 ### */
   Widget _buildDivider() {

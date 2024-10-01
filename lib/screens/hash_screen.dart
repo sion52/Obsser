@@ -19,8 +19,8 @@ class _HashScreenState extends State<HashScreen> {
 
   final List<Map<String, String>> posts = [
     {
-      'title': '첫 번째 게시물',
-      'description': '이것은 첫 번째 게시물입니다.',
+      'title': '카멜리아 힐',
+      'description': '따뜻한 제주를 맘껏 즐기는건 어때요?',
       'imageUrl': 'assets/pictures/camellia.png',
     },
     {

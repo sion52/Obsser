@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:obsser_1/screens/menu/password_screen.dart';
-import 'package:obsser_1/screens/menu/signup_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:obsser_1/screens/menu/password_screen.dart';
+import 'package:obsser_1/screens/menu/signup_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /* ##### 로그인 화면 ##### */
 class LogIn extends StatefulWidget {
@@ -22,48 +23,60 @@ class _LogInState extends State<LogIn> {
 
   /* ### 로그인 서버 요청 함수 ### */
   Future<void> checkLogin() async {
-    final String email = emailController.text;
-    final String password = passwordController.text;
+  final String email = emailController.text;
+  final String password = passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
-      setState(() {
-        message = '이메일과 비밀번호를 모두 입력해 주세요.'; // 이메일 또는 비밀번호가 비어있을 때
-      });
-      return;
-    }
+  if (email.isEmpty || password.isEmpty) {
+    setState(() {
+      message = '이메일과 비밀번호를 모두 입력해 주세요.';
+    });
+    return;
+  }
 
-    try {
-      final response = await http.post(
-        Uri.parse('http://127.0.0.1:5000/auth/login'), // 서버 URL로 POST 요청
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-        }),
-      );
+  try {
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/auth/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+      }),
+    );
 
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
+    // print('Response status: ${response.statusCode}');
+    // print('Response body: ${response.body}');
 
-        if (responseData['success']) {
-          widget.onLogin(); // 로그인 성공 시 콜백 호출
-          // ignore: use_build_context_synchronously
-          Navigator.pop(context); // 로그인 성공 후 이전 화면으로 돌아감
-        } else {
-          setState(() {
-            message = responseData['message'] ?? '로그인에 실패했습니다.'; // 로그인 실패 메시지
-          });
-        }
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+
+      if (responseData['result'] == 'success') {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('email', email);
+
+        widget.onLogin(); // 로그인 성공 시 콜백 호출
+        Navigator.pop(context); // 로그인 성공 후 이전 화면으로 돌아감
       } else {
         setState(() {
-          message = '서버 연결에 문제가 있습니다. 나중에 다시 시도해 주세요.'; // 서버 응답 실패 시
+          message = responseData['message'] ?? '로그인에 실패했습니다.';
         });
       }
-    } catch (error) {
+    } else {
       setState(() {
-        message = '로그인 중 오류가 발생했습니다.'; // 예외 발생 시 오류 메시지
+        message = '서버 연결에 문제가 있습니다. 상태 코드: ${response.statusCode}';
       });
     }
+  } catch (error) {
+    // print('Error: $error');
+    setState(() {
+      message = '로그인 중 오류가 발생했습니다.';
+    });
+  }
+}
+
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
