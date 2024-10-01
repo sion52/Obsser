@@ -35,7 +35,7 @@ class _LogInState extends State<LogIn> {
 
   try {
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/auth/login'),
+      Uri.parse('http://3.37.197.251:5000/auth/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'email': email,
@@ -52,8 +52,10 @@ class _LogInState extends State<LogIn> {
       if (responseData['result'] == 'success') {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('email', email);
+        await prefs.setString('name', responseData['name']);
 
         widget.onLogin(); // 로그인 성공 시 콜백 호출
+        // ignore: use_build_context_synchronously
         Navigator.pop(context); // 로그인 성공 후 이전 화면으로 돌아감
       } else {
         setState(() {
@@ -83,25 +85,24 @@ class _LogInState extends State<LogIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF), // 배경색 흰색
-      body: Column(
-        children: [
-          const Padding(padding: EdgeInsets.only(top: 250)), // 상단 여백
-          /* ### 앱 이름 표시 ### */
-          const Center(
-            child: Text(
-              '옵써',
-              style: TextStyle(
-                fontSize: 64.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'NanumMyeongjo',
-                color: Colors.black,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Padding(padding: EdgeInsets.only(top: 250)), // 상단 여백
+            /* ### 앱 이름 표시 ### */
+            const Center(
+              child: Text(
+                '옵써',
+                style: TextStyle(
+                  fontSize: 64.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'NanumMyeongjo',
+                  color: Colors.black,
+                ),
               ),
             ),
-          ),
-          /* ### 입력 및 버튼 ### */
-          Form(
-            child: Theme(
-              data: ThemeData(), // 테마 데이터 적용
+            /* ### 입력 및 버튼 ### */
+            Form(
               child: Container(
                 padding: const EdgeInsets.all(20.0),
                 child: SingleChildScrollView(
@@ -184,22 +185,24 @@ class _LogInState extends State<LogIn> {
                         ),
                       ),
                       const SizedBox(height: 30.0),
+
                       /* ### 비밀번호 찾기 링크 ### */
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const PasswordScreen()),
-                          );
-                        },
-                        child: const Center(
-                          child: Text(
-                            '비밀번호를 잊으셨나요?',
-                            style: TextStyle(fontSize: 16.0, color: Color(0xFF626262)),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 6.0),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(builder: (context) => const PasswordScreen()),
+                      //     );
+                      //   },
+                      //   child: const Center(
+                      //     child: Text(
+                      //       '비밀번호를 잊으셨나요?',
+                      //       style: TextStyle(fontSize: 16.0, color: Color(0xFF626262)),
+                      //     ),
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 6.0),
+                      
                       /* ### 계정 생성 링크 ### */
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -227,8 +230,8 @@ class _LogInState extends State<LogIn> {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

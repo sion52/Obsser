@@ -128,12 +128,12 @@ class _TripScreenState extends State<TripScreen> {
       );
 
       if (response.statusCode == 200) {
-        print('서버에 데이터가 성공적으로 전송되었습니다.');
+        // print('서버에 데이터가 성공적으로 전송되었습니다.');
       } else {
-        print('서버에 데이터 전송 실패: ${response.statusCode}');
+        // print('서버에 데이터 전송 실패: ${response.statusCode}');
       }
     } catch (error) {
-      print('오류 발생: $error');
+      // print('오류 발생: $error');
     }
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:obsser_1/texts/magazine_text.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 /* ##### 매거진 상세 페이지 ##### */
 class MagzScreen extends StatefulWidget {

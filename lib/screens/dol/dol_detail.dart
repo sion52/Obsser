@@ -10,6 +10,12 @@ class DolDetail extends StatefulWidget {
   final int imageIndex; // 선택된 이미지 인덱스
 
   // 이미지, 제목, 설명 리스트
+  final List<String> name = [
+    'cake',
+    'veke',
+    'restarant',
+    'rent',
+  ];
   final List<String> images = [
     'assets/banners/banner1.png',
     'assets/banners/banner2.png',
@@ -27,6 +33,12 @@ class DolDetail extends StatefulWidget {
     '베케의 돌담 감상하기, 정원 도슨트를 예약하세요',
     '올레식당 웨이팅 없이 이용하기',
     '렌트카 22% 할인 받기',
+  ];
+  final List<String> details = [
+    'assets/banners/detail.png',
+    'assets/banners/detail2.png',
+    'assets/banners/detail3.png',
+    'assets/banners/detail4.png',
   ];
 
   DolDetail({super.key, required this.imageIndex});
@@ -50,7 +62,7 @@ class _DolDetailState extends State<DolDetail> {
   // 서버에서 price, description, image 데이터를 가져오는 함수
   Future<void> fetchData() async {
     try {
-      final response = await http.get(Uri.parse('http://127.0.0.1:5000/detail/${widget.imageIndex}')); // 서버 요청 URL에 이미지 인덱스를 포함
+      final response = await http.get(Uri.parse('http://127.0.0.1:5000/detail/${widget.name[widget.imageIndex]}')); // 서버 요청 URL에 이미지 인덱스를 포함
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
@@ -59,10 +71,10 @@ class _DolDetailState extends State<DolDetail> {
           image = data['image']; // image URL 데이터 가져오기
         });
       } else {
-        print('Failed to load data: ${response.statusCode}');
+        // print('Failed to load data: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error fetching data: $e');
+      // print('Error fetching data: $e');
     }
   }
 
@@ -81,12 +93,12 @@ class _DolDetailState extends State<DolDetail> {
       );
 
       if (response.statusCode == 200) {
-        print('찜 상태가 성공적으로 저장되었습니다.');
+        // print('찜 상태가 성공적으로 저장되었습니다.');
       } else {
-        print('찜 상태 저장 실패: ${response.statusCode}');
+        // print('찜 상태 저장 실패: ${response.statusCode}');
       }
     } catch (e) {
-      print('찜 상태 저장 중 오류 발생: $e');
+      // print('찜 상태 저장 중 오류 발생: $e');
     }
   }
 
@@ -227,7 +239,8 @@ class _DolDetailState extends State<DolDetail> {
                       ),
                     ],
                   ),
-                  Image.asset('assets/banners/detail.png'),
+                  SizedBox(height: 20,),
+                  Image.asset(widget.details[widget.imageIndex]),
                 ],
               ),
             ),

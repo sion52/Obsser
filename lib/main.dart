@@ -6,12 +6,13 @@ import 'screens/hash_screen.dart';
 import 'screens/briefcase_screen.dart';
 import 'screens/menu_screen.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
 /* ##### 앱 종료 확인 팝업 ##### */
 Future<void> _onBackPressed(BuildContext context) async {
+  
   await showDialog(
     context: context,
     builder: (context) => AlertDialog(

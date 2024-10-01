@@ -20,6 +20,7 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   bool isLoggedIn = false; // 로그인 상태 저장 변수
   String? email;
+  String? name;
 
   @override
   void initState() {
@@ -31,6 +32,7 @@ class _MenuScreenState extends State<MenuScreen> {
   /* ### 로그인 상태 확인 함수 ### */
   Future<void> _checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
     setState(() {
       isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     });
@@ -39,8 +41,10 @@ class _MenuScreenState extends State<MenuScreen> {
   /* ### 저장된 이메일 가져오기 ### */
   Future<void> _getEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
     setState(() {
       email = prefs.getString('email') ?? 'example@gmail.com'; // 이메일 없으면 기본값으로 설정
+      name = prefs.getString('name') ?? '로그인하세요';
     });
   }
 
@@ -61,6 +65,7 @@ class _MenuScreenState extends State<MenuScreen> {
     setState(() {
       isLoggedIn = false;
       email = 'example@gmail.com';
+      name = '로그인하세요';
     });
   }
 
@@ -72,7 +77,7 @@ class _MenuScreenState extends State<MenuScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(40, 100, 40, 20),
+            padding: const EdgeInsets.fromLTRB(40, 100, 40, 40),
             child: Column(
               children: [
                 _buildProfileSection(), // 프로필 섹션
@@ -83,7 +88,7 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
           _buildDivider(), // 구분선
           Padding(
-            padding: const EdgeInsets.fromLTRB(40, 20, 40, 0),
+            padding: const EdgeInsets.fromLTRB(40, 40, 40, 0),
             child: _buildSettingsOptions(), // 설정 메뉴 섹션
           ),
         ],
@@ -126,7 +131,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        isLoggedIn ? '옵써' : '로그인하세요', // 로그인 상태에 따른 텍스트
+                        name ?? '로그인하세요', // 로그인 상태에 따른 텍스트
                         style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
                       ),
                       Text(

@@ -54,7 +54,7 @@ class _DolScreenState extends State<DolScreen> {
   void initState() {
     super.initState();
 
-    fetchDolData(); // 페이지 로드 시 서버에서 데이터 요청
+    // fetchDolData(); // 페이지 로드 시 서버에서 데이터 요청
     _imagePageController = PageController(); // 이미지 슬라이드용 페이지 컨트롤러 초기화
     _postPageController = PageController();  // 게시판용 페이지 컨트롤러 초기화
     
@@ -73,7 +73,7 @@ class _DolScreenState extends State<DolScreen> {
   /* ### 서버 데이터 요청 메서드 ### */
   Future<void> fetchDolData() async {
     try {
-      final response = await http.get(Uri.parse('http://127.0.0.1:5000/'));
+      final response = await http.get(Uri.parse('http://3.37.197.251:5000/'));
       if (mounted && response.statusCode == 200) { // 서버 응답이 성공적일 경우
         setState(() {
           dolMessage = json.decode(response.body)['dolMessage']; // 서버 응답 메시지 반영
@@ -95,31 +95,39 @@ class _DolScreenState extends State<DolScreen> {
   /* ### 리소스 해제 메서드 ### */
   @override
   void dispose() {
+    _timer?.cancel(); // 타이머 해제
     _imagePageController.dispose(); // 이미지 슬라이드용 페이지 컨트롤러 해제
     _postPageController.dispose();  // 게시판용 페이지 컨트롤러 해제
-    _timer?.cancel(); // 타이머 해제
     _searchController.dispose(); // 검색창 컨트롤러 해제
+    
     super.dispose();
   }
 
   /* ### 자동 슬라이드 메서드 ### */
   void _startAutoSlide() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) { // 3초마다 슬라이드 전환
-      if (!mounted) return;
-      setState(() {
-        _currentSlide = (_currentSlide + 1) % images.length; // 다음 슬라이드로 이동
-      });
-      _imagePageController.animateToPage(
-        _currentSlide,
-        duration: const Duration(milliseconds: 300), // 애니메이션 지속 시간
-        curve: Curves.easeInOut, // 애니메이션 효과
-      );
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      try {
+        if (!mounted) return;
+
+        setState(() {
+          _currentSlide = (_currentSlide + 1) % images.length; // 다음 슬라이드로 이동
+        });
+
+        _imagePageController.animateToPage(
+          _currentSlide,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      } catch (e) {
+        print("Error in Timer: $e"); // 오류 로그 출력
+      }
     });
   }
 
+
   /* ### 슬라이드 이미지 클릭 이벤트 처리 ### */
   void _onImageTap(int index) {
-    Navigator.pushReplacement(
+    Navigator.push(
       context, 
       MaterialPageRoute(
         builder: (context) => DolDetail(imageIndex: index,), // 클릭한 슬라이드 인덱스 전달
@@ -404,12 +412,12 @@ class _DolScreenState extends State<DolScreen> {
             const SizedBox(height: 25,),
 
             /* 서버 요청 응답 메시지 */
-            Center(
-              child: Text(
-                dolMessage,
-                style: const TextStyle(fontSize: 12, color: Color(0xFFE0E0E0)),
-              ),
-            )
+            // Center(
+            //   child: Text(
+            //     dolMessage,
+            //     style: const TextStyle(fontSize: 12, color: Color(0xFFE0E0E0)),
+            //   ),
+            // )
           ],
         ),
       ),
