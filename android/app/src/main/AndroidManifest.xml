@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+package="com.example.kakaomap">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="옵써"
@@ -31,6 +32,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="6c85d32531fc66eef97c76fb687d20cf"/> <!-- 발급받은 카카오 네이티브 앱 키로 교체 -->
+
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

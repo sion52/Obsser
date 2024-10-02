@@ -1,15 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 /* ##### 공지사항 화면 ##### */
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   final String query;
 
   const SearchScreen({super.key, required this.query});
 
   @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  List<dynamic> _places = [];
+
+  Future<void> fetchPlaces(String query) async {
+    final String appKey = '6c85d32531fc66eef97c76fb687d20cf'; // 발급받은 카카오 API 키
+    final String url = 'https://dapi.kakao.com/v2/local/search/keyword.json?query=$query';
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'KakaoAK $appKey',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      setState(() {
+        _places = data['documents'];
+      });
+    } else {
+      throw Exception('Failed to load places');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     // TextEditingController에 query 값을 설정
-    final TextEditingController searchController = TextEditingController(text: query);
+    final TextEditingController searchController = TextEditingController(text: widget.query);
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF), // 배경 흰색
@@ -58,6 +88,30 @@ class SearchScreen extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onSubmitted: (value) {
+                fetchPlaces(value);
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Search Places',
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _places.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(_places[index]['place_name']),
+                  subtitle: Text(_places[index]['address_name']),
+                );
+              },
             ),
           ),
         ],

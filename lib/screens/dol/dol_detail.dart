@@ -4,6 +4,7 @@ import 'package:obsser_1/main.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /* ##### 상세 페이지 화면 ##### */
 class DolDetail extends StatefulWidget {
@@ -35,10 +36,16 @@ class DolDetail extends StatefulWidget {
     '렌트카 22% 할인 받기',
   ];
   final List<String> details = [
-    'assets/banners/detail.png',
+    'assets/banners/detail1.png',
     'assets/banners/detail2.png',
     'assets/banners/detail3.png',
     'assets/banners/detail4.png',
+  ];
+  final List<String> links = [
+    'https://www.paris.co.kr/product/%EC%A0%9C%EC%A3%BC%EB%A7%88%EC%9D%8C%EC%83%8C%EB%93%9C-%EC%BC%80%EC%9D%B4%ED%81%AC/',
+    'https://booking.naver.com/booking/12/bizes/1101896',
+    'https://booking.naver.com/booking/6/bizes/931266/items/5149009?startDate=2024-09-30',
+    'http://gajajejurent.com/info/?page=1',
   ];
 
   DolDetail({super.key, required this.imageIndex});
@@ -311,8 +318,14 @@ class _DolDetailState extends State<DolDetail> {
             const SizedBox(width: 30),
             // 예약하기 버튼
             GestureDetector(
-              onTap: () {
+              onTap: () async {
                 // 예약하기 버튼 동작
+                final url = widget.links[widget.imageIndex]; // 링크 가져오기
+                if (await canLaunch(url)) { // URL이 열 수 있는지 확인
+                  await launch(url); // 웹 페이지 열기
+                } else {
+                  throw 'Could not launch $url'; // URL 열기 실패 시 예외 처리
+                }
               },
               child: Container(
                 width: 210,

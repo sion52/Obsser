@@ -72,27 +72,27 @@ class SettingScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       const SizedBox(height: 30),
-                      GestureDetector(
-                        onTap: () {
-                          // 프로필 사진 변경 기능 추가
-                        },
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              ' 프로필 사진 변경',
-                              style: TextStyle(
-                                fontSize: 24, 
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 40),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     // 프로필 사진 변경 기능 추가
+                      //   },
+                      //   child: const Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Text(
+                      //         ' 프로필 사진 변경',
+                      //         style: TextStyle(
+                      //           fontSize: 24, 
+                      //           fontWeight: FontWeight.w700,
+                      //         ),
+                      //       ),
+                      //       Icon(
+                      //         Icons.arrow_forward_ios,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 40),
                       GestureDetector(
                         onTap: () => _logout(context), // 로그아웃 버튼 클릭 시 동작
                         child: const Row(

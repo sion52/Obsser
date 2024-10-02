@@ -75,12 +75,12 @@ class _HashScreenState extends State<HashScreen> {
               child: Image.asset(
                 post['imageUrl']!,
                 fit: BoxFit.cover,
-                height: 200,
+                height: 180,
                 width: double.infinity,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16,10,16,16),
+              padding: const EdgeInsets.fromLTRB(16,8,16,0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -91,7 +91,6 @@ class _HashScreenState extends State<HashScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 5),
                   Text(
                     post['description']!,
                     style: const TextStyle(fontSize: 16),
@@ -114,7 +113,7 @@ class _HashScreenState extends State<HashScreen> {
       ),
       backgroundColor: const Color(0xFFFFFFFF), // 페이지 배경색 흰색
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(38, 30, 38, 0),
+        padding: const EdgeInsets.fromLTRB(38, 15, 38, 0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start, // 좌측 정렬
@@ -128,7 +127,7 @@ class _HashScreenState extends State<HashScreen> {
               const SizedBox(height: 5),
               /* ### 슬라이드 게시판 섹션 추가 ### */
               SizedBox(
-                height: 300, // 슬라이드 게시판 높이 설정
+                height: 260, // 슬라이드 게시판 높이 설정
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: posts.length,
@@ -217,7 +216,7 @@ class _HashScreenState extends State<HashScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Container(
-        height: 185, // 칩 리스트 높이
+        height: 175, // 칩 리스트 높이
         width: double.infinity,
         decoration: BoxDecoration(
           color: const Color(0xFFFAFAFA), // 배경색 흰색
@@ -331,6 +330,7 @@ class _HashScreenState extends State<HashScreen> {
               Positioned(
                 right: 0,
                 top: 0,
+                bottom: 5,
                 child: IconButton(
                   constraints: const BoxConstraints(
                     minWidth: 24,

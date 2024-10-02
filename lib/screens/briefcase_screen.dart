@@ -76,7 +76,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(25, 30, 25, 0),
+            padding: const EdgeInsets.fromLTRB(25, 15, 25, 0),
             child: Column(
               children: [
                 _buildCalendar(), // 달력 위젯

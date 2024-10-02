@@ -43,8 +43,8 @@ class _MenuScreenState extends State<MenuScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!mounted) return;
     setState(() {
-      email = prefs.getString('email') ?? 'example@gmail.com'; // 이메일 없으면 기본값으로 설정
-      name = prefs.getString('name') ?? '로그인하세요';
+      email = prefs.getString('email') ?? '로그인하고 맞춤 서비스를 이용하세요'; // 이메일 없으면 기본값으로 설정
+      name = prefs.getString('name') ?? '로그인 하기';
     });
   }
 
@@ -64,8 +64,8 @@ class _MenuScreenState extends State<MenuScreen> {
     await prefs.setBool('isLoggedIn', false);
     setState(() {
       isLoggedIn = false;
-      email = 'example@gmail.com';
-      name = '로그인하세요';
+      email = '로그인하고 맞춤 서비스를 이용하세요';
+      name = '로그인 하기';
     });
   }
 
@@ -131,11 +131,11 @@ class _MenuScreenState extends State<MenuScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name ?? '로그인하세요', // 로그인 상태에 따른 텍스트
+                        name ?? '로그인 하기', // 로그인 상태에 따른 텍스트
                         style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
                       ),
                       Text(
-                        email ?? 'example@gmail.com', // 로그인된 이메일 또는 기본 텍스트
+                        email ?? '로그인하고 맞춤 서비스를 이용하세요', // 로그인된 이메일 또는 기본 텍스트
                         style: const TextStyle(fontSize: 12, color: Color(0xFF727272)),
                       ),
                     ],
@@ -143,20 +143,22 @@ class _MenuScreenState extends State<MenuScreen> {
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingScreen()),
-                );
-              },
-              child: const Icon(Icons.settings_outlined, size: 40), // 설정 아이콘
-            ),
+            if (isLoggedIn) // 로그인 상태일 때만 설정 아이콘 표시
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SettingScreen()),
+                  );
+                },
+                child: const Icon(Icons.settings_outlined, size: 40), // 설정 아이콘
+              ),
           ],
         ),
       ),
     );
   }
+
 
   /* ### 나의 관심장소 및 나의 일정 섹션 ### */
   Widget _buildMenuOptions() {

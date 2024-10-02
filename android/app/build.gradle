@@ -42,3 +42,12 @@ android {
 flutter {
     source = "../.."
 }
+
+repositories {
+    maven { url 'https://devrepo.kakao.com/nexus/repository/kakaomap-releases/' }
+}
+
+dependencies {
+    implementation 'com.kakao.sdk:v2.maps:2.9.0' // 카카오맵 SDK 의존성 추가
+    ...
+}
