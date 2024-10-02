@@ -1,10 +1,11 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-package="com.example.kakaomap">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="옵써"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAnWrsXZv96Ri-ASUjOStR625NcXmZ7T-o"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -32,9 +33,6 @@ package="com.example.kakaomap">
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <meta-data
-            android:name="com.kakao.sdk.AppKey"
-            android:value="6c85d32531fc66eef97c76fb687d20cf"/> <!-- 발급받은 카카오 네이티브 앱 키로 교체 -->
 
     </application>
     <!-- Required to query activities that can process text, see:

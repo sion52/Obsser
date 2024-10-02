@@ -8,7 +8,7 @@ CORS(app)  # CORS 정책 해결을 위해 사용
 travel_data = [
     {
         "name": "8월 힐링 제주도",
-        "date": "2024.08.15 - 2024.08.18",
+        "date": 2024081520240818,
         "image_url": "assets/histories/back_0.png"
     },
 ]

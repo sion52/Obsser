@@ -38,6 +38,7 @@ class _NewTBackScreenState extends State<NewTBackScreen> {
     // ignore: unused_local_variable
     final response = await http.post(
       Uri.parse('http://3.37.197.251:5000/mytrip/addmytrip'), // 서버 주소 (환경에 맞게 수정)
+      // Uri.parse('http://127.0.0.1:5000/mytrip/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:obsser_1/map.dart';
 import 'package:obsser_1/screens/dol/dol_detail.dart';
 import 'package:obsser_1/screens/dol/magazine_detail.dart';
 import 'package:obsser_1/screens/menu/notice.dart';
@@ -318,6 +319,12 @@ class _DolScreenState extends State<DolScreen> {
                                   builder: (context) => SearchScreen(query: query), // 검색어를 SearchScreen으로 전달
                                 ),
                               );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => My(), // 검색어를 SearchScreen으로 전달
+                              //   ),
+                              // );
                             }
                           },
                         ),
@@ -339,7 +346,7 @@ class _DolScreenState extends State<DolScreen> {
                   ),
                   GestureDetector(
                     child: const Text(
-                      '내 사진 공유하기',
+                      '내 장소 공유하기',
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Color(0xFF727272)), // 텍스트 스타일 예시
                     ),
                   ),

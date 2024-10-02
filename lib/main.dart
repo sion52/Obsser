@@ -33,8 +33,14 @@ Future<void> _onBackPressed(BuildContext context) async {
 }
 
 /* ##### 앱 메인 설정 ##### */
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {

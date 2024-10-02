@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 /* ##### 공지사항 화면 ##### */
 class SearchScreen extends StatefulWidget {
@@ -13,27 +12,12 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  List<dynamic> _places = [];
+  late GoogleMapController mapController;
 
-  Future<void> fetchPlaces(String query) async {
-    final String appKey = '6c85d32531fc66eef97c76fb687d20cf'; // 발급받은 카카오 API 키
-    final String url = 'https://dapi.kakao.com/v2/local/search/keyword.json?query=$query';
+  final LatLng _center = const LatLng(33.5072269,126.493446);
 
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'KakaoAK $appKey',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      setState(() {
-        _places = data['documents'];
-      });
-    } else {
-      throw Exception('Failed to load places');
-    }
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
   }
 
   @override
@@ -90,28 +74,14 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
             ),
           ),
-
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onSubmitted: (value) {
-                fetchPlaces(value);
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Search Places',
-              ),
-            ),
-          ),
+          /* ### 구글맵 위젯 ### */
           Expanded(
-            child: ListView.builder(
-              itemCount: _places.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_places[index]['place_name']),
-                  subtitle: Text(_places[index]['address_name']),
-                );
-              },
+            child: GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 18.0,
+              ),
             ),
           ),
         ],

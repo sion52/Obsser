@@ -27,14 +27,18 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
   /* ### 서버에서 여행 데이터를 받아오는 함수 ### */
   Future<List<Map<String, String>>> fetchTravelData() async {
     final response = await http.get(Uri.parse('http://3.37.197.251:5000/mytrip')); // 서버 요청
+    // final response = await http.get(Uri.parse('http://127.0.0.1:5000/mytrip'));
 
     if (response.statusCode == 200) {
       // 응답 성공시, 데이터를 파싱하고 Map<String, String>으로 변환
       List<dynamic> data = json.decode(response.body);
       List<Map<String, String>> travelData = data.map((item) {
+
+        String dadate = formatTimestamp(item['date'].toString());
+
         return {
           'name': item['name'].toString(),
-          'date': item['date'].toString(),
+          'date': dadate,
           'image_url': item['image_url'].toString(),
         };
       }).toList();
@@ -45,6 +49,20 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
       throw Exception('Failed to load travel data');
     }
   }
+
+  String formatTimestamp(String timestamp) {
+    // 시작 날짜와 끝 날짜를 각각 슬라이싱 (첫 8자리와 마지막 8자리)
+    String startDate = timestamp.substring(0, 8); // '20241001'
+    String endDate = timestamp.substring(8); // '20241008'
+
+    // 슬라이싱된 문자열을 yyyy.mm.dd 형식으로 변환
+    String formattedStartDate = '${startDate.substring(0, 4)}.${startDate.substring(4, 6)}.${startDate.substring(6, 8)}';
+    String formattedEndDate = '${endDate.substring(0, 4)}.${endDate.substring(4, 6)}.${endDate.substring(6, 8)}';
+
+    // 'yyyy.mm.dd - yyyy.mm.dd' 형식으로 출력
+    return '$formattedStartDate - $formattedEndDate';
+  }
+
 
   /* ### 페이지 로드 시 서버에서 데이터 가져오기 ### */
   @override
