@@ -211,7 +211,7 @@ class _HashScreenState extends State<HashScreen> {
 
   /* ##### 키워드 칩 리스트 ##### */
   Widget buildKeywordChips() {
-    List<String> keywords = ['한적한', '감성적인', '휴양지', '맛집', '야경', '여유로운', '술', "촬영지", "드라이브"];
+    List<String> keywords = ['한적한', '감성적인', '휴양지', '맛집', '야경', '여유로운', '술', '촬영지', '드라이브'];
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),

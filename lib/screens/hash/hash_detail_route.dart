@@ -25,22 +25,40 @@ class _HashDetailRouteState extends State<HashDetailRoute> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   /* ### 뒤로가기 버튼 및 키워드 헤더 ### */
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween, // 양쪽 끝 정렬
+                  Stack(
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context, widget.selectedKeyword); // 뒤로가기
-                        },
-                        child: const Icon(
-                          Icons.arrow_back_ios,
-                          size: 30,
-                          color: Color(0xFF000000), // 아이콘 색상
+                      Positioned(
+                        top: 5,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context, widget.selectedKeyword); // 뒤로가기
+                          },
+                          child: const Icon(
+                            Icons.arrow_back_ios,
+                            size: 30,
+                            color: Color(0xFF000000), // 아이콘 색상
+                          ),
                         ),
                       ),
-                      buildKeywordHeader(), // 키워드 헤더
+                      Center(child: buildKeywordHeader()), // 키워드 헤더
                     ],
                   ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween, // 양쪽 끝 정렬
+                  //   children: [
+                  //     GestureDetector(
+                  //       onTap: () {
+                  //         Navigator.pop(context, widget.selectedKeyword); // 뒤로가기
+                  //       },
+                  //       child: const Icon(
+                  //         Icons.arrow_back_ios,
+                  //         size: 30,
+                  //         color: Color(0xFF000000), // 아이콘 색상
+                  //       ),
+                  //     ),
+                  //     buildKeywordHeader(), // 키워드 헤더
+                  //   ],
+                  // ),
                   const SizedBox(height: 35),
                   /* ### 여행지 카드 리스트 ### */
                   Column(
