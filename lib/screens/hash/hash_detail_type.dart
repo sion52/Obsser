@@ -7,17 +7,17 @@ import 'package:obsser_1/screens/hash/hash_detail_route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /* ##### 키워드별 여행지 화면 ##### */
-class HashDetail extends StatefulWidget {
+class HashDetailT extends StatefulWidget {
   final Function(int) onKeywordSelected; // 선택된 키워드에 대한 콜백
   final String selectedKeyword; // 선택된 키워드
 
-  const HashDetail({super.key, required this.selectedKeyword, required this.onKeywordSelected});
+  const HashDetailT({super.key, required this.selectedKeyword, required this.onKeywordSelected});
 
   @override
-  State<HashDetail> createState() => _HashDetailState();
+  State<HashDetailT> createState() => _HashDetailState();
 }
 
-class _HashDetailState extends State<HashDetail> {
+class _HashDetailState extends State<HashDetailT> {
   List<Map<String, String>> places = []; // 서버에서 받아온 여행지 데이터를 저장
   List<bool> isFavoriteList = []; // 각 카드의 즐겨찾기 상태 리스트
   bool isLoading = true; // 로딩 상태 표시
@@ -31,7 +31,7 @@ class _HashDetailState extends State<HashDetail> {
   // 서버에서 여행지 데이터 가져오는 함수
   Future<void> fetchPlacesData(String keyword) async {
     try {
-      final response = await http.get(Uri.parse('http://3.37.197.251:5000/place_pages/$keyword')); // 서버 요청 URL
+      final response = await http.get(Uri.parse('http://3.37.197.251:5000/place_pages/type/$keyword')); // 서버 요청 URL
 
       if (response.statusCode == 200) {
         // 응답 데이터를 출력
@@ -110,38 +110,38 @@ class _HashDetailState extends State<HashDetail> {
             ),
           ),
           /* ### 여행 루트 문구 및 버튼 ### */
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
-              children: [
-                const Text(
-                  '옵써가 계획한 ',
-                  style: TextStyle(fontSize: 16, color: Color(0xFF000000)),
-                ),
-                Text(
-                  widget.selectedKeyword, // 선택한 키워드 표시
-                  style: const TextStyle(fontSize: 16, color: Color(0xFF497F5B)),
-                ),
-                const Text(
-                  ' 여행루트는 어때요? ',
-                  style: TextStyle(fontSize: 16, color: Color(0xFF000000)),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // 여행루트 상세 페이지로 이동
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HashDetailRoute(selectedKeyword: widget.selectedKeyword)),
-                    );
-                  },
-                  child: const Text(
-                    '보러가기>',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF497F5B)),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Center(
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+          //     children: [
+          //       const Text(
+          //         '옵써가 계획한 ',
+          //         style: TextStyle(fontSize: 16, color: Color(0xFF000000)),
+          //       ),
+          //       Text(
+          //         widget.selectedKeyword, // 선택한 키워드 표시
+          //         style: const TextStyle(fontSize: 16, color: Color(0xFF497F5B)),
+          //       ),
+          //       const Text(
+          //         ' 여행루트는 어때요? ',
+          //         style: TextStyle(fontSize: 16, color: Color(0xFF000000)),
+          //       ),
+          //       GestureDetector(
+          //         onTap: () {
+          //           // 여행루트 상세 페이지로 이동
+          //           Navigator.push(
+          //             context,
+          //             MaterialPageRoute(builder: (context) => HashDetailRoute(selectedKeyword: widget.selectedKeyword)),
+          //           );
+          //         },
+          //         child: const Text(
+          //           '보러가기>',
+          //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF497F5B)),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
@@ -156,7 +156,7 @@ class _HashDetailState extends State<HashDetail> {
           TextSpan(
             children: [
               TextSpan(
-                text: '키워드별',
+                text: '카테고리별',
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Color(0xFF497F5B)),
               ),
               TextSpan(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:obsser_1/screens/hash/hash_detail.dart';
+import 'package:obsser_1/screens/hash/hash_detail_type.dart';
 import 'package:obsser_1/screens/search_screen.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 /* ##### 키워드 검색 및 카테고리 선택 페이지 ##### */
 class HashScreen extends StatefulWidget {
@@ -16,92 +19,46 @@ class _HashScreenState extends State<HashScreen> {
   String? selectedKeyword;
   final TextEditingController _searchController = TextEditingController(); // 검색창 컨트롤러 추가
   late PageController _pageController;
-
-  final List<Map<String, String>> posts = [
-    {
-      'title': '카멜리아 힐',
-      'description': '따뜻한 제주를 맘껏 즐기는건 어때요?',
-      'imageUrl': 'assets/pictures/camellia.png',
-    },
-    {
-      'title': '두 번째 게시물',
-      'description': '이것은 두 번째 게시물입니다.',
-      'imageUrl': 'assets/pictures/camellia.png',
-    },
-    {
-      'title': '세 번째 게시물',
-      'description': '이것은 세 번째 게시물입니다.',
-      'imageUrl': 'assets/pictures/camellia.png',
-    },
-  ];
+  bool isLoading = true; // 로딩 상태를 표시하는 변수
+  List<Map<String, String>> places = []; // 서버에서 받아온 여행지 데이터를 저장할 리스트
 
   @override
   void initState() {
     super.initState();
-
-    _pageController = PageController();  // 게시판용 페이지 컨트롤러 초기화
+    _pageController = PageController(); // 게시판용 페이지 컨트롤러 초기화
+    fetchPlacesData(); // 페이지 로드 시 서버에서 데이터 가져오기
   }
+
+  /* ### 서버에서 여행지 데이터를 받아오는 함수 ### */
+Future<void> fetchPlacesData() async {
+  final response = await http.get(Uri.parse('http://3.37.197.251:5000/place_pages'));
+
+  if (response.statusCode == 200) {
+    // 응답 성공시, 데이터를 파싱하고 Map<String, String>으로 변환
+    Map<String, dynamic> data = json.decode(response.body)['data'];
+    List<Map<String, String>> travelData = [ // 리스트로 감쌈
+      {
+        'current_weather': data['current_weather'].toString(),
+        'name': data['name'].toString(),
+        'image': data['image'].toString(),
+      }
+    ];
+
+    setState(() {
+      places = travelData; // 받아온 데이터를 places에 저장
+      isLoading = false; // 로딩 상태 해제
+    });
+  } else {
+    throw Exception('Failed to load travel data');
+  }
+}
+
 
   /* ### 리소스 해제 메서드 ### */
   @override
   void dispose() {
-    _pageController.dispose();  // 게시판용 페이지 컨트롤러 해제
+    _pageController.dispose(); // 게시판용 페이지 컨트롤러 해제
     super.dispose();
-  }
-
-  /* ### 슬라이드 게시판 카드 생성 메서드 ### */
-  Widget _buildPostCard(Map<String, String> post) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white, // 배경색 흰색
-          borderRadius: BorderRadius.circular(15), // 모서리 둥글게
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2), // 그림자 색상 및 투명도
-              spreadRadius: 1, // 그림자가 퍼지는 정도
-              blurRadius: 3, // 그림자 블러 정도
-              offset: const Offset(0, 3), // 그림자의 위치
-            ),
-          ],
-        ),
-        clipBehavior: Clip.none, // 그림자가 짤리지 않도록 설정
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-              child: Image.asset(
-                post['imageUrl']!,
-                fit: BoxFit.cover,
-                height: 180,
-                width: double.infinity,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16,8,16,0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    post['title']!,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    post['description']!,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   @override
@@ -123,21 +80,66 @@ class _HashScreenState extends State<HashScreen> {
               buildKeywordChips(), // 키워드 칩 리스트 위젯
               const SizedBox(height: 20),
 
-              buildTitle('오늘의 추천', ' 여행지'), // 카테고리별 여행지 제목
+              buildTitle('오늘의 날씨', ', 오늘의 여행'), // 카테고리별 여행지 제목
               const SizedBox(height: 5),
-              /* ### 슬라이드 게시판 섹션 추가 ### */
-              SizedBox(
-                height: 260, // 슬라이드 게시판 높이 설정
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: posts.length,
-                  itemBuilder: (context, index) {
-                    return _buildPostCard(posts[index]); // 슬라이드 게시판 내용
-                  },
-                ),
-              ),
-              const SizedBox(height: 10),
               
+              // 서버에서 가져온 데이터를 로딩 중일 때와 로딩 후에 각각 처리
+              // 서버에서 가져온 데이터를 로딩 중일 때와 로딩 후에 각각 처리
+              isLoading
+                ? const Center(child: CircularProgressIndicator()) // 로딩 중일 때 인디케이터 표시
+                : Column(
+                    children: places.map((place) {
+                      return Card(
+                        color: Colors.white,
+                        elevation: 2,
+                        margin: const EdgeInsets.symmetric(vertical: 10), // 카드 간격 설정
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15), // 카드 모서리 둥글게 설정
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // 이미지 표시
+                            ClipRRect(
+                              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)), // 이미지의 모서리 둥글게
+                              child: Image.memory(
+                                base64Decode(place['image']!), // Base64로 디코딩된 이미지
+                                fit: BoxFit.cover,
+                                height: 200, // 이미지 높이 크게 설정
+                                width: double.infinity, // 가로로 꽉 채우기
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(16.0), // 텍스트 패딩 설정
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    place['name']!,
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8), // 텍스트 간격
+                                  Text(
+                                    '${place['current_weather']}',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+
+
+              const SizedBox(height: 10),
               buildTitle('카테고리별', ' 여행지'), // 카테고리별 여행지 제목
               const SizedBox(height: 3),
               buildCategoryList(), // 카테고리 리스트 위젯
@@ -169,42 +171,42 @@ class _HashScreenState extends State<HashScreen> {
           ),
         ),
         // 검색 입력 필드
-        Container(
-          padding: const EdgeInsets.fromLTRB(0, 2, 20, 0),
-          width: 155,
-          height: 30,
-          child: TextField(
-            controller: _searchController, // 검색창 컨트롤러 연결
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide.none, // 테두리 없음
-              ),
-              filled: true,
-              fillColor: const Color(0xFFF2F2F2), // 배경색 회색
-              suffixIcon: IconButton(
-                padding: EdgeInsets.zero,
-                icon: const Icon(Icons.search, size: 28, color: Color(0xFF000000)),
-                onPressed: () {
-                  // 검색 버튼 클릭 시 SearchScreen으로 입력값 전달
-                  String query = _searchController.text;
-                  if (query.isNotEmpty) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SearchScreen(query: query), // 검색어를 SearchScreen으로 전달
-                      ),
-                    );
-                  }
-                },
-              ),
-              suffixIconConstraints: const BoxConstraints(
-                maxWidth: 30,
-              ),
-              contentPadding: const EdgeInsets.fromLTRB(15, 0, 0, 0), // 수직 패딩 조정
-            ),
-          ),
-        ),
+        // Container(
+        //   padding: const EdgeInsets.fromLTRB(0, 2, 20, 0),
+        //   width: 155,
+        //   height: 30,
+        //   child: TextField(
+        //     controller: _searchController, // 검색창 컨트롤러 연결
+        //     decoration: InputDecoration(
+        //       border: OutlineInputBorder(
+        //         borderRadius: BorderRadius.circular(20),
+        //         borderSide: BorderSide.none, // 테두리 없음
+        //       ),
+        //       filled: true,
+        //       fillColor: const Color(0xFFF2F2F2), // 배경색 회색
+        //       suffixIcon: IconButton(
+        //         padding: EdgeInsets.zero,
+        //         icon: const Icon(Icons.search, size: 28, color: Color(0xFF000000)),
+        //         onPressed: () {
+        //           // 검색 버튼 클릭 시 SearchScreen으로 입력값 전달
+        //           String query = _searchController.text;
+        //           if (query.isNotEmpty) {
+        //             Navigator.push(
+        //               context,
+        //               MaterialPageRoute(
+        //                 builder: (context) => SearchScreen(query: query), // 검색어를 SearchScreen으로 전달
+        //               ),
+        //             );
+        //           }
+        //         },
+        //       ),
+        //       suffixIconConstraints: const BoxConstraints(
+        //         maxWidth: 30,
+        //       ),
+        //       contentPadding: const EdgeInsets.fromLTRB(15, 0, 0, 0), // 수직 패딩 조정
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
@@ -338,6 +340,15 @@ class _HashScreenState extends State<HashScreen> {
                   ),
                   onPressed: () {
                     // 카테고리 버튼 클릭 시 동작
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HashDetailT(
+                        selectedKeyword: category['label']!,
+                        onKeywordSelected: widget.onKeywordSelected,
+                      ),
+                    ),
+                  );
                   }, 
                   icon: const Icon(Icons.arrow_forward_ios, color: Color(0xFF000000), size: 20),
                 ),

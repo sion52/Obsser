@@ -5,6 +5,7 @@
     <application
         android:label="옵써"
         android:name="${applicationName}"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAnWrsXZv96Ri-ASUjOStR625NcXmZ7T-o"/>
