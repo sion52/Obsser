@@ -217,7 +217,7 @@ class _MenuScreenState extends State<MenuScreen> {
           const SizedBox(height: 40),
           _buildSettingsRow(' 서비스 이용 약관', const ServiceScreen()), // 서비스 약관 메뉴
           const SizedBox(height: 40),
-          _buildAppVersionRow(' 앱버전', '1.0.0'), // 앱버전 메뉴 - 팝업 추가
+          _buildAppVersionRow(' 앱버전', '1.0.1'), // 앱버전 메뉴 - 팝업 추가
           const SizedBox(height: 40),
           if (isLoggedIn) // 로그인 상태일 때만 로그아웃 버튼을 표시
             GestureDetector(

@@ -61,7 +61,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       List<Map<String, String>> travelData = data.map((item) {
         return {
           'name': item['name'].toString(),   // String으로 변환
-          'tags': item['tags'].toString(),
+          'type': item['type'].toString(),
           'image': item['image'].toString(),
         };
       }).toList();
@@ -306,7 +306,7 @@ Widget _buildFavoritePlaceCard({
         itemBuilder: (context, index) {
           final place = favoritePlaces[index];
           return _buildFavoritePlaceCard(
-            cate: place['tags']!, // 카테고리 추가
+            cate: place['type']!, // 카테고리 추가
             title: place['name']!,
             base64Image: place['image']!, // Base64 인코딩된 이미지 사용
             isSelected: selectedPlaces.contains(index), // 선택된 인덱스에 해당하는 카드에만 테두리 표시

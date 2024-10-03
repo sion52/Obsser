@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:obsser_1/screens/dol/dol_detail.dart';
 import 'package:obsser_1/screens/dol/magazine_detail.dart';
+import 'package:obsser_1/screens/dol/magazine_detail_auto.dart';
 import 'package:obsser_1/screens/dol/new_post.dart';
 import 'package:obsser_1/screens/menu/notice.dart';
 import 'package:obsser_1/screens/search_screen.dart';
@@ -34,9 +35,6 @@ class _DolScreenState extends State<DolScreen> {
 
   final List<Map<String, String>> posts = [
     {
-      'imageUrl': '0',
-    },
-    {
       'imageUrl': 'assets/pictures/ex1.png',
     },
     {
@@ -44,9 +42,6 @@ class _DolScreenState extends State<DolScreen> {
     },
     {
       'imageUrl': 'assets/pictures/ex3.png',
-    },
-    {
-      'imageUrl': '0',
     },
   ];
 
@@ -139,19 +134,19 @@ class _DolScreenState extends State<DolScreen> {
   /* ### 슬라이드 게시판 카드 생성 메서드 ### */
   Widget _buildPostCard(Map<String, String> post, int index) {
     // 첫 번째 카드의 너비를 다른 카드의 절반으로 설정
-    double cardWidth = (index == 0 || index == posts.length - 1) ? 75 : 263; // 첫 번째 카드의 너비는 70, 나머지는 263
+    double cardWidth = 263; // 첫 번째 카드의 너비는 70, 나머지는 263
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 8, 0), // 양쪽 패딩 추가
+      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0), // 양쪽 패딩 추가
       child: Container(
         width: cardWidth, // 카드 너비 설정
         decoration: BoxDecoration(
-          color: (index == 0 || index == posts.length - 1) ? Colors.white : Colors.transparent, // 첫 번째 카드는 흰색, 나머지는 투명
+          color: Colors.transparent, // 첫 번째 카드는 흰색, 나머지는 투명
           borderRadius: BorderRadius.only(
-            topRight: index == posts.length - 1 ? Radius.zero : Radius.circular(15), // 오른쪽 상단 모서리 둥글게
-            bottomRight: index == posts.length - 1 ? Radius.zero : Radius.circular(15), // 오른쪽 하단 모서리 둥글게
-            topLeft: index == 0 ? Radius.zero : Radius.circular(15), // 첫 번째 카드일 때 왼쪽 상단 모서리 둥글게
-            bottomLeft: index == 0 ? Radius.zero : Radius.circular(15), // 첫 번째 카드일 때 왼쪽 하단 모서리 둥글게
+            topRight: Radius.circular(15), // 오른쪽 상단 모서리 둥글게
+            bottomRight: Radius.circular(15), // 오른쪽 하단 모서리 둥글게
+            topLeft: Radius.circular(15), // 첫 번째 카드일 때 왼쪽 상단 모서리 둥글게
+            bottomLeft: Radius.circular(15), // 첫 번째 카드일 때 왼쪽 하단 모서리 둥글게
           ),
           boxShadow: [
             BoxShadow(
@@ -165,13 +160,6 @@ class _DolScreenState extends State<DolScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (index == 0 || index == posts.length - 1) // 첫 번째 카드일 때
-              ClipRRect(
-                child: Container(
-                  color: Colors.white,
-                )
-              )
-            else // 나머지 카드
               ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Image.asset(
@@ -189,13 +177,23 @@ class _DolScreenState extends State<DolScreen> {
 
   /* ### 매거진 이미지 클릭 이벤트 처리 ### */
   void _onMagazineTap(int index) {
-    Navigator.push(
-      context, 
-      MaterialPageRoute(
-        builder: (context) => MagzScreen(index: index), // 클릭한 매거진 인덱스 전달
-      ),
-    );
+    if (index == 2) {
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => MagzScreenA(), // 인덱스가 2일 때 MagzScreenA로 이동
+        ),
+      );
+    } else {
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => MagzScreen(index: index), // 인덱스가 2가 아닐 때는 기존의 MagzScreen으로 이동
+        ),
+      );
+    }
   }
+
 
   /* ### 메인 페이지 UI 구성 ### */
   @override
