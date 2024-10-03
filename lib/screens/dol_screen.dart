@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:obsser_1/map.dart';
 import 'package:obsser_1/screens/dol/dol_detail.dart';
 import 'package:obsser_1/screens/dol/magazine_detail.dart';
 import 'package:obsser_1/screens/menu/notice.dart';

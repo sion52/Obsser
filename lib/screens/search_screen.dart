@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 /* ##### 공지사항 화면 ##### */
 class SearchScreen extends StatefulWidget {
@@ -12,13 +12,13 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  late GoogleMapController mapController;
-
-  final LatLng _center = const LatLng(33.5072269,126.493446);
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
+  // late GoogleMapController mapController;
+  //
+  // final LatLng _center = const LatLng(33.5072269,126.493446);
+  //
+  // void _onMapCreated(GoogleMapController controller) {
+  //   mapController = controller;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class _SearchScreenState extends State<SearchScreen> {
         children: [
           /* ### 상단 네비게이션 바 ### */
           Padding(
-            padding: const EdgeInsets.fromLTRB(40, 60, 40, 0), // 패딩 설정
+            padding: const EdgeInsets.fromLTRB(40, 30, 40, 0), // 패딩 설정
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween, // 요소를 양 끝에 배치
               children: [
@@ -74,16 +74,17 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
             ),
           ),
+          const SizedBox(height: 20,),
           /* ### 구글맵 위젯 ### */
-          Expanded(
-            child: GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 18.0,
-              ),
-            ),
-          ),
+          // Expanded(
+          //   child: GoogleMap(
+          //     onMapCreated: _onMapCreated,
+          //     initialCameraPosition: CameraPosition(
+          //       target: _center,
+          //       zoom: 18.0,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

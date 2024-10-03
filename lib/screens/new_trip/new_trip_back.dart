@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:obsser_1/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /* ##### 새로운 여행 이미지 선택 화면 ##### */
 class NewTBackScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _NewTBackScreenState extends State<NewTBackScreen> {
   bool isNextEnabled = true; // 다음 버튼 활성화 여부
   String selectedImage = 'assets/histories/back_0.png'; // 초기 선택 이미지
 
-  // ### 서버로 여행 데이터를 전송하는 함수 ###
+  // ### 서버로 여행 데이터를 전송하는 함수 ### 
   Future<void> saveTravelData(String title, String startDate, String endDate, String imageUrl) async {
     // 날짜를 DateTime 형식으로 변환
     DateFormat dateFormat = DateFormat('yyyy.MM.dd'); // 날짜 형식 지정
@@ -34,13 +35,16 @@ class _NewTBackScreenState extends State<NewTBackScreen> {
     // 두 날짜를 이어붙여 16자리 숫자 문자열 생성 후 int로 변환
     int formattedDate = int.parse("$formattedStartDate$formattedEndDate");
 
+    // // SharedPreferences에서 이메일을 가져옴
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+
     // 서버에 POST 요청
-    // ignore: unused_local_variable
     final response = await http.post(
       Uri.parse('http://3.37.197.251:5000/mytrip/addmytrip'), // 서버 주소 (환경에 맞게 수정)
-      // Uri.parse('http://127.0.0.1:5000/mytrip/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token'
       },
       body: jsonEncode(<String, dynamic>{ // 'date'를 int로 전송하기 위해 <String, dynamic> 사용
         'name': title,
@@ -48,7 +52,14 @@ class _NewTBackScreenState extends State<NewTBackScreen> {
         'image_url': imageUrl, // 선택된 이미지 URL
       }),
     );
+
+    if (response.statusCode == 200) {
+      print("Travel data saved successfully");
+    } else {
+      print("Failed to save travel data: ${response.body}");
+    }
   }
+
 
   // ### 두 자리 숫자를 맞추기 위한 헬퍼 함수 ###
   // 한 자릿수인 월과 일을 두 자리로 만들어주는 함수

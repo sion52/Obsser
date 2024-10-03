@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:obsser_1/screens/menu/password_screen.dart';
+// import 'package:obsser_1/screens/menu/password_screen.dart';
 import 'package:obsser_1/screens/menu/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,11 +48,14 @@ class _LogInState extends State<LogIn> {
 
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
+      var token = jsonDecode(response.body)['access_token'];
+      print('JWT Token: $token');
 
       if (responseData['result'] == 'success') {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('email', email);
         await prefs.setString('name', responseData['name']);
+        await prefs.setString('token', token);
 
         widget.onLogin(); // 로그인 성공 시 콜백 호출
         // ignore: use_build_context_synchronously
@@ -70,11 +73,10 @@ class _LogInState extends State<LogIn> {
   } catch (error) {
     // print('Error: $error');
     setState(() {
-      message = '로그인 중 오류가 발생했습니다.';
+      message = '로그인 중 오류가 발생했습니다. $error';
     });
   }
 }
-
 
   @override
   void initState() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:obsser_1/screens/menu/myfavorite.dart';
 import 'package:obsser_1/screens/new_trip/new_trip_screen.dart';
 import 'package:obsser_1/screens/new_trip/trip.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
@@ -26,12 +27,15 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
 
   /* ### 서버에서 여행 데이터를 받아오는 함수 ### */
   Future<List<Map<String, String>>> fetchTravelData() async {
-    final response = await http.get(Uri.parse('http://3.37.197.251:5000/mytrip')); // 서버 요청
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+
+    final response = await http.get(Uri.parse('http://3.37.197.251:5000/mytrip'),headers: {'Authorization': 'Bearer $token'},); // 서버 요청
     // final response = await http.get(Uri.parse('http://127.0.0.1:5000/mytrip'));
 
     if (response.statusCode == 200) {
       // 응답 성공시, 데이터를 파싱하고 Map<String, String>으로 변환
-      List<dynamic> data = json.decode(response.body);
+      List<dynamic> data = json.decode(response.body)['data'];
       List<Map<String, String>> travelData = data.map((item) {
 
         String dadate = formatTimestamp(item['date'].toString());

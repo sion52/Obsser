@@ -24,7 +24,7 @@ Future<void> _onBackPressed(BuildContext context) async {
           child: const Text('취소'),
         ),
         TextButton(
-          onPressed: () => SystemNavigator.pop(), 
+          onPressed: () => SystemNavigator.pop(),
           child: const Text('확인'),
         ),
       ],

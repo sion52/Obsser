@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 /* ##### 여행 카드 상세보기 화면 ##### */
 class TripScreen extends StatefulWidget {
@@ -81,14 +82,20 @@ class _TripScreenState extends State<TripScreen> {
 
   // ### 서버에서 여행 데이터를 받아오는 함수 ###
   Future<List<Map<String, String>>> fetchTravelData() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:5000/mytrip')); // 서버에서 여행 데이터 요청
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    
+    final response = await http.get(Uri.parse('http://3.37.197.251:5000/mytrip'), headers: {'Authorization': 'Bearer $token'},); // 서버에서 여행 데이터 요청
 
     if (response.statusCode == 200) {
       // 서버 응답이 성공적일 때
-      List<dynamic> data = json.decode(response.body); // JSON 응답 파싱
+      List<dynamic> data = json.decode(response.body)['data']; // JSON 응답 파싱
 
       // 응답 데이터를 List<Map<String, String>> 형식으로 변환
       List<Map<String, String>> travelData = data.map((item) {
+
+        String dadate = formatTimestamp(item['date'].toString());
+
         return {
           'name': item['name'].toString(), // 명시적으로 String 변환
           'date': item['date'].toString(),
@@ -100,6 +107,19 @@ class _TripScreenState extends State<TripScreen> {
     } else {
       throw Exception('Failed to load travel data'); // 오류 처리
     }
+  }
+
+  String formatTimestamp(String timestamp) {
+    // 시작 날짜와 끝 날짜를 각각 슬라이싱 (첫 8자리와 마지막 8자리)
+    String startDate = timestamp.substring(0, 8); // '20241001'
+    String endDate = timestamp.substring(8); // '20241008'
+
+    // 슬라이싱된 문자열을 yyyy.mm.dd 형식으로 변환
+    String formattedStartDate = '${startDate.substring(0, 4)}.${startDate.substring(4, 6)}.${startDate.substring(6, 8)}';
+    String formattedEndDate = '${endDate.substring(0, 4)}.${endDate.substring(4, 6)}.${endDate.substring(6, 8)}';
+
+    // 'yyyy.mm.dd - yyyy.mm.dd' 형식으로 출력
+    return '$formattedStartDate - $formattedEndDate';
   }
 
   // ### 2차원 행렬 데이터를 서버에 POST 요청하는 함수 ###
