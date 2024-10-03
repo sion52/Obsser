@@ -7,6 +7,7 @@ import 'package:obsser_1/screens/dol/dol_detail.dart';
 import 'package:obsser_1/screens/dol/magazine_detail.dart';
 import 'package:obsser_1/screens/dol/magazine_detail_auto.dart';
 import 'package:obsser_1/screens/dol/new_post.dart';
+import 'package:obsser_1/screens/dol/post.dart';
 import 'package:obsser_1/screens/menu/notice.dart';
 import 'package:obsser_1/screens/search_screen.dart';
 
@@ -138,28 +139,37 @@ class _DolScreenState extends State<DolScreen> {
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 0, 0), // 양쪽 패딩 추가
-      child: Container(
-        width: cardWidth, // 카드 너비 설정
-        decoration: BoxDecoration(
-          color: Colors.transparent, // 첫 번째 카드는 흰색, 나머지는 투명
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(15), // 오른쪽 상단 모서리 둥글게
-            bottomRight: Radius.circular(15), // 오른쪽 하단 모서리 둥글게
-            topLeft: Radius.circular(15), // 첫 번째 카드일 때 왼쪽 상단 모서리 둥글게
-            bottomLeft: Radius.circular(15), // 첫 번째 카드일 때 왼쪽 하단 모서리 둥글게
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2), // 그림자 색상
-              spreadRadius: 1,
-              blurRadius: 3,
-              offset: const Offset(0, 3), // 그림자 위치
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PostScreen(), // 클릭 시 PostScreen으로 이동
             ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          );
+        },
+        child: Container(
+          width: cardWidth, // 카드 너비 설정
+          decoration: BoxDecoration(
+            color: Colors.transparent, // 첫 번째 카드는 흰색, 나머지는 투명
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(15), // 오른쪽 상단 모서리 둥글게
+              bottomRight: Radius.circular(15), // 오른쪽 하단 모서리 둥글게
+              topLeft: Radius.circular(15), // 첫 번째 카드일 때 왼쪽 상단 모서리 둥글게
+              bottomLeft: Radius.circular(15), // 첫 번째 카드일 때 왼쪽 하단 모서리 둥글게
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2), // 그림자 색상
+                spreadRadius: 1,
+                blurRadius: 3,
+                offset: const Offset(0, 3), // 그림자 위치
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: Image.asset(
@@ -168,7 +178,8 @@ class _DolScreenState extends State<DolScreen> {
                   height: 227, // 이미지 높이 조정
                 ),
               ),
-          ],
+            ],
+          ),
         ),
       ),
     );
