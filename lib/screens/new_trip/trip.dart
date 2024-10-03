@@ -89,7 +89,7 @@ class _TripScreenState extends State<TripScreen> {
     var token = prefs.getString('token');
 
     final response = await http.get(
-      Uri.parse('http://3.37.197.251:5000/place_pages/드라이브'),
+      Uri.parse('http://3.37.197.251:5000/place_pages/맛집'),
       headers: {'Authorization': 'Bearer $token'},
     ); // 서버에서 관심장소 데이터 요청
 

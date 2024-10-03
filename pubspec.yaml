@@ -46,6 +46,7 @@ dependencies:
   google_maps_flutter: ^2.9.0
   url_launcher: ^6.3.0
   dart_openai: ^5.1.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +58,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  envied_generator: ^0.5.4+1
+  build_runner: ^2.4.13
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

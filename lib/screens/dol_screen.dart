@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:obsser_1/screens/dol/dol_detail.dart';
 import 'package:obsser_1/screens/dol/magazine_detail.dart';
+import 'package:obsser_1/screens/dol/new_post.dart';
 import 'package:obsser_1/screens/menu/notice.dart';
 import 'package:obsser_1/screens/search_screen.dart';
 
@@ -344,6 +345,12 @@ class _DolScreenState extends State<DolScreen> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700), // 텍스트 스타일 예시
                   ),
                   GestureDetector(
+                    onTap: () => Navigator.push( // 알림 페이지로 이동
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) => ImageUploadScreen(), // 알림 페이지
+                      ),
+                    ),
                     child: const Text(
                       '내 장소 공유하기',
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Color(0xFF727272)), // 텍스트 스타일 예시

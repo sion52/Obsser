@@ -117,173 +117,186 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF), // 배경색 흰색
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            const Padding(padding: EdgeInsets.only(top: 250)), // 상단 여백
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      resizeToAvoidBottomInset: true, // 키보드가 올라올 때 화면 자동 조정
+      body: GestureDetector(
+        onTap: () {
+          // 화면 터치 시 키보드 닫기
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+              left: 15.0, // 왼쪽 패딩 15
+              right: 15.0, // 오른쪽 패딩 15
+            ),
+            child: Column(
               children: [
-                /* ### 이름 입력 ### */
-                const Text('이름',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    )),
-                const SizedBox(height: 10.0),
-                TextField(
-                  controller: name3Controller, // 이름 입력 컨트롤러
-                  cursorColor: const Color(0xFF497F5B),
-                  decoration: InputDecoration(
-                    hintText: '이름',
-                    hintStyle: const TextStyle(color: Color(0xFF8F9098)),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFC5C6CC)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFF497F5B)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  ),
-                  keyboardType: TextInputType.text,
-                ),
-                const SizedBox(height: 25.0),
-
-                /* ### 이메일 입력 ### */
-                const Text('이메일',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    )),
-                const SizedBox(height: 10.0),
-                TextField(
-                  controller: email3Controller, // 이메일 입력 컨트롤러
-                  cursorColor: const Color(0xFF497F5B),
-                  decoration: InputDecoration(
-                    hintText: '이메일',
-                    hintStyle: const TextStyle(color: Color(0xFF8F9098)),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFC5C6CC)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFF497F5B)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 25.0),
-
-                /* ### 비밀번호 입력 ### */
-                const Text('비밀번호',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    )),
-                const SizedBox(height: 10.0),
-                TextField(
-                  controller: password2Controller, // 비밀번호 입력 컨트롤러
-                  cursorColor: const Color(0xFF497F5B),
-                  decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _isObscured = !_isObscured; // 비밀번호 가리기 상태 토글
-                        });
-                      },
-                      icon: Icon(
-                        _isObscured ? Icons.visibility : Icons.visibility_off,
-                        color: const Color(0xFF8F9098),
-                      ),
-                    ),
-                    hintText: '비밀번호',
-                    hintStyle: const TextStyle(color: Color(0xFF8F9098)),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFC5C6CC)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFF497F5B)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  ),
-                  obscureText: _isObscured, // 비밀번호 가리기
-                  keyboardType: TextInputType.text,
-                ),
-                const SizedBox(height: 10.0),
-
-                /* ### 비밀번호 확인 입력 ### */
-                TextField(
-                  controller: confirmPasswordController, // 비밀번호 확인 컨트롤러
-                  cursorColor: const Color(0xFF497F5B),
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: '비밀번호 확인',
-                    suffixIcon: isMatching == null
-                        ? null // 값이 입력되지 않으면 아이콘 없음
-                        : Icon(
-                            isMatching!
-                                ? Icons.check // 일치하면 체크 아이콘
-                                : Icons.close, // 일치하지 않으면 닫기 아이콘
-                            color: isMatching! ? Colors.green : Colors.red,
-                          ),
-                    hintStyle: const TextStyle(color: Color(0xFF8F9098)),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFFC5C6CC)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color(0xFF497F5B)),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  ),
-                  keyboardType: TextInputType.text,
-                ),
-                const SizedBox(height: 20.0),
-
-                /* ### 가입 버튼 ### */
-                Center(
-                  child: ButtonTheme(
-                    minWidth: 160.0,
-                    height: 42.0,
-                    child: ElevatedButton(
-                      onPressed: _signup, // 회원가입 함수 호출
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(160, 52),
-                        backgroundColor: const Color(0xFF497F5B),
-                      ),
-                      child: const Text(
-                        '가입하기',
+                const Padding(padding: EdgeInsets.only(top: 250)), // 상단 여백
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /* ### 이름 입력 ### */
+                    const Text('이름',
                         style: TextStyle(
-                          color: Color(0xFFFFFFFF),
-                          fontSize: 16,
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        )),
+                    const SizedBox(height: 10.0),
+                    TextField(
+                      controller: name3Controller, // 이름 입력 컨트롤러
+                      cursorColor: const Color(0xFF497F5B),
+                      decoration: InputDecoration(
+                        hintText: '이름',
+                        hintStyle: const TextStyle(color: Color(0xFF8F9098)),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Color(0xFFC5C6CC)),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Color(0xFF497F5B)),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                      ),
+                      keyboardType: TextInputType.text,
+                    ),
+                    const SizedBox(height: 25.0),
+
+                    /* ### 이메일 입력 ### */
+                    const Text('이메일',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        )),
+                    const SizedBox(height: 10.0),
+                    TextField(
+                      controller: email3Controller, // 이메일 입력 컨트롤러
+                      cursorColor: const Color(0xFF497F5B),
+                      decoration: InputDecoration(
+                        hintText: '이메일',
+                        hintStyle: const TextStyle(color: Color(0xFF8F9098)),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Color(0xFFC5C6CC)),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Color(0xFF497F5B)),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(height: 25.0),
+
+                    /* ### 비밀번호 입력 ### */
+                    const Text('비밀번호',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        )),
+                    const SizedBox(height: 10.0),
+                    TextField(
+                      controller: password2Controller, // 비밀번호 입력 컨트롤러
+                      cursorColor: const Color(0xFF497F5B),
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isObscured = !_isObscured; // 비밀번호 가리기 상태 토글
+                            });
+                          },
+                          icon: Icon(
+                            _isObscured ? Icons.visibility : Icons.visibility_off,
+                            color: const Color(0xFF8F9098),
+                          ),
+                        ),
+                        hintText: '비밀번호',
+                        hintStyle: const TextStyle(color: Color(0xFF8F9098)),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Color(0xFFC5C6CC)),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Color(0xFF497F5B)),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                      ),
+                      obscureText: _isObscured, // 비밀번호 가리기
+                      keyboardType: TextInputType.text,
+                    ),
+                    const SizedBox(height: 10.0),
+
+                    /* ### 비밀번호 확인 입력 ### */
+                    TextField(
+                      controller: confirmPasswordController, // 비밀번호 확인 컨트롤러
+                      cursorColor: const Color(0xFF497F5B),
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: '비밀번호 확인',
+                        suffixIcon: isMatching == null
+                            ? null // 값이 입력되지 않으면 아이콘 없음
+                            : Icon(
+                                isMatching!
+                                    ? Icons.check // 일치하면 체크 아이콘
+                                    : Icons.close, // 일치하지 않으면 닫기 아이콘
+                                color: isMatching! ? Colors.green : Colors.red,
+                              ),
+                        hintStyle: const TextStyle(color: Color(0xFF8F9098)),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Color(0xFFC5C6CC)),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Color(0xFF497F5B)),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                      ),
+                      keyboardType: TextInputType.text,
+                    ),
+                    const SizedBox(height: 20.0),
+
+                    /* ### 가입 버튼 ### */
+                    Center(
+                      child: ButtonTheme(
+                        minWidth: 160.0,
+                        height: 42.0,
+                        child: ElevatedButton(
+                          onPressed: _signup, // 회원가입 함수 호출
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(160, 52),
+                            backgroundColor: const Color(0xFF497F5B),
+                          ),
+                          child: const Text(
+                            '가입하기',
+                            style: TextStyle(
+                              color: Color(0xFFFFFFFF),
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
 
-                /* ### 오류 메시지 출력 ### */
-                if (errorMessage.isNotEmpty)
-                  Center(
-                    child: Text(
-                      errorMessage,
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        color: Color(0xFFED3241),
+                    /* ### 오류 메시지 출력 ### */
+                    if (errorMessage.isNotEmpty)
+                      Center(
+                        child: Text(
+                          errorMessage,
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            color: Color(0xFFED3241),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                  ],
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
