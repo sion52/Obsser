@@ -3,6 +3,7 @@
 - 2024년 5월 3일 ~ 2024년 10월 4일
 
 # '옵써'
+<img src="https://github.com/user-attachments/assets/c91125b6-566e-4e10-9fc2-9804bae3bb79" />
 
 ## Tech Stack
 ### Front end
