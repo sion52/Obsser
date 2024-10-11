@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data'; // Base64 디코딩을 위해 필요
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,11 +22,14 @@ class DolScreen extends StatefulWidget {
 
 class _DolScreenState extends State<DolScreen> {
   String dolMessage = 'Loading...'; // 서버 응답 메시지 저장 변수
+  List<Map<String, String>> serverData = []; // 서버에서 받아온 데이터를 저장할 리스트
   late PageController _imagePageController; // 이미지 슬라이드용 페이지 컨트롤러
   late PageController _postPageController;  // 게시판용 페이지 컨트롤러
   int _currentSlide = 0; // 현재 슬라이드 인덱스 저장 변수
   Timer? _timer; // 자동 슬라이드를 위한 타이머
+  bool isLoading = true; // 로딩 상태 표시
   final TextEditingController _searchController = TextEditingController(); // 검색창 컨트롤러 추가
+  
 
   final List<String> images = [ // 슬라이드 이미지 리스트
     'assets/banners/banner1.png',
@@ -51,7 +55,7 @@ class _DolScreenState extends State<DolScreen> {
   void initState() {
     super.initState();
 
-    // fetchDolData(); // 페이지 로드 시 서버에서 데이터 요청
+    fetchDolData(); // 페이지 로드 시 서버에서 데이터 요청
     _imagePageController = PageController(); // 이미지 슬라이드용 페이지 컨트롤러 초기화
     _postPageController = PageController();  // 게시판용 페이지 컨트롤러 초기화
     
@@ -70,20 +74,32 @@ class _DolScreenState extends State<DolScreen> {
   /* ### 서버 데이터 요청 메서드 ### */
   Future<void> fetchDolData() async {
     try {
-      final response = await http.get(Uri.parse('http://3.37.197.251:5000/'));
+      final response = await http.get(Uri.parse('http://3.37.197.251:5000/')); // 서버에 GET 요청을 보냄
+
       if (mounted && response.statusCode == 200) { // 서버 응답이 성공적일 경우
+        List<dynamic> data = json.decode(response.body)['data']; // 'data' 키 안의 데이터를 파싱
+        List<Map<String, String>> parsedData = data.map((item) {
+          return {
+            'name': item['name'].toString(), // 'name' 값을 String으로 변환하여 저장
+            'image': item['image'].toString(), // 'image' 값을 String으로 변환하여 저장
+          };
+        }).toList();
+
         setState(() {
-          dolMessage = json.decode(response.body)['dolMessage']; // 서버 응답 메시지 반영
+          serverData = parsedData; // 서버에서 받아온 데이터를 저장
+          isLoading = false; // 로딩 완료
         });
-      } else if (mounted) { // 서버 응답 실패
+      } else if (mounted) { // 서버 응답 실패 시
         setState(() {
           dolMessage = 'Failed to fetch data. Status code: ${response.statusCode}';
+          isLoading = false; // 로딩 완료
         });
       }
     } catch (e) { // 오류 처리
       if (mounted) {
         setState(() {
           dolMessage = 'Error fetching data: $e';
+          isLoading = false; // 로딩 완료
         });
       }
     }
@@ -121,6 +137,12 @@ class _DolScreenState extends State<DolScreen> {
     });
   }
 
+  // Base64 문자열을 이미지로 디코딩하는 함수
+  Image imageFromBase64String(String base64String) {
+    Uint8List imageBytes = base64Decode(base64String);
+    return Image.memory(imageBytes, fit: BoxFit.cover);
+  }
+
 
   /* ### 슬라이드 이미지 클릭 이벤트 처리 ### */
   void _onImageTap(int index) {
@@ -132,58 +154,6 @@ class _DolScreenState extends State<DolScreen> {
     );
   }
 
-  /* ### 슬라이드 게시판 카드 생성 메서드 ### */
-  Widget _buildPostCard(Map<String, String> post, int index) {
-    // 첫 번째 카드의 너비를 다른 카드의 절반으로 설정
-    double cardWidth = 263; // 첫 번째 카드의 너비는 70, 나머지는 263
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0), // 양쪽 패딩 추가
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PostScreen(), // 클릭 시 PostScreen으로 이동
-            ),
-          );
-        },
-        child: Container(
-          width: cardWidth, // 카드 너비 설정
-          decoration: BoxDecoration(
-            color: Colors.transparent, // 첫 번째 카드는 흰색, 나머지는 투명
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(15), // 오른쪽 상단 모서리 둥글게
-              bottomRight: Radius.circular(15), // 오른쪽 하단 모서리 둥글게
-              topLeft: Radius.circular(15), // 첫 번째 카드일 때 왼쪽 상단 모서리 둥글게
-              bottomLeft: Radius.circular(15), // 첫 번째 카드일 때 왼쪽 하단 모서리 둥글게
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2), // 그림자 색상
-                spreadRadius: 1,
-                blurRadius: 3,
-                offset: const Offset(0, 3), // 그림자 위치
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image.asset(
-                  post['imageUrl']!,
-                  fit: BoxFit.cover,
-                  height: 227, // 이미지 높이 조정
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
 
   /* ### 매거진 이미지 클릭 이벤트 처리 ### */
@@ -344,55 +314,53 @@ class _DolScreenState extends State<DolScreen> {
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10,10,15,5), // 왼쪽으로 20만큼 패딩 추가
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    '  게시판',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700), // 텍스트 스타일 예시
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.push( // 알림 페이지로 이동
-                      context, 
-                      MaterialPageRoute(
-                        builder: (context) => ImageUploadScreen(), // 알림 페이지
-                      ),
-                    ),
-                    child: const Text(
-                      '내 장소 공유하기',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Color(0xFF727272)), // 텍스트 스타일 예시
-                    ),
-                  ),
-                ],
-              )
-            ),
-
-            // 게시판 슬라이드를 ListView로 변경합니다.
-            Stack(
+            /* ### 게시판 섹션 ### */
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 15, 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // 배경 이미지
-                Image.asset('assets/film.png'),
-
-                // 가로 스크롤 리스트
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.center, // 중앙에 배치
-                    child: Container(
-                      height: 227, // 슬라이드 게시판 높이 설정
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal, // 수평 스크롤 설정
-                        itemCount: posts.length,
-                        itemBuilder: (context, index) {
-                          return _buildPostCard(posts[index], index); // 카드 생성 메서드 호출
-                        },
-                      ),
+                const Text(
+                  '  게시판',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImageUploadScreen(),
                     ),
+                  ),
+                  child: const Text(
+                    '내 장소 공유하기',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Color(0xFF727272)),
                   ),
                 ),
               ],
             ),
+          ),
+
+          /* ### 게시판 슬라이드 섹션 ### */
+          Stack(
+            children: [
+              Image.asset('assets/film.png'), // 배경 이미지
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    height: 227, // 슬라이드 게시판 높이 설정
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal, // 수평 스크롤 설정
+                      itemCount: serverData.length,
+                      itemBuilder: (context, index) {
+                        return PostCard(post: serverData[index], index: index); // PostCard 사용
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
 
 
             const SizedBox(height: 30,),
@@ -469,4 +437,84 @@ class _DolScreenState extends State<DolScreen> {
       ),
     );
   }
+}
+
+class PostCard extends StatefulWidget {
+  final Map<String, String> post;
+  final int index;
+
+  const PostCard({required this.post, required this.index, Key? key}) : super(key: key);
+
+  @override
+  _PostCardState createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context); // AutomaticKeepAlive 사용 시 꼭 호출
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0), // 양쪽 패딩 추가
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PostScreen(name: widget.post['name']!), // name 값을 전달
+            ),
+          );
+        },
+        child: Container(
+          width: 263, // 카드 너비 설정
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 3,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.memory(
+                  base64Decode(widget.post['image']!), // Base64로 디코딩한 이미지
+                  fit: BoxFit.cover, // 이미지를 카드 안에 꽉 채우도록 설정
+                  width: double.infinity, // 가로 길이를 카드에 맞춤
+                  height: 227, // 높이 설정
+                ),
+              ),
+              Positioned(
+                bottom: 10, // 텍스트가 이미지 하단에 위치하도록 설정
+                left: 10,  // 텍스트가 이미지 왼쪽에 위치하도록 설정
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.5), // 텍스트 배경에 반투명한 검은색 배경 추가
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Text(
+                    widget.post['name']!, // 이미지에 겹쳐서 표시할 이름
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.white, // 텍스트를 흰색으로 설정
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true; // AutomaticKeepAlive를 항상 활성화
 }

@@ -18,50 +18,40 @@ class HashDetail extends StatefulWidget {
 }
 
 class _HashDetailState extends State<HashDetail> {
-  List<Map<String, String>> places = []; // 서버에서 받아온 여행지 데이터를 저장
   List<bool> isFavoriteList = []; // 각 카드의 즐겨찾기 상태 리스트
   bool isLoading = true; // 로딩 상태 표시
+  late Future<List<Map<String, String>>> _placesFuture;
 
   @override
   void initState() {
     super.initState();
-    fetchPlacesData(widget.selectedKeyword); // 페이지 로드 시 서버에서 데이터 가져오기
+    _placesFuture = fetchPlacesData(widget.selectedKeyword); // 페이지 로드 시 서버에서 데이터 가져오기
   }
 
   // 서버에서 여행지 데이터 가져오는 함수
-  Future<void> fetchPlacesData(String keyword) async {
+  Future<List<Map<String, String>>> fetchPlacesData(String keyword) async {
     try {
-      final response = await http.get(Uri.parse('http://3.37.197.251:5000/place_pages/$keyword')); // 서버 요청 URL
+      final response = await http.get(Uri.parse('http://3.37.197.251:5000/place_pages/$keyword'));
 
       if (response.statusCode == 200) {
-        // 응답 데이터를 출력
-        print("응답 데이터: ${response.body}");
+        List<dynamic> data = json.decode(response.body)['data'];
 
-        List<dynamic> data = json.decode(response.body)['data']; // JSON 파싱
-        setState(() {
-          // 서버로부터 받은 데이터를 리스트에 저장
-          places = data.map((item) {
-            return {
-              'name': item['name'].toString(),
-              'image': item['image'].toString(), // Base64 이미지
-            };
-          }).toList();
+        // 데이터 크기만큼 isFavoriteList를 초기화합니다.
+        isFavoriteList = List<bool>.filled(data.length, false);
 
-          // 즐겨찾기 리스트 초기화 (여행지 개수에 맞게 설정)
-          isFavoriteList = List<bool>.filled(places.length, false);
-          isLoading = false; // 로딩 완료
-        });
+        return data.map((item) {
+          return {
+            'name': item['name'].toString(),
+            'image': item['image'].toString(),
+          };
+        }).toList();
       } else {
         throw Exception('Failed to load places');
       }
     } catch (e) {
-      setState(() {
-        isLoading = false; // 오류 발생 시 로딩 완료 처리
-      });
-      print("Error: $e");
+      throw Exception('Error fetching data: $e');
     }
   }
-
 
   // 즐겨찾기 상태를 서버에 POST 요청으로 보내는 함수
   Future<void> sendFavoriteStatusToServer(String name) async {
@@ -105,7 +95,27 @@ class _HashDetailState extends State<HashDetail> {
               children: [
                 buildKeywordHeader(), // 키워드별 여행지 제목
                 const SizedBox(height: 8),
-                buildKeywordChips(), // 키워드 칩 및 카드 리스트
+                FutureBuilder<List<Map<String, String>>>(
+                  future: _placesFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: Text('No data available'),
+                      );
+                    } else {
+                      final places = snapshot.data!;
+                      return buildKeywordChips(places);
+                    }
+                  },
+                ), // 키워드 칩 및 카드 리스트
               ],
             ),
           ),
@@ -171,7 +181,7 @@ class _HashDetailState extends State<HashDetail> {
   }
 
   /* ### 키워드 칩 및 여행지 카드 리스트 ### */
-  Widget buildKeywordChips() {
+  Widget buildKeywordChips(List<Map<String, String>> places) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0), // 가로 패딩 0
       child: Container(
@@ -189,59 +199,21 @@ class _HashDetailState extends State<HashDetail> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start, // 좌측 정렬
                 children: [
-                  /* ### 키워드 버튼 ### */
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0), // 패딩 설정
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context, widget.selectedKeyword); // 선택된 키워드를 전달하며 페이지 종료
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(0), // 버튼 내부 패딩
-                        backgroundColor: const Color(0xFFD9D9D9), // 버튼 배경색
-                        foregroundColor: const Color(0xFF000000), // 버튼 텍스트 색상
-                        elevation: 0, // 그림자 없음
-                        minimumSize: const Size(110, 50), // 버튼 크기 설정
-                      ),
-                      child: Text(
-                        widget.selectedKeyword, // 선택된 키워드 표시
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 10),
                   /* ### 여행지 카드 리스트 ### */
                   Expanded(
-                    child: isLoading
-                      ? const Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircularProgressIndicator(), // 로딩 인디케이터
-                              SizedBox(height: 16), // 간격 추가
-                              Text(
-                                '여행지를 불러오는 중입니다...', // 로딩 중 텍스트
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.grey, // 텍스트 색상 설정
-                                ),
-                              ),
-                            ],
-                          )
-                        )
-                      : SingleChildScrollView(
-                          child: Column(
-                            children: places.asMap().entries.map((entry) {
-                              int index = entry.key;
-                              Map<String, String> place = entry.value;
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 5),
-                                child: _buildCard(index, place['name']!, place['image']!),
-                              );
-                            }).toList(),
-                          ),
-                        ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: places.asMap().entries.map((entry) {
+                          int index = entry.key;
+                          Map<String, String> place = entry.value;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: _buildCard(index, place['name']!, place['image']!),
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -295,7 +267,7 @@ class _HashDetailState extends State<HashDetail> {
                   setState(() {
                     isFavoriteList[index] = !isFavoriteList[index];
                     // 즐겨찾기 상태를 서버로 전송
-                    sendFavoriteStatusToServer(places[index]['name']!);
+                    sendFavoriteStatusToServer(title);
                   });
                 },
                 child: SvgPicture.asset(

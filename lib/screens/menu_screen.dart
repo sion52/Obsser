@@ -8,10 +8,13 @@ import 'package:obsser_1/screens/menu/notice.dart';
 import 'package:obsser_1/screens/menu/notification.dart';
 import 'package:obsser_1/screens/menu/setting.dart';
 import 'package:obsser_1/screens/menu/service.dart';
+import 'dart:io';
 
 /* ##### 메뉴 페이지 ##### */
 class MenuScreen extends StatefulWidget {
-  const MenuScreen({super.key});
+  final File? imageFile;
+
+  const MenuScreen({super.key, this.imageFile});
 
   @override
   State<MenuScreen> createState() => _MenuScreenState();
@@ -125,7 +128,15 @@ class _MenuScreenState extends State<MenuScreen> {
               },
               child: Row(
                 children: [
-                  Image.asset('assets/profile.png', width: 50, height: 50), // 프로필 이미지
+                   Image(
+                    image: widget.imageFile != null
+                        ? FileImage(widget.imageFile!)
+                        : const AssetImage('assets/profile.png'), // 기본 이미지
+                    width: 50, // 이미지 크기 조정
+                    height: 50,
+                    fit: BoxFit.cover, // 이미지 비율 유지
+                  ),
+
                   const SizedBox(width: 15),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

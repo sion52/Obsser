@@ -44,7 +44,7 @@ class _MagzScreenAState extends State<MagzScreenA> {
               children: [
                 // 매거진 이미지 표시
                 Image.asset(
-                  'assets/magazines/m_0d.png', 
+                  'assets/magazines/m_2d.png', 
                   fit: BoxFit.cover, 
                   width: double.infinity,
                 ),

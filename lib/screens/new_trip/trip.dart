@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:typed_data'; // Base64 이미지 디코딩에 필요
+import 'dart:math'; // 랜덤 섞기를 위해 필요한 패키지 추가
 
 /* ##### 여행 카드 상세보기 화면 ##### */
 class TripScreen extends StatefulWidget {
@@ -21,10 +22,12 @@ class _TripScreenState extends State<TripScreen> {
   List<int> selectedPlaces = []; // 선택된 관심장소의 인덱스 리스트
   List<Map<String, String>> favoritePlaces = []; // 서버에서 받아온 찜 데이터 저장
   List<String> selectedPlaceNames = []; // 선택된 장소의 이름 리스트
+  bool isSaving = false; // 일정 저장 상태를 나타내는 변수
 
   void onCategoryTap(String category) {
     setState(() {
       selectedCategory = category;
+      isSaving = category == "나의일정"; // '나의일정'을 선택하면 저장 모드로 전환
     });
   }
 
@@ -40,7 +43,6 @@ class _TripScreenState extends State<TripScreen> {
     });
   }
 
-  // ### 서버에서 여행 데이터를 받아오는 함수 ###
   Future<List<Map<String, String>>> fetchTravelData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
@@ -76,7 +78,6 @@ class _TripScreenState extends State<TripScreen> {
     return '$formattedStartDate - $formattedEndDate';
   }
 
-  // ### 서버에서 관심장소 데이터를 받아오는 함수 ###
   Future<void> fetchPlaceData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
@@ -104,7 +105,6 @@ class _TripScreenState extends State<TripScreen> {
     }
   }
 
-  // Base64 문자열을 이미지로 디코딩하는 함수
   Image imageFromBase64String(String base64String) {
     Uint8List imageBytes = base64Decode(base64String);
     return Image.memory(imageBytes, fit: BoxFit.cover);
@@ -195,7 +195,6 @@ class _TripScreenState extends State<TripScreen> {
     );
   }
 
-  // ### 선택한 여행 카드만 보여주는 위젯 ###
   Widget _buildSelectedTravelCard() {
     if (widget.index >= travelCards.length) {
       return const Center(child: Text('해당하는 여행 카드가 없습니다.'));
@@ -212,7 +211,6 @@ class _TripScreenState extends State<TripScreen> {
     );
   }
 
-  // ### 여행 카드 UI 위젯 ###
   Widget _buildTravelCard({
     required String title,
     required String date,
@@ -256,7 +254,6 @@ class _TripScreenState extends State<TripScreen> {
     );
   }
 
-  // 관심장소 이미지 카드 UI
   Widget _buildFavoritePlaceCard({
     required String title,
     required String base64Image,
@@ -306,7 +303,6 @@ class _TripScreenState extends State<TripScreen> {
     );
   }
 
-  // 새로운 관심장소 카드를 그리드 형식으로 보여주는 GridView
   Widget _buildGridFavoritePlaces() {
     return Expanded(
       child: GridView.builder(
@@ -330,62 +326,125 @@ class _TripScreenState extends State<TripScreen> {
     );
   }
 
-  // 일정 드래그 가능한 리스트
   Widget _plan() {
-    return Expanded(
-      child: ReorderableListView(
-        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
-        dragStartBehavior: DragStartBehavior.down, // 드래그를 빠르게 시작할 수 있도록 설정
-        children: List.generate(
-          selectedPlaceNames.length,
-          (index) {
-            return Padding(
-              key: ValueKey(selectedPlaceNames[index]),
-              padding: const EdgeInsets.symmetric(vertical: 10), // 리스트 항목 사이 여백 추가
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 100), // 애니메이션 효과 추가
-                curve: Curves.easeInOut,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200, // 회색 배경색
-                  borderRadius: BorderRadius.circular(15), // 모서리를 둥글게 설정
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 4, // 그림자 효과
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  title: Text(
-                    selectedPlaceNames[index],
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
+  return Expanded(
+    child: Column(
+      children: [
+        Expanded(
+          child: ReorderableListView(
+            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
+            dragStartBehavior: DragStartBehavior.down,
+            children: _buildRandomizedItems(), // 랜덤 순서로 아이템을 생성
+            onReorder: (oldIndex, newIndex) {
+              setState(() {
+                if (newIndex > oldIndex) {
+                  newIndex -= 1;
+                }
+                final item = selectedPlaceNames.removeAt(oldIndex);
+                selectedPlaceNames.insert(newIndex, item);
+              });
+            },
+          ),
+        ),
+        TextButton(
+          onPressed: _showPlaceAddDialog,
+          child: const Text(
+            '장소 추가하기',
+            style: TextStyle(fontSize: 16, color: Colors.blue),
+          ),
+        ),
+        const SizedBox(height: 70),
+      ],
+    ),
+  );
+}
+
+List<Widget> _buildRandomizedItems() {
+  List<Widget> items = List.generate(
+    selectedPlaceNames.length,
+    (index) {
+      return Padding(
+        key: ValueKey(selectedPlaceNames[index]),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeInOut,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            title: Text(
+              selectedPlaceNames[index],
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            trailing: const Icon(Icons.drag_handle),
+          ),
+        ),
+      );
+    },
+  );
+
+  items.shuffle(Random()); // 리스트 순서를 랜덤으로 섞음
+  return items;
+}
+
+  void _showPlaceAddDialog() {
+    TextEditingController placeController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: const Text('장소 추가하기'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: placeController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  trailing: const Icon(Icons.drag_handle), // 드래그 핸들 아이콘 추가
+                  hintText: '장소 이름 입력',
                 ),
               ),
-            );
-          },
-        ),
-        onReorder: (oldIndex, newIndex) {
-          setState(() {
-            if (newIndex > oldIndex) {
-              newIndex -= 1;
-            }
-            final item = selectedPlaceNames.removeAt(oldIndex);
-            selectedPlaceNames.insert(newIndex, item);
-          });
-        },
-      ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('취소'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  selectedPlaceNames.add(placeController.text);
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
     );
   }
 
-
-  // ### 새로운 일정 추가 버튼 UI ###
   Widget _buildAddScheduleButton() {
     return Positioned(
       left: 20,
@@ -393,21 +452,37 @@ class _TripScreenState extends State<TripScreen> {
       bottom: 10,
       child: Center(
         child: ElevatedButton(
-          onPressed: () => onCategoryTap('나의일정'),
+          onPressed: () {
+            if (isSaving) {
+              saveSchedule();
+              Navigator.pop(context);
+            } else {
+              onCategoryTap('나의일정');
+              setState(() {
+                isSaving = true;
+              });
+            }
+          },
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 5),
             backgroundColor: const Color(0xFFFFC04B),
             foregroundColor: const Color(0xFFFFFFFF),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            minimumSize: const Size(300, 50),
+            minimumSize: isSaving
+                ? const Size(150, 50)
+                : const Size(300, 50),
             elevation: 0,
           ),
-          child: const Text(
-            '선택한 관심장소로 일정짜기',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          child: Text(
+            isSaving ? '저장하기' : '선택한 관심장소로 일정짜기',
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
         ),
       ),
     );
+  }
+
+  void saveSchedule() {
+    print('일정이 저장되었습니다.');
   }
 }

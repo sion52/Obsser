@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 /* ##### 해시태그 여행 루트 상세 페이지 ##### */
 class HashDetailRoute extends StatefulWidget {
@@ -11,6 +13,35 @@ class HashDetailRoute extends StatefulWidget {
 }
 
 class _HashDetailRouteState extends State<HashDetailRoute> {
+  late Future<List<Map<String, String>>> _placesFuture; // Future로 서버에서 데이터를 받아옴
+
+  @override
+  void initState() {
+    super.initState();
+    _placesFuture = fetchPlacesData(widget.selectedKeyword); // 페이지 로드 시 서버에서 데이터 가져오기
+  }
+
+  // 서버에서 여행지 데이터 가져오는 함수
+  Future<List<Map<String, String>>> fetchPlacesData(String keyword) async {
+    try {
+      final response = await http.get(Uri.parse('http://3.37.197.251:5000/place_pages/$keyword'));
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body)['data'];
+        return data.map((item) {
+          return {
+            'name': item['name'].toString(),
+            'image': item['image'].toString(),
+          };
+        }).toList();
+      } else {
+        throw Exception('Failed to load places');
+      }
+    } catch (e) {
+      throw Exception('Error fetching data: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,54 +74,31 @@ class _HashDetailRouteState extends State<HashDetailRoute> {
                       Center(child: buildKeywordHeader()), // 키워드 헤더
                     ],
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween, // 양쪽 끝 정렬
-                  //   children: [
-                  //     GestureDetector(
-                  //       onTap: () {
-                  //         Navigator.pop(context, widget.selectedKeyword); // 뒤로가기
-                  //       },
-                  //       child: const Icon(
-                  //         Icons.arrow_back_ios,
-                  //         size: 30,
-                  //         color: Color(0xFF000000), // 아이콘 색상
-                  //       ),
-                  //     ),
-                  //     buildKeywordHeader(), // 키워드 헤더
-                  //   ],
-                  // ),
                   const SizedBox(height: 35),
-                  /* ### 여행지 카드 리스트 ### */
-                  Column(
-                    children: [
-                      buildCard(
-                        '삼성혈', 
-                        'assets/pictures/samsung.png', 
-                        '제주 제주시 삼성로 22', 
-                        """제주 시내에 위치해 있어 여행의 시작점으로 좋습니다.\n이곳에서 제주도의 역사와 문화를 간단히 알아보세요."""
-                      ),  
-                      buildtime(30), // 소요시간
-                      buildCard(
-                        '카멜리아힐', 
-                        'assets/pictures/camellia.png', 
-                        '제주 서귀포시 안덕면 병악로 166', 
-                        "아름다운 차밭과 꽃들이 있는 곳이니 여유롭게 구경하세요."
-                      ),
-                      buildtime(15),
-                      buildCard(
-                        '생각하는 정원', 
-                        'assets/pictures/garden.png', 
-                        '제주 제주시 한경면 녹차분재로 675', 
-                        "다양한 식물과 예쁜 경관을 즐길 수 있는 곳입니다."
-                      ),
-                      buildtime(20),
-                      buildCard(
-                        '베케', 
-                        'assets/pictures/veke.png', 
-                        '제주 서귀포시 효돈로 48', 
-                        "이곳에서 제주 베케의 아름다움을 만끽하세요."
-                      ),
-                    ],
+                  /* ### FutureBuilder로 서버 데이터를 처리 ### */
+                  FutureBuilder<List<Map<String, String>>>(
+                    future: _placesFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('오류 발생: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(child: Text('데이터가 없습니다.'));
+                      }
+
+                      List<Map<String, String>> places = snapshot.data!;
+                      return Column(
+                        children: places.map((place) {
+                          return Column(
+                            children: [
+                              buildCard(place['name']!, place['image']!),
+                              const SizedBox(height: 20), // 간격 추가
+                            ],
+                          );
+                        }).toList(),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -117,7 +125,10 @@ class _HashDetailRouteState extends State<HashDetailRoute> {
   }
 
   /* ### 여행지 카드 위젯 ### */
-  Widget buildCard(String title, String image, String location, String text) {
+  Widget buildCard(String title, String base64Image) {
+    // Base64 문자열을 디코딩하여 이미지로 변환
+    final decodedBytes = base64Decode(base64Image);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
       children: [
@@ -131,8 +142,8 @@ class _HashDetailRouteState extends State<HashDetailRoute> {
         Center(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15), // 이미지 모서리 둥글게
-            child: Image.asset(
-              image, // 이미지 경로
+            child: Image.memory(
+              decodedBytes, // Base64 디코딩된 이미지
               width: 250, // 이미지 가로 크기
               height: 190, // 이미지 세로 크기
               fit: BoxFit.cover, // 이미지 크기 맞춤
@@ -140,24 +151,10 @@ class _HashDetailRouteState extends State<HashDetailRoute> {
           ),
         ),
         const SizedBox(height: 8),
-        // 위치 정보
-        Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.location_on_outlined, color: Color(0xFF000000)), // 위치 아이콘
-              Text(location, style: const TextStyle(fontSize: 17)), // 위치 텍스트
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
-        // 여행지 설명
-        Center(
-          child: Text(text, style: const TextStyle(fontSize: 13)), // 설명 텍스트
-        ),
       ],
     );
   }
+
 
   /* ### 소요시간 표시 위젯 ### */
   Widget buildtime(int time) {

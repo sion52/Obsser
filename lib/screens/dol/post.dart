@@ -3,6 +3,10 @@ import 'dart:io'; // File 클래스를 사용하기 위해 필요
 import 'package:flutter/material.dart';
 
 class PostScreen extends StatefulWidget {
+  final String name;
+
+  const PostScreen({super.key, required this.name}); // name 변수를 추가
+
   @override
   _PostScreenState createState() => _PostScreenState();
 }
@@ -25,13 +29,14 @@ class _PostScreenState extends State<PostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF8F8F8),
+      resizeToAvoidBottomInset: true, // 키보드가 올라올 때 화면 조정
       appBar: AppBar(
         backgroundColor: const Color(0xFFFFFFFF),
         toolbarHeight: 0, // 툴바 높이 설정
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20), // 좌우에 60만큼 패딩 추가
-        child: Center(
+      body: SingleChildScrollView( // 화면이 스크롤 가능하도록 설정
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20), // 좌우에 60만큼 패딩 추가
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -106,8 +111,10 @@ class _PostScreenState extends State<PostScreen> {
               ),
               SizedBox(height: 20),
               // 댓글 목록
-              Expanded(
+              Container(
+                height: 150, // 댓글 리스트의 높이를 제한
                 child: ListView.builder(
+                  shrinkWrap: true,
                   itemCount: _comments.length,
                   itemBuilder: (context, index) {
                     return Padding(

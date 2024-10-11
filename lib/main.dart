@@ -72,6 +72,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex; // 초기 페이지 설정
+    // _clearToken(); // 앱 시작 시 토큰 삭제
   }
 
   /* ### 네비게이션 버튼 클릭 시 실행 ### */

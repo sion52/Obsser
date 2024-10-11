@@ -187,8 +187,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 child: CategoryButton(label: '전체', isSelected: selectedCategory == '전체'),
               ),
               GestureDetector(
-                onTap: () => onCategoryTap('관광'), // '관광' 카테고리 선택
-                child: CategoryButton(label: '관광', isSelected: selectedCategory == '관광'),
+                onTap: () => onCategoryTap('명소'), // '명소' 카테고리 선택
+                child: CategoryButton(label: '명소', isSelected: selectedCategory == '명소'),
               ),
               GestureDetector(
                 onTap: () => onCategoryTap('식당'), // '식당' 카테고리 선택

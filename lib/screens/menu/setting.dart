@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:obsser_1/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
+import 'package:obsser_1/screens/menu_screen.dart';
 
 /* ##### 계정 설정 화면 ##### */
 class SettingScreen extends StatefulWidget {
@@ -14,15 +15,21 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   File? _imageFile; // 프로필 사진을 저장할 변수
-  final ImagePicker _picker = ImagePicker();
 
   // 프로필 사진 변경 메서드
   Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       setState(() {
         _imageFile = File(image.path); // 선택한 이미지를 File 객체로 변환
       });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MenuScreen(imageFile: _imageFile!), // MenuScreen으로 이미지 파일 전달
+        ),
+      );
     }
   }
 
@@ -94,32 +101,22 @@ class _SettingScreenState extends State<SettingScreen> {
                       const SizedBox(height: 30),
                       GestureDetector(
                         onTap: _pickImage, // 메서드 호출로 변경
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               ' 프로필 사진 변경',
                               style: TextStyle(
                                 fontSize: 24, 
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            Icon(
+                            const Icon(
                               Icons.arrow_forward_ios,
                             ),
                           ],
                         ),
                       ),
-                       // 선택한 이미지 표시
-                      const SizedBox(height: 20),
-                      _imageFile != null
-                          ? Image.file(
-                        _imageFile!,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      )
-                          : const SizedBox.shrink(), // 이미지가 없으면 빈 위젯
 
                       const SizedBox(height: 40), // 항목 간 여백
 
